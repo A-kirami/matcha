@@ -30,3 +30,5 @@ src-tauri/target
 coverage
 html
 tests
+
+components.d.ts
