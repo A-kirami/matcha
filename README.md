@@ -92,7 +92,7 @@ Matcha 是一个专为 KiramiBot 设计的辅助开发工具，能够与 KiramiB
   - [x] 发送私聊消息（send_private_msg）
   - [x] 发送群消息（send_group_msg）
   - [x] 发送消息（send_msg）
-  - [x] 查是否可以发送图片（can_send_image）
+  - [x] 检查是否可以发送图片（can_send_image）
   - [x] 检查是否可以发送语音（can_send_record）
   - [x] 获取运行状态（get_status）
   - [x] 获取版本信息（get_version_info）
