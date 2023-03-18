@@ -113,9 +113,14 @@ Matcha 是一个专为 KiramiBot 设计的辅助开发工具，能够与 KiramiB
 ## 🎊 活动
 
 ![Alt](https://repobeats.axiom.co/api/embed/647a10251f545090f351a6afc3b2a124494df1a2.svg 'Repobeats analytics image')
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FA-kirami%2Fmatcha.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FA-kirami%2Fmatcha?ref=badge_shield)
 
 ## 📄 许可证
 
 Code: AGPL-3.0 - 2023 - Akirami
 
 Logo: CC-BY-NC-ND, Designs by Akirami
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FA-kirami%2Fmatcha.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FA-kirami%2Fmatcha?ref=badge_large)
