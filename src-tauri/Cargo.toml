@@ -1,0 +1,53 @@
+[package]
+name = "matcha"
+version = "0.1.0"
+description = "Matcha is mock chat."
+authors = ["akirami"]
+license = ""
+repository = ""
+edition = "2021"
+rust-version = "1.57"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[build-dependencies]
+tauri-build = { version = "1.2", features = ["config-toml"] }
+
+[dependencies]
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+tauri = { version = "1.2", features = ["app-all", "devtools", "fs-all", "macos-private-api", "os-all", "path-all", "shell-open", "window-all"] }
+window-shadows = "0.2.1"
+tokio = { version = "1.24", features = ["full"] }
+tokio-tungstenite = { version = "0.18", features = ["native-tls"] }
+anyhow = "1.0"
+rand = "0.8"
+futures-util = "0.3"
+log = { version = "0.4", features = ["kv_unstable"] }
+thiserror = "1"
+infer = { version = "0.13", default-features = false }
+warp = "0.3.3"
+reqwest = "0.11.14"
+regex = "1.7.1"
+base64 = "0.21.0"
+md5 = "0.7.0"
+serde_repr = "0.1"
+byte-unit = "4.0"
+fern = "0.6"
+time = { version = "0.3", features = ["formatting", "local-offset"] }
+
+[features]
+# by default Tauri runs in production mode
+# when `tauri dev` runs it is executed with `cargo run --no-default-features` if `devPath` is an URL
+default = ["custom-protocol"]
+# this feature is used used for production builds where `devPath` points to the filesystem
+# DO NOT remove this
+custom-protocol = ["tauri/custom-protocol"]
+colored = ["fern/colored"]
+
+[profile.release]
+panic = "abort" # Strip expensive panic clean-up logic
+codegen-units = 1 # Compile crates one after another so the compiler can optimize better
+lto = true # Enables link to optimizations
+opt-level = "s" # Optimize for binary size
+strip = true # Remove debug symbols

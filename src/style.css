@@ -1,0 +1,38 @@
+@font-face {
+  font-family: "SourceHanSans";
+  font-weight: 250 900;
+  src: url("/SourceHanSansCN-VF.otf.woff2");
+  font-display: swap;
+}
+
+html, body {
+  @apply p-0 m-0 bg-transparent antialiased text-base font-normal select-none;
+  font-family: "SourceHanSans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+}
+
+::selection {
+  @apply bg-blue-200;
+}
+
+pre {
+  @apply break-all whitespace-pre-wrap;
+}
+
+.hljs {
+  @apply !bg-transparent;
+}
+
+pre code.hljs {
+  @apply !p-0;
+}
+
+.os-viewport {
+  @apply scroll-smooth;
+}
+
+.hljs-string.line-fold {
+  @apply overflow-hidden text-ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}

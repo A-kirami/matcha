@@ -1,0 +1,140 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "eslint-config-prettier",
+    "eslint:recommended",
+    "plugin:vue/vue3-recommended",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:promise/recommended",
+    "plugin:prettier/recommended",
+    "@unocss"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 13,
+    "parser": "@typescript-eslint/parser",
+    "sourceType": "module"
+  },
+  "plugins": ["vue", "@typescript-eslint"],
+  "parser": "vue-eslint-parser",
+  "globals": {
+    "defineProps": "readonly",
+    "defineEmits": "readonly",
+    "defineExpose": "readonly",
+    "withDefaults": "readonly",
+    "$ref": "readonly",
+    "$computed": "readonly",
+    "$shallowRef": "readonly",
+    "$customRef": "readonly",
+    "$toRef": "readonly",
+    "$": "readonly",
+    "$$": "readonly"
+  },
+  "rules": {
+    "linebreak-style": ["warn", "windows"],
+    "quotes": ["warn", "single"],
+    "semi": ["warn", "never"],
+    "object-shorthand": ["warn", "always"],
+    "array-bracket-spacing": [
+      "warn",
+      "never",
+      {
+        "objectsInArrays": false,
+        "arraysInArrays": false
+      }
+    ],
+    "object-curly-spacing": ["warn", "always"],
+    "array-callback-return": "error",
+    "arrow-spacing": "warn",
+    "block-scoped-var": "error",
+    "block-spacing": "warn",
+    "brace-style": ["error", "1tbs"],
+    "camelcase": "error",
+    "comma-spacing": [
+      "error",
+      {
+        "before": false,
+        "after": true
+      }
+    ],
+    "comma-style": ["error", "last"],
+    "computed-property-spacing": ["error", "never"],
+    "consistent-this": ["error", "that"],
+    "constructor-super": "error",
+    "curly": "error",
+    "default-case": "error",
+    "dot-location": ["error", "property"],
+    "dot-notation": "error",
+    "eol-last": ["warn", "always"],
+    "eqeqeq": ["error", "always"],
+    "for-direction": "error",
+    "func-names": ["warn", "as-needed"],
+    "function-paren-newline": ["warn", "multiline-arguments"],
+    "getter-return": ["error", { "allowImplicit": true }],
+    "guard-for-in": "error",
+    "implicit-arrow-linebreak": ["warn", "beside"],
+    "key-spacing": [
+      "error",
+      {
+        "beforeColon": false,
+        "afterColon": true
+      }
+    ],
+    "keyword-spacing": [
+      "error",
+      {
+        "before": true,
+        "after": true
+      }
+    ],
+    "space-infix-ops": "warn",
+    "space-unary-ops": ["warn", { "nonwords": false }],
+    "new-cap": "warn",
+    "no-await-in-loop": "error",
+    "no-cond-assign": "error",
+    "no-empty": "warn",
+    "no-constant-condition": "error",
+    "no-var": "error",
+    "spaced-comment": ["warn", "always", { "markers": ["/"] }],
+    "no-console": "warn",
+    "accessor-pairs": "error",
+    "no-alert": "warn",
+    "no-eval": "error",
+    "no-trailing-spaces": "warn",
+    "no-inline-comments": "warn",
+    // "lines-around-comment": ["warn", {"allowBlockStart": true, "allowObjectStart": true, "allowArrayStart": true, "allowClassStart": true}],
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "vue/no-multiple-template-root": "off",
+    "vue/no-v-model-argument": "off",
+    "vue/no-v-for-template-key": "off",
+    "vue/script-setup-uses-vars": "error",
+    "vue/multi-word-component-names": "off",
+    "vue/no-setup-props-destructure": "off",
+    "import/no-unresolved": ["error", { "ignore": ["^virtual:", "\\.png$"] }],
+    "import/order": [
+      "warn",
+      {
+        "groups": ["builtin", "external", "internal", ["parent", "sibling", "index"], "type"],
+        "newlines-between": "always",
+        "alphabetize": { "order": "asc", "caseInsensitive": true }
+      }
+    ],
+    "import/newline-after-import": ["warn", { "considerComments": true }]
+  },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true
+      }
+    }
+  }
+}
