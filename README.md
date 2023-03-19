@@ -14,6 +14,16 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/A-kirami/matcha/actions/workflows/build.yml" target="__blank"
+    ><img src="https://github.com/A-kirami/matcha/actions/workflows/build.yml/badge.svg?branch=main&event=push" alt="Github Actions"
+  /></a>
+  <a href="https://app.codacy.com/gh/A-kirami/matcha/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade" target="__blank"
+    ><img src="https://app.codacy.com/project/badge/Grade/99e8f33bae854311a67ccf671a015d9a" alt="Codacy"
+  /></a>
+  <br />
+  <a href="https://github.com/A-kirami/matcha/releases/latest" target="__blank"
+    ><img src="https://img.shields.io/github/v/release/A-kirami/matcha?include_prereleases&&color=70aeff&style=social" alt="Release Version"
+  /></a>
   <a href="https://github.com/A-kirami/matcha/stargazers" target="__blank"
     ><img alt="GitHub stars" src="https://img.shields.io/github/stars/A-kirami/matcha?style=social"
   /></a>
