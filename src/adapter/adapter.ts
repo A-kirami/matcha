@@ -1,6 +1,8 @@
 import * as CommDriver from '@/driver'
 import { useChatStore, useStatusStore } from '@/stores'
 
+import { ProtocolError } from './errors'
+
 import type { ActionRequest, ActionResponse, AdapterActionHandler } from './action'
 import type { AdapterEventHandler, Event } from './event'
 import type { Config } from '@/stores/config'
@@ -69,8 +71,10 @@ export abstract class Adapter {
       scene && (await this.chat.appendScene(scene, false))
       return response
     } catch (error) {
-      // TODO: 完善错误处理，从 Handler Error 中获取错误响应并返回
-      throw new Error()
+      if (error instanceof ProtocolError) {
+        return error.response
+      }
+      throw error
     }
   }
 

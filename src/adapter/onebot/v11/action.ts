@@ -3,15 +3,18 @@ import { getVersion } from '@tauri-apps/api/app'
 
 import { AdapterActionHandler } from '@/adapter/action'
 import { Behav } from '@/adapter/behav'
+import { UnsupportedActionError } from '@/adapter/errors'
 import { db } from '@/database'
 import { logger } from '@/plugins'
 import { asyncWrapper } from '@/utils'
 
-import { MessageHandler, Messages, createMessage } from './message'
+import { MessageHandler, createMessage } from './message'
 import { response } from './utils'
 
+import type { Messages } from './message'
 import type { ActionResult, ActionRequest, ActionStrategy } from '@/adapter/action'
 import type { PrivateMessageScene, GroupMessageScene } from '@/adapter/scene'
+import type { StrKeyObject } from '@/adapter/typed'
 
 const messageHandler = new MessageHandler()
 
@@ -21,11 +24,14 @@ export class ActionHandler extends AdapterActionHandler {
   async handle({ action, params }: ActionRequest): Promise<ActionResult> {
     try {
       const func = this.strategy[action]
+      if (!func) {
+        throw new UnsupportedActionError(response(1404, { message: '不支持的动作请求' }))
+      }
       const asyncFn = asyncWrapper<ActionResult>(func)
       return await asyncFn(params)
     } catch (error) {
       logger.error((error as Error).toString())
-      throw new Error()
+      throw error
     }
   }
 }
@@ -93,15 +99,15 @@ const actionStrategy: ActionStrategy = {
     auto_escape: boolean
   }): Promise<ActionResult<{ message_id: number }, PrivateMessageScene | GroupMessageScene>> => {
     if (message_type === 'private') {
-      return (await actionStrategy.send_private_msg({ user_id, message })) as ActionResult<
-        { message_id: number },
-        PrivateMessageScene
-      >
+      return (await (actionStrategy.send_private_msg as (request: StrKeyObject) => Promise<ActionResult>)({
+        user_id,
+        message,
+      })) as ActionResult<{ message_id: number }, PrivateMessageScene>
     } else {
-      return (await actionStrategy.send_group_msg({ group_id, message })) as ActionResult<
-        { message_id: number },
-        GroupMessageScene
-      >
+      return (await (actionStrategy.send_group_msg as (request: StrKeyObject) => Promise<ActionResult>)({
+        group_id,
+        message,
+      })) as ActionResult<{ message_id: number }, GroupMessageScene>
     }
   },
 

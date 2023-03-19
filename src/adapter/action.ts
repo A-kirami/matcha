@@ -21,7 +21,7 @@ export interface ActionResult<R extends StrKeyObject = StrKeyObject, S extends S
 }
 
 export interface ActionStrategy {
-  [key: string]: (request: ActionRequest['params']) => ActionResult | Promise<ActionResult>
+  [key: string]: ((request: ActionRequest['params']) => ActionResult | Promise<ActionResult>) | undefined
 }
 
 export abstract class AdapterActionHandler {
