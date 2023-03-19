@@ -3004,7 +3004,6 @@ dependencies = [
  "serde_json",
  "serde_with",
  "thiserror",
- "toml",
  "url",
  "walkdir",
  "windows",
