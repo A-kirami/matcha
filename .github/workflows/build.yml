@@ -51,7 +51,7 @@ jobs:
       - uses: JonasKruckenberg/tauri-build@v1
         id: tauri_build
         with:
-          configPath: 'Tauri.toml'
+          configPath: './src-tauri/Tauri.toml'
 
       - uses: actions/upload-artifact@v3
         with:
