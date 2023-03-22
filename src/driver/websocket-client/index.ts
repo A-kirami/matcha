@@ -46,13 +46,15 @@ export class websocketClient implements Driver {
       if (connectID !== websocketClient.id) {
         return
       }
+      const wsId = sessionStorage.getItem('ws_id')
+      if (wsId) {
+        this.ws = new WebSocket(Number(wsId), [])
+        await this.disconnect()
+        await this.connect()
+        return
+      }
       try {
         logger.info(`正在尝试连接到反向 WebSocket 服务器 ${connectUrl}`)
-        const wsId = sessionStorage.getItem('ws_id')
-        if (wsId) {
-          this.ws = new WebSocket(Number(wsId), [])
-          await this.disconnect()
-        }
         this.ws = await WebSocket.connect(connectUrl, connectConfig)
         sessionStorage.setItem('ws_id', this.ws.id.toString())
         this.ws.addListener(async (message: Message) => {
