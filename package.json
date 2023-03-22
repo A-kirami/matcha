@@ -98,7 +98,8 @@
     "*.{vue,js,ts,tsx,jsx}": [
       "eslint --fix",
       "stylelint --fix",
-      "prettier --write --ignore-unknown"
+      "prettier --write --ignore-unknown",
+      "vitest related --run"
     ]
   }
 }
