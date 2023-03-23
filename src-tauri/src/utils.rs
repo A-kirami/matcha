@@ -6,7 +6,7 @@ use std::path::PathBuf;
 use std::str;
 
 const HTTP_URL_REGEX: &str = r#"^(https?://)[^\s]+"#;
-const FILE_URL_REGEX: &str = r#"^file:///?$"#;
+const FILE_URL_REGEX: &str = r#"^file:///?"#;
 const DATA_URL_REGEX: &str = r#"^data:[^,]+;base64,"#;
 const BASE64_REGEX: &str = r#"^base64://"#;
 
@@ -35,8 +35,8 @@ pub async fn get_file_contents(file: &str) -> Result<Vec<u8>, Box<dyn Error>> {
         let response = reqwest::get(file).await?.bytes().await?.to_vec();
         Ok(response)
     } else if file_type.file_url.is_match(file) {
-        let path = file.replacen("file://", "", 1);
-        let contents = tokio::fs::read(path).await?;
+        let path = file_type.file_url.replace(file, "");
+        let contents = tokio::fs::read(&*path).await?;
         Ok(contents)
     } else {
         let file_rex = if file_type.data_url.is_match(file) {
