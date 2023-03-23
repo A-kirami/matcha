@@ -3,7 +3,16 @@ name: Build
 permissions:
   contents: write
 
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    paths:
+      - "src/**"
+      - "src-tauri/src/**"
+      - "tests/**"
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
