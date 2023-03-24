@@ -11,6 +11,7 @@ use tauri::{
     Manager, Runtime, State, Window,
 };
 use tokio::{net::TcpStream, sync::Mutex};
+use tokio_tungstenite::tungstenite::http::Uri;
 use tokio_tungstenite::{
     connect_async_with_config,
     tungstenite::{
@@ -90,10 +91,16 @@ fn connect<R: Runtime>(
     callback_function: CallbackFn,
     config: Option<ConnectionConfig>,
 ) -> Result<Id> {
+    let uri: Uri = url.parse().unwrap();
+    let authority = uri.authority().unwrap().as_str();
+    let host = authority
+        .find('@')
+        .map(|idx| authority.split_at(idx + 1).1)
+        .unwrap_or_else(|| authority);
     let mut request = Request::builder()
-        .uri(&url)
+        .uri(url)
         .method("GET")
-        .header("Host", &url)
+        .header("Host", host)
         .header("Connection", "Upgrade")
         .header("Upgrade", "websocket")
         .header("Sec-WebSocket-Version", "13")
