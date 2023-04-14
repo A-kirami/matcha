@@ -4,7 +4,7 @@
 )]
 
 use log::LevelFilter;
-use plugins::log::LogTarget;
+use plugins::log::{LogTarget, TimezoneStrategy};
 use tauri::Manager;
 use window_shadows::set_shadow;
 
@@ -33,6 +33,7 @@ fn main() {
         .plugin(
             plugins::log::Builder::default()
                 .targets([LogTarget::LogDir, LogTarget::Stdout, LogTarget::Webview])
+                .timezone_strategy(TimezoneStrategy::UseLocal)
                 .level(LevelFilter::Info)
                 .filter(|metadata| {
                     !metadata
