@@ -853,7 +853,7 @@ const eventParseStrategy: EventParseStrategy<EventMapping> = {
     const member = await db.members.get({ groupId: group_id.toString(), userId: self_id.toString() })
     const status = useStatusStore()
     let sub_type: 'delete' | 'recall'
-    if (member!.role !== 'member' && user_id !== status.bot!.id) {
+    if (member!.role !== 'member' && user_id.toString() !== status.bot!.id) {
       sub_type = 'delete'
     } else {
       sub_type = 'recall'

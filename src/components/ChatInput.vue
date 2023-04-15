@@ -180,7 +180,7 @@ defineExpose({
 })
 
 interface Mentions {
-  id: number
+  id: string
   name: string
 }
 
@@ -191,7 +191,7 @@ async function getMentions(): Promise<Mentions[]> {
     const members = await db.members.where({ groupId: chatId }).toArray()
     mentions.push(
       ...(await Promise.all(
-        members.map(async (item) => ({ id: Number(item.userId), name: await getUserNickname(item.userId, chatId) }))
+        members.map(async (item) => ({ id: item.userId, name: await getUserNickname(item.userId, chatId) }))
       ))
     )
   } else {
