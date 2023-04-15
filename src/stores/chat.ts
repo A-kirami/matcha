@@ -26,7 +26,7 @@ export const useChatStore = defineStore('chat', () => {
     if (scene.type === 'message') {
       chatMessages.set(scene.message_id, scene.id)
     }
-    const event = await adapter.bot.eventHandler.build(scene)
+    const event = await adapter.bot.eventHandler.handle(scene)
     const chat = {
       id: scene.id,
       scene,
@@ -40,7 +40,7 @@ export const useChatStore = defineStore('chat', () => {
     const {
       group_id: groupId,
       self: { bot_id: botId },
-    }: { user_id: string; group_id?: string; self: { bot_id: string } } = scene
+    }: { group_id?: string; self: { bot_id: string } } = scene
     const privateId = `${botId}.${status.user?.id}`
     const chats = groupId && scene.detail_type !== 'group_invite' ? groupChats : privateChats
     const chatId = (groupId ?? privateId).toString()
