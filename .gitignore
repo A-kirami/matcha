@@ -23,9 +23,6 @@ src-tauri/target
 *.sw?
 .VSCodeCounter
 
-# Lint
-.husky
-
 # Test
 coverage
 html
