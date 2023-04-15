@@ -414,7 +414,7 @@ const eventBuildStrategy: EventBuildStrategy<SceneMapping<Messages>> = {
       plain_message: raw_message,
       user_name: nickname,
       anonymous,
-      member: { card, role, rank: level, title },
+      member: { card, role, level, title },
     } = scene
     return {
       time,
@@ -437,7 +437,7 @@ const eventBuildStrategy: EventBuildStrategy<SceneMapping<Messages>> = {
         area: '',
         card,
         role,
-        level,
+        level: level.toString(),
         title,
       },
     }
@@ -706,7 +706,6 @@ const eventParseStrategy: EventParseStrategy<EventMapping> = {
         card,
         role,
         title,
-        rank: level,
         level: member!.level,
       },
     }
