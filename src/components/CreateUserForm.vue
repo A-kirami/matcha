@@ -21,25 +21,26 @@ const dragHandle = $ref<HTMLElement | null>(null)
 const userForm = $ref<User>({
   id: randomId(),
   name: '点击修改昵称',
-  sex: undefined,
-  birthday: undefined,
-  location: undefined,
-  hometown: undefined,
-  sign: undefined,
-  qid: undefined,
-  level: undefined,
-  loginDays: undefined,
+  sex: 'unknown',
+  birthdate: undefined,
+  location: '',
+  hometown: '',
+  sign: '',
+  qid: '',
+  level: 0,
+  loginDays: 0,
 })
 
-function randomId(): number {
-  return randomInt(1e8, 1e9)
+function randomId(): string {
+  return randomInt(1e8, 1e9).toString()
 }
 
 async function onFinish(user: User): Promise<void> {
-  if (user.birthday) {
+  if (user.birthdate) {
     // @ts-ignore
-    user.birthday = (user.birthday as Dayjs).unix()
+    user.birthdate = (user.birthdate as Dayjs).unix()
   }
+  userForm.sex ??= 'unknown'
   if (await db.users.get(user.id)) {
     message.error('用户已存在')
   } else {
@@ -67,7 +68,7 @@ watch(nameFocused, (focused) => {
 
 watch(idFocused, (focused) => {
   if (!focused) {
-    userForm.id = Number(idTarget?.innerText) || randomId()
+    userForm.id = idTarget?.innerText || randomId()
   }
 })
 
@@ -199,8 +200,8 @@ let visible = $computed({
                 <a-select-option value="female">♀ 女</a-select-option>
               </a-select>
             </a-form-item>
-            <a-form-item label="生日" name="birthday" :colon="false">
-              <a-date-picker v-model:value="userForm.birthday" :disabled-date="disableFuture" size="small" />
+            <a-form-item label="生日" name="birthdate" :colon="false">
+              <a-date-picker v-model:value="userForm.birthdate" :disabled-date="disableFuture" size="small" />
             </a-form-item>
           </div>
           <a-form-item label="现居" name="location" :colon="false">

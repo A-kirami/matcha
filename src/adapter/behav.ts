@@ -37,7 +37,7 @@ export class Behav {
       time: getTimestamp(),
       self: {
         platform: 'qq',
-        bot_id: this.status.bot!.id.toString(),
+        bot_id: this.status.bot!.id,
       },
       type,
     }
@@ -63,8 +63,8 @@ export class Behav {
       sub_type,
       message_id,
       message: contents,
-      plain_message: await getPlainMessage(contents, { chatType: 'group', chatId: receiver.id.toString() }),
-      user_id: sender.id.toString(),
+      plain_message: await getPlainMessage(contents, { chatType: 'group', chatId: receiver.id }),
+      user_id: sender.id,
       user_name: sender.name,
     }
   }
@@ -82,10 +82,10 @@ export class Behav {
       sub_type: 'normal',
       message_id,
       message: contents,
-      plain_message: await getPlainMessage(contents, { chatType: 'group', chatId: receiver.id.toString() }),
-      user_id: sender.id.toString(),
+      plain_message: await getPlainMessage(contents, { chatType: 'group', chatId: receiver.id }),
+      user_id: sender.id,
       user_name: sender.name,
-      group_id: receiver.id.toString(),
+      group_id: receiver.id,
       group_name: receiver.name,
       anonymous: null,
       member,

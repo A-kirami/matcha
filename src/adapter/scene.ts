@@ -61,8 +61,6 @@ interface MemberInfo {
   role: 'owner' | 'admin' | 'member'
   /** 群成员等级 lv.0-lv.100 */
   level: number
-  /** 等级头衔 */
-  rank: string
   /** 专属头衔 */
   title: string
 }

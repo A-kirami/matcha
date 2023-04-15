@@ -1,73 +1,71 @@
 export interface User {
   /** QQ */
-  id: number
+  id: string
   /** 昵称 */
   name: string
   /** 性别 */
-  sex?: 'male' | 'female' | 'unknown'
-  /** 生日 */
-  birthday?: number
+  sex: 'male' | 'female' | 'unknown'
+  /** 出生日期 */
+  birthdate?: number
   /** 所在地 */
-  location?: string
+  location: string
   /** 故乡 */
-  hometown?: string
+  hometown: string
   /** 个性签名 */
-  sign?: string
+  sign: string
   /** ID 身份卡 */
-  qid?: string
+  qid: string
   /** 等级 */
-  level?: number
+  level: number
   /** 连续登陆天数 */
-  loginDays?: number
+  loginDays: number
 }
 
 export interface Friend {
   /** QQ */
-  userId: number
+  userId: string
   /** 好友 ID */
-  friendId: number
+  friendId: string
   /** 备注 */
   remark: string
 }
 
 export interface Group {
   /** 群号 */
-  id: number
+  id: string
   /** 群名 */
   name: string
   /** 创建时间 */
-  time?: number
+  time: number
   /** 群介绍 */
-  intro?: string
+  intro: string
   /** 等级 */
-  level?: number
+  level: number
   /** 当前成员数 */
   memberCount: number
   /** 最大成员数 */
   maxMemberCount: number
+  /** 是否启用全体禁言 */
+  wholeBanned: boolean
 }
 
 export interface Member {
   /** 所在群号 */
-  groupId: number
+  groupId: string
   /** QQ */
-  userId: number
+  userId: string
   /** 群名片 */
   card: string
   /** 群权限 */
   role: 'owner' | 'admin' | 'member'
   /** 群聊等级 */
   level: number
-  /** 等级头衔 */
-  rank: string
   /** 专属头衔 */
   title: string
   /** 加群时间 */
-  joinTime?: number
-  /** 最后发言时间 */
-  lastSentTime?: number
+  joinTime: number
   /** 头衔过期时间 */
-  titleExpireTime?: number
+  titleExpireTime: number
   /** 禁言到期时间 */
-  banExpireTime?: number
+  banExpireTime: number
 }

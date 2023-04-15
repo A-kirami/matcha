@@ -414,7 +414,7 @@ const eventBuildStrategy: EventBuildStrategy<SceneMapping<Messages>> = {
       plain_message: raw_message,
       user_name: nickname,
       anonymous,
-      member: { card, role, rank: level, title },
+      member: { card, role, level, title },
     } = scene
     return {
       time,
@@ -437,7 +437,7 @@ const eventBuildStrategy: EventBuildStrategy<SceneMapping<Messages>> = {
         area: '',
         card,
         role,
-        level,
+        level: level.toString(),
         title,
       },
     }
@@ -682,8 +682,8 @@ const eventParseStrategy: EventParseStrategy<EventMapping> = {
       anonymous,
       sender: { nickname: user_name, card, role, title, level },
     } = event
-    const member = await db.members.get({ userId: user_id, groupId: group_id })
-    const group = await db.groups.get(group_id)
+    const member = await db.members.get({ userId: user_id.toString(), groupId: group_id.toString() })
+    const group = await db.groups.get(group_id.toString())
     return {
       id: crypto.randomUUID(),
       time,
@@ -706,7 +706,6 @@ const eventParseStrategy: EventParseStrategy<EventMapping> = {
         card,
         role,
         title,
-        rank: level,
         level: member!.level,
       },
     }
@@ -714,8 +713,8 @@ const eventParseStrategy: EventParseStrategy<EventMapping> = {
 
   'notice.group_upload': async (event: GroupUploadNoticeEvent): Promise<GroupFileUploadNoticeScene> => {
     const { time, self_id, post_type: type, user_id, group_id, file } = event
-    const user = await db.users.get(user_id)
-    const group = await db.groups.get(group_id)
+    const user = await db.users.get(user_id.toString())
+    const group = await db.groups.get(group_id.toString())
     return {
       id: crypto.randomUUID(),
       time,
@@ -735,8 +734,8 @@ const eventParseStrategy: EventParseStrategy<EventMapping> = {
 
   'notice.group_admin': async (event: GroupAdminNoticeEvent): Promise<GroupAdminNoticeScene> => {
     const { time, self_id, post_type: type, notice_type: detail_type, sub_type, user_id, group_id } = event
-    const user = await db.users.get(user_id)
-    const group = await db.groups.get(group_id)
+    const user = await db.users.get(user_id.toString())
+    const group = await db.groups.get(group_id.toString())
     const status = useStatusStore()
     return {
       id: crypto.randomUUID(),
@@ -752,15 +751,15 @@ const eventParseStrategy: EventParseStrategy<EventMapping> = {
       user_name: user!.name,
       group_id: group_id.toString(),
       group_name: group!.name,
-      operator_id: status.bot!.id.toString(),
+      operator_id: status.bot!.id,
       operator_name: status.bot!.name,
     }
   },
 
   'notice.group_decrease': async (event: GroupDecreaseNoticeEvent): Promise<GroupMemberDecreaseNoticeScene> => {
     const { time, self_id, post_type: type, sub_type, user_id, group_id } = event
-    const user = await db.users.get(user_id)
-    const group = await db.groups.get(group_id)
+    const user = await db.users.get(user_id.toString())
+    const group = await db.groups.get(group_id.toString())
     const status = useStatusStore()
     return {
       id: crypto.randomUUID(),
@@ -776,15 +775,15 @@ const eventParseStrategy: EventParseStrategy<EventMapping> = {
       user_name: user!.name,
       group_id: group_id.toString(),
       group_name: group!.name,
-      operator_id: status.bot!.id.toString(),
+      operator_id: status.bot!.id,
       operator_name: status.bot!.name,
     }
   },
 
   'notice.group_increase': async (event: GroupIncreaseNoticeEvent): Promise<GroupMemberIncreaseNoticeScene> => {
     const { time, self_id, post_type: type, sub_type, user_id, group_id } = event
-    const user = await db.users.get(user_id)
-    const group = await db.groups.get(group_id)
+    const user = await db.users.get(user_id.toString())
+    const group = await db.groups.get(group_id.toString())
     const status = useStatusStore()
     return {
       id: crypto.randomUUID(),
@@ -800,15 +799,15 @@ const eventParseStrategy: EventParseStrategy<EventMapping> = {
       user_name: user!.name,
       group_id: group_id.toString(),
       group_name: group!.name,
-      operator_id: status.bot!.id.toString(),
+      operator_id: status.bot!.id,
       operator_name: status.bot!.name,
     }
   },
 
   'notice.group_ban': async (event: GroupBanNoticeEvent): Promise<GroupMemberBanNoticeScene> => {
     const { time, self_id, post_type: type, sub_type, user_id, group_id } = event
-    const user = await db.users.get(user_id)
-    const group = await db.groups.get(group_id)
+    const user = await db.users.get(user_id.toString())
+    const group = await db.groups.get(group_id.toString())
     const status = useStatusStore()
     return {
       id: crypto.randomUUID(),
@@ -824,14 +823,14 @@ const eventParseStrategy: EventParseStrategy<EventMapping> = {
       user_name: user!.name,
       group_id: group_id.toString(),
       group_name: group!.name,
-      operator_id: status.bot!.id.toString(),
+      operator_id: status.bot!.id,
       operator_name: status.bot!.name,
     }
   },
 
   'notice.friend_add': async (event: FriendAddNoticeEvent): Promise<FriendIncreaseNoticeScene> => {
     const { time, self_id, post_type: type, user_id } = event
-    const user = await db.users.get(user_id)
+    const user = await db.users.get(user_id.toString())
     return {
       id: crypto.randomUUID(),
       time,
@@ -848,12 +847,12 @@ const eventParseStrategy: EventParseStrategy<EventMapping> = {
 
   'notice.group_recall': async (event: GroupRecallNoticeEvent): Promise<GroupMessageDeleteNoticeScene> => {
     const { time, self_id, post_type: type, user_id, group_id, message_id } = event
-    const user = await db.users.get(user_id)
-    const group = await db.groups.get(group_id)
-    const member = await db.members.get({ groupId: group_id, userId: self_id })
+    const user = await db.users.get(user_id.toString())
+    const group = await db.groups.get(group_id.toString())
+    const member = await db.members.get({ groupId: group_id.toString(), userId: self_id.toString() })
     const status = useStatusStore()
     let sub_type: 'delete' | 'recall'
-    if (member!.role !== 'member' && user_id !== status.bot!.id) {
+    if (member!.role !== 'member' && user_id.toString() !== status.bot!.id) {
       sub_type = 'delete'
     } else {
       sub_type = 'recall'
@@ -872,7 +871,7 @@ const eventParseStrategy: EventParseStrategy<EventMapping> = {
       user_name: user!.name,
       group_id: group_id.toString(),
       group_name: group!.name,
-      operator_id: status.bot!.id.toString(),
+      operator_id: status.bot!.id,
       operator_name: status.bot!.name,
       message_id: message_id.toString(),
     }
@@ -880,7 +879,7 @@ const eventParseStrategy: EventParseStrategy<EventMapping> = {
 
   'notice.friend_recall': async (event: FriendRecallNoticeEvent): Promise<PrivateMessageDeleteNoticeScene> => {
     const { time, self_id, post_type: type, user_id, message_id } = event
-    const user = await db.users.get(user_id)
+    const user = await db.users.get(user_id.toString())
     return {
       id: crypto.randomUUID(),
       time,
@@ -898,9 +897,9 @@ const eventParseStrategy: EventParseStrategy<EventMapping> = {
 
   'notice.notify.poke': async (event: GroupPokeNotifyEvent): Promise<GroupPokeNoticeScene> => {
     const { time, self_id, post_type: type, user_id, group_id, target_id } = event
-    const user = await db.users.get(user_id)
-    const group = await db.groups.get(group_id)
-    const target = await db.users.get(target_id)
+    const user = await db.users.get(user_id.toString())
+    const group = await db.groups.get(group_id.toString())
+    const target = await db.users.get(target_id.toString())
     return {
       id: crypto.randomUUID(),
       time,
@@ -921,9 +920,9 @@ const eventParseStrategy: EventParseStrategy<EventMapping> = {
 
   'notice.notify.lucky_king': async (event: GroupHongbaoLuckyNotifyEvent): Promise<GroupHongbaoLuckyNoticeScene> => {
     const { time, self_id, post_type: type, user_id, group_id, target_id } = event
-    const user = await db.users.get(user_id)
-    const group = await db.groups.get(group_id)
-    const target = await db.users.get(target_id)
+    const user = await db.users.get(user_id.toString())
+    const group = await db.groups.get(group_id.toString())
+    const target = await db.users.get(target_id.toString())
     return {
       id: crypto.randomUUID(),
       time,
@@ -944,8 +943,8 @@ const eventParseStrategy: EventParseStrategy<EventMapping> = {
 
   'notice.notify.honor': async (event: GroupMemberHonorNotifyEvent): Promise<GroupMemberHonorNoticeScene> => {
     const { time, self_id, post_type: type, user_id, group_id, honor_type: honor } = event
-    const user = await db.users.get(user_id)
-    const group = await db.groups.get(group_id)
+    const user = await db.users.get(user_id.toString())
+    const group = await db.groups.get(group_id.toString())
     return {
       id: crypto.randomUUID(),
       time,
@@ -965,7 +964,7 @@ const eventParseStrategy: EventParseStrategy<EventMapping> = {
 
   'request.friend': async (event: FriendRequestEvent): Promise<AddFriendRequestScene> => {
     const { time, self_id, post_type: type, user_id, comment } = event
-    const user = await db.users.get(user_id)
+    const user = await db.users.get(user_id.toString())
     return {
       id: crypto.randomUUID(),
       time,
@@ -983,8 +982,8 @@ const eventParseStrategy: EventParseStrategy<EventMapping> = {
 
   'request.group': async (event: GroupRequestEvent): Promise<JoinGroupRequestScene | GroupInviteRequestScene> => {
     const { time, self_id, post_type: type, sub_type, user_id, group_id, comment } = event
-    const user = await db.users.get(user_id)
-    const group = await db.groups.get(group_id)
+    const user = await db.users.get(user_id.toString())
+    const group = await db.groups.get(group_id.toString())
     const groupRequest = {
       id: crypto.randomUUID(),
       time,
