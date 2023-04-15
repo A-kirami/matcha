@@ -14,3 +14,8 @@ export class ProtocolError extends AdapterError {
 export class UnsupportedActionError extends ProtocolError {
   static message = '不支持的动作请求'
 }
+
+/** 动作处理器运行时抛出异常 */
+export class InternalHandlerError extends ProtocolError {
+  static message = '动作处理器运行时抛出异常'
+}
