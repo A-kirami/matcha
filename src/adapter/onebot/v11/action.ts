@@ -3,7 +3,7 @@ import { getVersion } from '@tauri-apps/api/app'
 
 import { AdapterActionHandler } from '@/adapter/action'
 import { Behav } from '@/adapter/behav'
-import { UnsupportedActionError } from '@/adapter/errors'
+import { UnsupportedActionError, InternalHandlerError } from '@/adapter/errors'
 import { db } from '@/database'
 import { logger } from '@/plugins'
 import { useStatusStore, useChatStore } from '@/stores'
@@ -47,8 +47,9 @@ export class ActionHandler extends AdapterActionHandler {
       const asyncFn = asyncWrapper<ActionResult>(func)
       return await asyncFn(params)
     } catch (error) {
-      logger.error((error as Error).toString())
-      throw error
+      const errStr = (error as Error).toString()
+      logger.error(errStr)
+      throw new InternalHandlerError(result(1000, { message: errStr }).response)
     }
   }
 }
