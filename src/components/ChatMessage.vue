@@ -15,7 +15,7 @@ import { getUUID, getTimestamp, getMessageId } from '@/utils'
 
 import type { ContentMapping } from '@/adapter/content'
 import type { Event } from '@/adapter/event'
-import type { PrivateMessageScene, GroupMessageScene } from '@/adapter/scene'
+import type { MessageScenes } from '@/adapter/scene'
 
 const {
   index = 0,
@@ -24,7 +24,7 @@ const {
   send,
 } = defineProps<{
   index: number
-  scene: PrivateMessageScene | GroupMessageScene
+  scene: MessageScenes
   event?: Event
   send: boolean
 }>()
@@ -108,7 +108,7 @@ function changeContent(): void {
 
 /** 将消息重新发送 */
 async function resendMessage(): Promise<void> {
-  const sceneClone = JSON.parse(JSON.stringify(scene)) as PrivateMessageScene | GroupMessageScene
+  const sceneClone = JSON.parse(JSON.stringify(scene)) as MessageScenes
   sceneClone.id = getUUID()
   sceneClone.time = getTimestamp()
   // eslint-disable-next-line camelcase

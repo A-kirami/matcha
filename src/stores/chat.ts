@@ -1,66 +1,117 @@
 import { defineStore } from 'pinia'
 
+import { DefaultMap } from '@/utils'
+
 import { useAdapterStore } from './protocol'
 import { useStatusStore } from './status'
 
 import type { Event } from '@/adapter/event'
-import type { Scenes } from '@/adapter/scene'
+import type { Scenes, MessageScenes, NoticeScenes, RequestScenes } from '@/adapter/scene'
 
 interface Chat {
   id: string
+  type: 'message' | 'notice' | 'request'
   scene: Scenes
   event?: Event
+  push: boolean
   read: boolean
-  send: boolean
+}
+
+export interface Message extends Chat {
+  type: 'message'
+  scene: MessageScenes
+  recall: boolean
+}
+
+export interface Notice extends Chat {
+  type: 'notice'
+  scene: NoticeScenes
+}
+
+export interface Request extends Chat {
+  type: 'request'
+  scene: RequestScenes
+  action: 'await' | 'agree' | 'refuse'
+  reason?: string
+}
+
+export type Chats = Message | Notice | Request
+
+function newChat(scene: Scenes, event?: Event) {
+  return {
+    id: scene.id,
+    type: scene.type,
+    scene,
+    event,
+    push: false,
+    read: false,
+  }
 }
 
 export const useChatStore = defineStore('chat', () => {
-  const privateChats = $ref<Map<string, Chat[]>>(new Map())
-  const groupChats = $ref<Map<string, Chat[]>>(new Map())
-  const chatMessages = $ref<Map<string, string>>(new Map())
+  const botChats = $ref(new DefaultMap<string, Chats[]>(() => []))
 
   const adapter = useAdapterStore()
   const status = useStatusStore()
 
   async function appendScene(scene: Scenes, push = true): Promise<void> {
-    if (scene.type === 'message') {
-      chatMessages.set(scene.message_id, scene.id)
-    }
-    const event = await adapter.bot.eventHandler.build(scene)
-    const chat = {
-      id: scene.id,
-      scene,
-      event,
-      read: false,
-      send: true,
+    const event = await adapter.bot.eventHandler.handle(scene)
+    let chat
+    switch (scene.type) {
+      case 'message': {
+        chat = { ...newChat(scene, event), recall: false } as Message
+        break
+      }
+      case 'notice': {
+        chat = { ...newChat(scene, event) } as Notice
+        break
+      }
+      case 'request': {
+        chat = { ...newChat(scene, event), action: 'await' } as Request
+        break
+      }
+      default:
+        return
     }
     if (event && push) {
-      chat.send = await adapter.bot.send(event)
+      chat.push = await adapter.bot.send(event)
     }
-    const {
-      group_id: groupId,
-      self: { bot_id: botId },
-    }: { user_id: string; group_id?: string; self: { bot_id: string } } = scene
-    const privateId = `${botId}.${status.user?.id}`
-    const chats = groupId && scene.detail_type !== 'group_invite' ? groupChats : privateChats
-    const chatId = (groupId ?? privateId).toString()
-    !chats.has(chatId) && chats.set(chatId, [])
-    chats.get(chatId)!.push(chat)
+    const botId = status.bot!.id
+    botChats.got(botId).push(chat)
   }
 
-  function getChats(chatType: 'private' | 'group', chatId: number | string): Chat[] {
-    chatId = chatId.toString()
-    const chatKey = chatType === 'private' ? `${status.bot?.id}.${status.user?.id}` : chatId
-    const chatsMap = chatType === 'private' ? privateChats : groupChats
-    !chatsMap.has(chatKey) && chatsMap.set(chatKey, [])
-    return chatsMap.get(chatKey) as Chat[]
+  function getChats(chatType?: 'private' | 'group', chatId?: string): Chats[] {
+    const chats = botChats.got(status.bot!.id)
+    if (!chatType && !chatId) {
+      return chats
+    }
+    return chats.filter((chat) => chat.scene.talker === `${chatType}.${chatId}`)
+  }
+
+  function getChat(chatId: string): Chats {
+    const chats = botChats.got(status.bot!.id)
+    return chats.find((chat) => chat.id === chatId) as Chats
+  }
+
+  function getMessage(messageId: string): Message {
+    return getChats().find((chat) => chat.type === 'message' && chat.id === messageId) as Message
+  }
+
+  function getNotice(noticeId: string): Notice {
+    return getChats().find((chat) => chat.type === 'notice' && chat.id === noticeId) as Notice
+  }
+
+  function getRequest(requestId: string): Request {
+    return getChats().find((chat) => chat.type === 'request' && chat.id === requestId) as Request
   }
 
   return {
-    privateChats,
-    groupChats,
-    chatMessages,
+    botChats,
     appendScene,
     getChats,
+    getChat,
+    getMessage,
+    getNotice,
+    getRequest,
   }
 })

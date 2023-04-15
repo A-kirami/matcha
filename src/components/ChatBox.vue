@@ -14,6 +14,7 @@ import SendButton from '@/components/SendButton.vue'
 import TimeSeparator from '@/components/TimeSeparator.vue'
 import { db, User, Group } from '@/database'
 import { useChatStore, useStatusStore } from '@/stores'
+import { Message } from '@/stores/chat'
 
 import type { PartialOptions, OverlayScrollbars } from 'overlayscrollbars'
 
@@ -92,8 +93,9 @@ const scrollEnd = useDebounceFn((instance: OverlayScrollbars): void => {
 }, 200)
 
 /** 将消息标记为已读 */
-function markReadMessage(index: number) {
-  chatList[index].read = true
+function markReadMessage(index: number): void {
+  const message = chatList[index] as Message
+  message.read = true
 }
 
 /** 分隔消息时间 */
@@ -134,7 +136,7 @@ onBeforeRouteLeave((_, from) => {
             <TimeSeparator v-if="isSeparator(index)" class="py-3" :time="item.scene.time" />
             <div class="py-3" :class="{'ml-auto': item.scene.user_id !== status.bot!.id}">
               <ChatMessage
-                v-if="item.scene.type === 'message'"
+                v-if="item.type === 'message'"
                 :index="index"
                 :scene="item.scene"
                 :event="item.event"
