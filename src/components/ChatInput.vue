@@ -187,7 +187,7 @@ interface Mentions {
 async function getMentions(): Promise<Mentions[]> {
   const mentions: Mentions[] = []
   if (chatType === 'group') {
-    mentions.push({ id: "0", name: '全体成员' })
+    mentions.push({ id: '0', name: '全体成员' })
     const members = await db.members.where({ groupId: chatId }).toArray()
     mentions.push(
       ...(await Promise.all(
