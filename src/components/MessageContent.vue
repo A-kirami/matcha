@@ -120,7 +120,7 @@ onBeforeMount(async () => {
       audioUrl = message.data.url
     } else if (message.type === 'mention') {
       const mentionString = await getMentionString(message)
-      mentionMap.set(message.data.user_id, mentionString)
+      mentionMap.set(message.data.target, mentionString)
     }
   }
   isLoading = false
@@ -139,7 +139,7 @@ onBeforeMount(async () => {
     <template v-for="message in messages" v-else :key="message.type">
       <span v-if="message.type === 'text'">{{ message.data.text }}</span>
       <span v-else-if="message.type === 'mention'" class="text-sky-400 not-last:mr-1">{{
-        mentionMap.get(message.data.user_id)
+        mentionMap.get(message.data.target)
       }}</span>
       <img
         v-else-if="message.type === 'image'"
