@@ -11,6 +11,7 @@
     "lint": "eslint . --ext .vue,.js,.ts --fix --ignore-path .gitignore",
     "lint:style": "stylelint \"./**/*.{vue,css,scss,sass}\" --fix --ignore-path .gitignore",
     "format": "prettier --write ./**/*.{html,vue,js,ts,jsx,tsx,json,md} --ignore-path .gitignore",
+    "typecheck": "tsc --noEmit",
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "prepare": "husky install"
