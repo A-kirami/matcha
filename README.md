@@ -99,15 +99,42 @@ Matcha 是一个专为 KiramiBot 设计的辅助开发工具，能够与 KiramiB
   <summary>OneBot v11</summary>
 
   ### 动作
+
   - [x] 发送私聊消息（send_private_msg）
   - [x] 发送群消息（send_group_msg）
   - [x] 发送消息（send_msg）
+  - [x] 撤回消息（delete_msg）
+  - [x] 获取消息（get_msg）
+  - [ ] 获取合并转发消息（get_forward_msg）
+  - [x] 群组踢人（set_group_kick）
+  - [x] 群组单人禁言（set_group_ban）
+  - [ ] 群组匿名用户禁言（set_group_anonymous_ban）
+  - [x] 群组全员禁言（set_group_whole_ban）
+  - [x] 群组设置管理员（set_group_admin）
+  - [ ] 群组匿名（set_group_anonymous）
+  - [x] 设置群名片（set_group_card）
+  - [x] 设置群名（set_group_name）
+  - [x] 退出群组（set_group_leave）
+  - [x] 设置群组专属头衔（set_group_special_title）
+  - [x] 处理加好友请求（set_friend_add_request）
+  - [x] 处理加群请求／邀请（set_group_add_request）
+  - [x] 获取登录号信息（get_login_info）
+  - [x] 获取陌生人信息（get_stranger_info）
+  - [x] 获取好友列表（get_friend_list）
+  - [x] 获取群信息（get_group_info）
+  - [x] 获取群列表（get_group_list）
+  - [x] 获取群成员信息（get_group_member_info）
+  - [x] 获取群成员列表（get_group_member_list）
+  - [ ] 获取群荣誉信息（get_group_honor_info）
+  - [ ] 获取语音（get_record）
+  - [ ] 获取图片（get_image）
   - [x] 检查是否可以发送图片（can_send_image）
   - [x] 检查是否可以发送语音（can_send_record）
   - [x] 获取运行状态（get_status）
   - [x] 获取版本信息（get_version_info）
 
   ### 事件
+
   - [x] 私聊消息
   - [x] 群消息
   </details>

@@ -1,12 +1,14 @@
-import { StrKeyObject } from '@/adapter/typed'
+import type { ActionResult } from '@/adapter/action'
+import type { Scenes } from '@/adapter/scene'
 
-import type { ActionResponse } from '@/adapter/action'
-
-export function response<D extends StrKeyObject>(retcode: number, data: D | null = null): ActionResponse<D> {
+export function result<D, S extends Scenes>(retcode: number, data: D | null = null, scene?: S): ActionResult<D, S> {
   const status = retcode === 0 ? 'ok' : 'failed'
   return {
-    status,
-    retcode,
-    data,
+    response: {
+      status,
+      retcode,
+      data,
+    },
+    scene,
   }
 }

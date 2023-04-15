@@ -1,3 +1,5 @@
+import { unix } from 'dayjs'
+
 import { db } from '@/database'
 import { asyncWrapper } from '@/utils'
 
@@ -146,4 +148,30 @@ export async function getUserNickname(userId: string, groupId?: string): Promise
   const user = await db.users.get(userId)
   const userName = user?.name
   return userName || userId.toString()
+}
+
+/**
+ * 获取用户年龄
+ * @param birthday 生日时间戳
+ */
+export function getUserAge(birthday: number): number {
+  return unix(birthday).diff(undefined, 'year')
+}
+
+const ROLE = ['owner', 'admin', 'member']
+
+/**
+ * 检查用户权限
+ * @param role 最低要求权限
+ * @param groupId 群组
+ * @param userId 检查用户
+ *
+ * @returns 用户是否具有权限
+ */
+export async function roleCheck(role: 'owner' | 'admin' | 'member', groupId: string, userId: string): Promise<boolean> {
+  const member = await db.members.get([groupId, userId])
+  if (!member) {
+    return false
+  }
+  return ROLE.indexOf(member.role) >= ROLE.indexOf(role)
 }
