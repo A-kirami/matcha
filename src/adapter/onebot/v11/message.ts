@@ -242,7 +242,7 @@ const messageBuildStrategy: MessageBuildStrategy<ContentMapping> = {
 
   'mention': (content: MentionContent): AtMessage => {
     return createMessage('at', {
-      qq: content.data.all ? 'all' : content.data.user_id,
+      qq: content.data.target ? 'all' : content.data.target,
     })
   },
 
@@ -363,8 +363,7 @@ const messageParseStrategy: MessageParseStrategy<MessageMapping> = {
 
   'at': (message: AtMessage): MentionContent => {
     return createContent('mention', {
-      'user_id': message.data.qq,
-      'all': message.data.qq === 'all' ? true : false,
+      'target': message.data.qq,
     })
   },
 

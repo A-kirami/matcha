@@ -58,10 +58,10 @@ export async function getPlainMessage(contents: Contents[], context: Context): P
 
 export async function getMentionString(content: MentionContent, groupId?: string) {
   let mentionName: string
-  if (content.data.all) {
+  if (content.data.target === 'all') {
     mentionName = '全体成员'
   } else {
-    const userId = content.data.user_id
+    const userId = content.data.target
     mentionName = await getUserNickname(userId, groupId)
   }
   return `@${mentionName}`

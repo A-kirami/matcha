@@ -18,9 +18,7 @@ export type MentionContent = Content<
   'mention',
   {
     /** 提及的用户 id */
-    user_id: string
-    /** 是否提及所有用户 */
-    all?: boolean
+    target: string | 'all'
   }
 >
 
