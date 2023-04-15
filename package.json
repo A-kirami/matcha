@@ -10,7 +10,7 @@
     "tauri": "tauri",
     "lint": "eslint . --ext .vue,.js,.ts --fix",
     "lint:style": "stylelint \"src/**/*.{vue,css,scss,sass}\" --fix",
-    "format": "prettier --write ./**/*.{html,vue,ts,js,json,md} --ignore-path .gitignore",
+    "format": "prettier --write ./**/*.{html,vue,js,ts,jsx,tsx,json,md} --ignore-path .gitignore",
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "prepare": "husky install"
@@ -95,11 +95,11 @@
     }
   },
   "lint-staged": {
-    "*.{vue,js,ts,tsx,jsx}": [
+    "*.{vue,js,ts,jsx,tsx}": [
       "eslint --fix",
-      "stylelint --fix",
-      "prettier --write --ignore-unknown",
       "vitest related --run"
-    ]
+    ],
+    "*.{vue,css,scss,sass}": "stylelint --fix",
+    "*.{html,vue,js,ts,jsx,tsx,json,md}": "prettier --write --ignore-unknown"
   }
 }
