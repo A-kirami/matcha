@@ -20,7 +20,7 @@ export function checkMatchaCommand(contents: Contents[]): boolean {
 
 export async function runMatchaCommand(
   chatType: 'private' | 'group',
-  chatId: number | string,
+  chatId: string,
   contents: Contents[]
 ): Promise<void> {
   const command = extractCommand(contents)
@@ -51,11 +51,10 @@ async function openDevtools(): Promise<void> {
   await invoke('open_devtools')
 }
 
-function clearChats(chatType: 'private' | 'group', chatId: number | string): void {
+function clearChats(chatType: 'private' | 'group', chatId: string): void {
   chat.getChats(chatType, chatId).length = 0
 }
 
 function clearAllChats(): void {
-  chat.privateChats.clear()
-  chat.groupChats.clear()
+  chat.botChats.clear()
 }
