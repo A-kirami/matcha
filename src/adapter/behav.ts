@@ -43,6 +43,17 @@ export class Behav {
     }
   }
 
+  getTalker(senderId: string, receiverId: string): string {
+    if (senderId === this.status.bot!.id) {
+      return receiverId
+    } else if (receiverId === this.status.bot!.id) {
+      return senderId
+    } else {
+      throw new Error('Invalid senderId or receiverId.')
+    }
+  }
+
+  /** 发送私聊消息 */
   async sendPrivateMessage(sender: User, receiver: User, contents: Contents[]): Promise<PrivateMessageScene> {
     const message_id = getMessageId().toString()
     let sub_type: 'temp' | 'friend' | 'group' = 'temp'
@@ -66,9 +77,11 @@ export class Behav {
       plain_message: await getPlainMessage(contents, { chatType: 'group', chatId: receiver.id }),
       user_id: sender.id,
       user_name: sender.name,
+      talker: `private.${this.getTalker(sender.id, receiver.id)}`,
     }
   }
 
+  /** 发送群聊消息 */
   async sendGroupMessage(sender: User, receiver: Group, contents: Contents[]): Promise<GroupMessageScene> {
     const member = await db.members.get({ userId: sender.id, groupId: receiver.id })
     if (!member) {
@@ -89,9 +102,11 @@ export class Behav {
       group_name: receiver.name,
       anonymous: null,
       member,
+      talker: `group.${receiver.id}`,
     }
   }
 
+  /** 发送消息 */
   async sendMessage(
     chatType: 'private' | 'group',
     sender: User,

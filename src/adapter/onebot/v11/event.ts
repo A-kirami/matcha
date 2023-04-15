@@ -1,12 +1,10 @@
 /* eslint-disable camelcase */
 import { AdapterEventHandler } from '@/adapter/event'
-import { db } from '@/database'
-import { useStatusStore } from '@/stores'
 
 import { MessageHandler } from './message'
 
 import type { Messages } from './message'
-import type { Event as BaseEvent, EventBuildStrategy, EventParseStrategy } from '@/adapter/event'
+import type { Event as BaseEvent, EventStrategy } from '@/adapter/event'
 import type {
   SceneMapping,
   PrivateMessageScene,
@@ -79,7 +77,7 @@ export interface PrivateMessageEvent extends MessageEvent {
 }
 
 /** 私聊消息发送者 */
-interface PrivateSender {
+export interface PrivateSender {
   /** 发送者 QQ 号 */
   user_id: number
 
@@ -121,7 +119,7 @@ interface Anonymous {
 }
 
 /** 群消息发送者 */
-interface GroupSender extends PrivateSender {
+export interface GroupSender extends PrivateSender {
   /** 群名片／备注 */
   card: string
 
@@ -368,7 +366,7 @@ export type Events = ValueOf<EventMapping>
 
 const messageHandler = new MessageHandler()
 
-const eventBuildStrategy: EventBuildStrategy<SceneMapping<Messages>> = {
+const eventBuildStrategy: EventStrategy<SceneMapping<Messages>> = {
   'message.private': async (scene: PrivateMessageScene<Messages>): Promise<PrivateMessageEvent> => {
     const {
       time,
@@ -414,7 +412,7 @@ const eventBuildStrategy: EventBuildStrategy<SceneMapping<Messages>> = {
       plain_message: raw_message,
       user_name: nickname,
       anonymous,
-      member: { card, role, level, title },
+      member: { card, role, title, level },
     } = scene
     return {
       time,
@@ -428,7 +426,7 @@ const eventBuildStrategy: EventBuildStrategy<SceneMapping<Messages>> = {
       message: scene.original_message || (await messageHandler.build(message)),
       raw_message,
       font: 0,
-      anonymous: anonymous ? { ...anonymous, flag: anonymous.id.toString() } : null,
+      anonymous: anonymous ? { id: Number(anonymous.id), name: anonymous.name, flag: anonymous.id } : null,
       sender: {
         user_id: Number(user_id),
         nickname,
@@ -635,406 +633,6 @@ const eventBuildStrategy: EventBuildStrategy<SceneMapping<Messages>> = {
   },
 }
 
-const eventParseStrategy: EventParseStrategy<EventMapping> = {
-  'message.private': async (event: PrivateMessageEvent): Promise<PrivateMessageScene> => {
-    const {
-      time,
-      self_id,
-      post_type: type,
-      message_type: detail_type,
-      sub_type,
-      message_id,
-      message,
-      raw_message: plain_message,
-      user_id,
-      sender: { nickname: user_name },
-    } = event
-    return {
-      id: crypto.randomUUID(),
-      time,
-      self: {
-        platform: 'qq',
-        bot_id: self_id.toString(),
-      },
-      type,
-      detail_type,
-      sub_type: sub_type === 'other' ? 'temp' : sub_type,
-      message_id: message_id.toString(),
-      message: await messageHandler.parse(message),
-      plain_message,
-      user_id: user_id.toString(),
-      user_name,
-    }
-  },
-
-  'message.group': async (event: GroupMessageEvent): Promise<GroupMessageScene> => {
-    const {
-      time,
-      self_id,
-      post_type: type,
-      message_type: detail_type,
-      sub_type,
-      message_id,
-      message,
-      raw_message: plain_message,
-      user_id,
-      group_id,
-      anonymous,
-      sender: { nickname: user_name, card, role, title, level },
-    } = event
-    const member = await db.members.get({ userId: user_id.toString(), groupId: group_id.toString() })
-    const group = await db.groups.get(group_id.toString())
-    return {
-      id: crypto.randomUUID(),
-      time,
-      self: {
-        platform: 'qq',
-        bot_id: self_id.toString(),
-      },
-      type,
-      detail_type,
-      sub_type: sub_type as 'normal' | 'anonymous',
-      message_id: message_id.toString(),
-      message: await messageHandler.parse(message),
-      plain_message,
-      user_id: user_id.toString(),
-      user_name,
-      group_id: group_id.toString(),
-      group_name: group!.name,
-      anonymous,
-      member: {
-        card,
-        role,
-        title,
-        level: member!.level,
-      },
-    }
-  },
-
-  'notice.group_upload': async (event: GroupUploadNoticeEvent): Promise<GroupFileUploadNoticeScene> => {
-    const { time, self_id, post_type: type, user_id, group_id, file } = event
-    const user = await db.users.get(user_id.toString())
-    const group = await db.groups.get(group_id.toString())
-    return {
-      id: crypto.randomUUID(),
-      time,
-      self: {
-        platform: 'qq',
-        bot_id: self_id.toString(),
-      },
-      type,
-      detail_type: 'group_file_upload',
-      user_id: user_id.toString(),
-      user_name: user!.name,
-      group_id: group_id.toString(),
-      group_name: group!.name,
-      file,
-    }
-  },
-
-  'notice.group_admin': async (event: GroupAdminNoticeEvent): Promise<GroupAdminNoticeScene> => {
-    const { time, self_id, post_type: type, notice_type: detail_type, sub_type, user_id, group_id } = event
-    const user = await db.users.get(user_id.toString())
-    const group = await db.groups.get(group_id.toString())
-    const status = useStatusStore()
-    return {
-      id: crypto.randomUUID(),
-      time,
-      self: {
-        platform: 'qq',
-        bot_id: self_id.toString(),
-      },
-      type,
-      detail_type,
-      sub_type,
-      user_id: user_id.toString(),
-      user_name: user!.name,
-      group_id: group_id.toString(),
-      group_name: group!.name,
-      operator_id: status.bot!.id,
-      operator_name: status.bot!.name,
-    }
-  },
-
-  'notice.group_decrease': async (event: GroupDecreaseNoticeEvent): Promise<GroupMemberDecreaseNoticeScene> => {
-    const { time, self_id, post_type: type, sub_type, user_id, group_id } = event
-    const user = await db.users.get(user_id.toString())
-    const group = await db.groups.get(group_id.toString())
-    const status = useStatusStore()
-    return {
-      id: crypto.randomUUID(),
-      time,
-      self: {
-        platform: 'qq',
-        bot_id: self_id.toString(),
-      },
-      type,
-      detail_type: 'group_member_decrease',
-      sub_type: sub_type === 'leave' ? 'leave' : 'remove',
-      user_id: user_id.toString(),
-      user_name: user!.name,
-      group_id: group_id.toString(),
-      group_name: group!.name,
-      operator_id: status.bot!.id,
-      operator_name: status.bot!.name,
-    }
-  },
-
-  'notice.group_increase': async (event: GroupIncreaseNoticeEvent): Promise<GroupMemberIncreaseNoticeScene> => {
-    const { time, self_id, post_type: type, sub_type, user_id, group_id } = event
-    const user = await db.users.get(user_id.toString())
-    const group = await db.groups.get(group_id.toString())
-    const status = useStatusStore()
-    return {
-      id: crypto.randomUUID(),
-      time,
-      self: {
-        platform: 'qq',
-        bot_id: self_id.toString(),
-      },
-      type,
-      detail_type: 'group_member_increase',
-      sub_type: sub_type === 'approve' ? 'join' : sub_type,
-      user_id: user_id.toString(),
-      user_name: user!.name,
-      group_id: group_id.toString(),
-      group_name: group!.name,
-      operator_id: status.bot!.id,
-      operator_name: status.bot!.name,
-    }
-  },
-
-  'notice.group_ban': async (event: GroupBanNoticeEvent): Promise<GroupMemberBanNoticeScene> => {
-    const { time, self_id, post_type: type, sub_type, user_id, group_id } = event
-    const user = await db.users.get(user_id.toString())
-    const group = await db.groups.get(group_id.toString())
-    const status = useStatusStore()
-    return {
-      id: crypto.randomUUID(),
-      time,
-      self: {
-        platform: 'qq',
-        bot_id: self_id.toString(),
-      },
-      type,
-      detail_type: 'group_member_ban',
-      sub_type,
-      user_id: user_id.toString(),
-      user_name: user!.name,
-      group_id: group_id.toString(),
-      group_name: group!.name,
-      operator_id: status.bot!.id,
-      operator_name: status.bot!.name,
-    }
-  },
-
-  'notice.friend_add': async (event: FriendAddNoticeEvent): Promise<FriendIncreaseNoticeScene> => {
-    const { time, self_id, post_type: type, user_id } = event
-    const user = await db.users.get(user_id.toString())
-    return {
-      id: crypto.randomUUID(),
-      time,
-      self: {
-        platform: 'qq',
-        bot_id: self_id.toString(),
-      },
-      type,
-      detail_type: 'friend_increase',
-      user_id: user_id.toString(),
-      user_name: user!.name,
-    }
-  },
-
-  'notice.group_recall': async (event: GroupRecallNoticeEvent): Promise<GroupMessageDeleteNoticeScene> => {
-    const { time, self_id, post_type: type, user_id, group_id, message_id } = event
-    const user = await db.users.get(user_id.toString())
-    const group = await db.groups.get(group_id.toString())
-    const member = await db.members.get({ groupId: group_id.toString(), userId: self_id.toString() })
-    const status = useStatusStore()
-    let sub_type: 'delete' | 'recall'
-    if (member!.role !== 'member' && user_id.toString() !== status.bot!.id) {
-      sub_type = 'delete'
-    } else {
-      sub_type = 'recall'
-    }
-    return {
-      id: crypto.randomUUID(),
-      time,
-      self: {
-        platform: 'qq',
-        bot_id: self_id.toString(),
-      },
-      type,
-      detail_type: 'group_message_delete',
-      sub_type,
-      user_id: user_id.toString(),
-      user_name: user!.name,
-      group_id: group_id.toString(),
-      group_name: group!.name,
-      operator_id: status.bot!.id,
-      operator_name: status.bot!.name,
-      message_id: message_id.toString(),
-    }
-  },
-
-  'notice.friend_recall': async (event: FriendRecallNoticeEvent): Promise<PrivateMessageDeleteNoticeScene> => {
-    const { time, self_id, post_type: type, user_id, message_id } = event
-    const user = await db.users.get(user_id.toString())
-    return {
-      id: crypto.randomUUID(),
-      time,
-      self: {
-        platform: 'qq',
-        bot_id: self_id.toString(),
-      },
-      type,
-      detail_type: 'private_message_delete',
-      user_id: user_id.toString(),
-      user_name: user!.name,
-      message_id: message_id.toString(),
-    }
-  },
-
-  'notice.notify.poke': async (event: GroupPokeNotifyEvent): Promise<GroupPokeNoticeScene> => {
-    const { time, self_id, post_type: type, user_id, group_id, target_id } = event
-    const user = await db.users.get(user_id.toString())
-    const group = await db.groups.get(group_id.toString())
-    const target = await db.users.get(target_id.toString())
-    return {
-      id: crypto.randomUUID(),
-      time,
-      self: {
-        platform: 'qq',
-        bot_id: self_id.toString(),
-      },
-      type,
-      detail_type: 'group_poke',
-      user_id: user_id.toString(),
-      user_name: user!.name,
-      group_id: group_id.toString(),
-      group_name: group!.name,
-      target_id: target_id.toString(),
-      target_name: target!.name,
-    }
-  },
-
-  'notice.notify.lucky_king': async (event: GroupHongbaoLuckyNotifyEvent): Promise<GroupHongbaoLuckyNoticeScene> => {
-    const { time, self_id, post_type: type, user_id, group_id, target_id } = event
-    const user = await db.users.get(user_id.toString())
-    const group = await db.groups.get(group_id.toString())
-    const target = await db.users.get(target_id.toString())
-    return {
-      id: crypto.randomUUID(),
-      time,
-      self: {
-        platform: 'qq',
-        bot_id: self_id.toString(),
-      },
-      type,
-      detail_type: 'group_hongbao_lucky',
-      user_id: user_id.toString(),
-      user_name: user!.name,
-      group_id: group_id.toString(),
-      group_name: group!.name,
-      target_id: target_id.toString(),
-      target_name: target!.name,
-    }
-  },
-
-  'notice.notify.honor': async (event: GroupMemberHonorNotifyEvent): Promise<GroupMemberHonorNoticeScene> => {
-    const { time, self_id, post_type: type, user_id, group_id, honor_type: honor } = event
-    const user = await db.users.get(user_id.toString())
-    const group = await db.groups.get(group_id.toString())
-    return {
-      id: crypto.randomUUID(),
-      time,
-      self: {
-        platform: 'qq',
-        bot_id: self_id.toString(),
-      },
-      type,
-      detail_type: 'group_member_honor',
-      user_id: user_id.toString(),
-      user_name: user!.name,
-      group_id: group_id.toString(),
-      group_name: group!.name,
-      honor,
-    }
-  },
-
-  'request.friend': async (event: FriendRequestEvent): Promise<AddFriendRequestScene> => {
-    const { time, self_id, post_type: type, user_id, comment } = event
-    const user = await db.users.get(user_id.toString())
-    return {
-      id: crypto.randomUUID(),
-      time,
-      self: {
-        platform: 'qq',
-        bot_id: self_id.toString(),
-      },
-      type,
-      detail_type: 'add_friend',
-      user_id: user_id.toString(),
-      user_name: user!.name,
-      comment,
-    }
-  },
-
-  'request.group': async (event: GroupRequestEvent): Promise<JoinGroupRequestScene | GroupInviteRequestScene> => {
-    const { time, self_id, post_type: type, sub_type, user_id, group_id, comment } = event
-    const user = await db.users.get(user_id.toString())
-    const group = await db.groups.get(group_id.toString())
-    const groupRequest = {
-      id: crypto.randomUUID(),
-      time,
-      self: {
-        platform: 'qq',
-        bot_id: self_id.toString(),
-      },
-      type,
-      user_id: user_id.toString(),
-      user_name: user!.name,
-      group_id: group_id.toString(),
-      group_name: group!.name,
-    }
-    if (sub_type === 'add') {
-      return {
-        ...groupRequest,
-        detail_type: 'join_group',
-        comment,
-      }
-    } else {
-      return {
-        ...groupRequest,
-        detail_type: 'group_invite',
-      }
-    }
-  },
-}
-
 export class EventHandler extends AdapterEventHandler<Events> {
-  readonly buildStrategy = eventBuildStrategy
-  readonly parseStrategy = eventParseStrategy
-
-  getEventKey(event: Events): string {
-    const { post_type: postType, sub_type: subType }: { post_type: string; sub_type?: string } = event
-    let detailType
-    switch (event.post_type) {
-      case 'message': {
-        detailType = event.message_type
-        break
-      }
-      case 'notice': {
-        detailType = event.notice_type
-        break
-      }
-      case 'request': {
-        detailType = event.request_type
-        break
-      }
-      default:
-        throw new Error('意外的事件类型')
-    }
-    return this.createKey(postType, detailType, subType)
-  }
+  readonly strategy = eventBuildStrategy
 }
