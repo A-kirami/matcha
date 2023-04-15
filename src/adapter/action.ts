@@ -1,5 +1,4 @@
 import type { Scenes } from './scene'
-import type { StrKeyObject } from './typed'
 
 export interface ActionRequest {
   action: string
@@ -8,14 +7,14 @@ export interface ActionRequest {
   echo?: string
 }
 
-export interface ActionResponse<D extends StrKeyObject = StrKeyObject> {
+export interface ActionResponse<D = unknown> {
   status: 'ok' | 'failed'
   retcode: number
   data: D | null
   echo?: string
 }
 
-export interface ActionResult<R extends StrKeyObject = StrKeyObject, S extends Scenes = Scenes> {
+export interface ActionResult<R = unknown, S extends Scenes = Scenes> {
   response: ActionResponse<R>
   scene?: S
 }
