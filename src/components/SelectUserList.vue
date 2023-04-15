@@ -17,7 +17,7 @@ const userList = useObservable(
   )
 )
 
-function specifyUser(type: 'bot' | 'persona', uid: number) {
+function specifyUser(type: 'bot' | 'persona', uid: string) {
   if (type === 'bot' && uid !== status.assignUser) {
     status.assignBot = uid
   } else if (type === 'persona' && uid !== status.assignBot) {

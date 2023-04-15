@@ -36,7 +36,7 @@ const status = useStatusStore()
 const chats = useChatStore()
 
 /** 消息是否为Bot发送 */
-const isBot = scene.user_id === status.bot!.id.toString()
+const isBot = scene.user_id === status.bot!.id
 
 /** 单个消息 */
 const onlySingle = scene.message.length === 1

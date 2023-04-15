@@ -12,34 +12,37 @@ import Avatar from '@/components/Avatar.vue'
 import { db } from '@/database'
 import { useStatusStore } from '@/stores'
 
-import type { Member } from '@/database'
 import type { Dayjs } from 'dayjs'
 
 const status = useStatusStore()
 
 const dragHandle = $ref<HTMLElement | null>(null)
 
-type MemberForm = Omit<Member, 'groupId' | 'userId' | 'lastSentTime' | 'titleExpireTime' | 'banExpireTime'>
+interface MemberForm {
+  card: string
+  role: 'owner' | 'admin' | 'member'
+  level: number
+  title: string
+  joinTime: Dayjs
+}
 
 const memberForm = $ref<MemberForm>({
   card: status.user!.name,
   role: 'member',
   level: 0,
-  rank: '',
   title: '',
-  joinTime: undefined,
+  joinTime: dayjs(),
 })
 const route = useRoute()
 
 async function onFinish(member: MemberForm): Promise<void> {
-  const { card, role, level, rank, title, joinTime } = member
+  const { card, role, level, title, joinTime } = member
   const newMember = {
-    groupId: Number(route.params.chatId),
+    groupId: route.params.chatId.toString(),
     userId: status.user!.id,
     card: card === status.user!.name ? '' : card,
     role: role || 'member',
     level,
-    rank,
     title,
     // @ts-ignore
     joinTime: joinTime ? (joinTime as Dayjs).unix() : dayjs().unix(),

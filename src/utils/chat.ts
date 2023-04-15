@@ -56,13 +56,13 @@ export async function getPlainMessage(contents: Contents[], context: Context): P
   return (await Promise.all(plainMessagePromise)).filter(nonNullable).join('')
 }
 
-export async function getMentionString(content: MentionContent, groupId?: number) {
+export async function getMentionString(content: MentionContent, groupId?: string) {
   let mentionName: string
   if (content.data.all) {
     mentionName = '全体成员'
   } else {
     const userId = content.data.user_id
-    mentionName = await getUserNickname(Number(userId), groupId)
+    mentionName = await getUserNickname(userId, groupId)
   }
   return `@${mentionName}`
 }
@@ -74,7 +74,7 @@ type PlainStrategy<C> = {
 const plainStrategy: PlainStrategy<ContentMapping> = {
   text: (content: TextContent): string => content.data.text,
   mention: async (content: MentionContent, context: Context): Promise<string> => {
-    const groupId = context.chatType === 'group' ? Number(context.chatId) : undefined
+    const groupId = context.chatType === 'group' ? context.chatId : undefined
     const mentionString = await getMentionString(content, groupId)
     return mentionString + ''
   },
@@ -136,7 +136,7 @@ export function getPlainScene(scene?: Scenes): string {
  *
  * @returns 用户昵称
  */
-export async function getUserNickname(userId: number, groupId?: number): Promise<string> {
+export async function getUserNickname(userId: string, groupId?: string): Promise<string> {
   if (groupId) {
     const member = await db.members.get({ userId, groupId })
     if (member?.card) {

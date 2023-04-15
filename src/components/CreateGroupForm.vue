@@ -18,25 +18,25 @@ import type { Dayjs } from 'dayjs'
 const dragHandle = $ref<HTMLElement | null>(null)
 
 interface GroupForm {
-  id: number
+  id: string
   name: string
-  time?: Dayjs
-  intro?: string
-  level?: number
+  time: Dayjs
+  intro: string
+  level: number
   maxMemberCount: string
 }
 
 const groupForm = $ref<GroupForm>({
   id: randomId(),
   name: '点击修改群名称',
-  time: undefined,
-  intro: undefined,
-  level: undefined,
+  time: dayjs(),
+  intro: '',
+  level: 1,
   maxMemberCount: '200',
 })
 
-function randomId(): number {
-  return randomInt(1e7, 1e8)
+function randomId(): string {
+  return randomInt(1e7, 1e8).toString()
 }
 
 async function onFinish(group: GroupForm): Promise<void> {
@@ -53,6 +53,7 @@ async function onFinish(group: GroupForm): Promise<void> {
       level,
       maxMemberCount: Number(maxMemberCount),
       memberCount: 0,
+      wholeBanned: false,
     })
     message.success('群组创建成功')
   }
@@ -77,7 +78,7 @@ watch(nameFocused, (focused) => {
 
 watch(idFocused, (focused) => {
   if (!focused) {
-    groupForm.id = Number(idTarget?.innerText) || randomId()
+    groupForm.id = idTarget?.innerText || randomId()
   }
 })
 
@@ -89,7 +90,7 @@ function onInput(e: Event, editType: 'name' | 'id'): void {
     if (editType === 'id') {
       const filteredText = el.innerText.replace(/[^\d]/g, '')
       if (filteredText !== el.innerText || el.innerText.length > 10) {
-        el.innerText = groupForm.id.toString()
+        el.innerText = groupForm.id
       }
     } else {
       if (el.innerText.length > 14) {
@@ -204,7 +205,7 @@ let visible = $computed({
           </a-form-item>
           <div class="w-full flex flex-row justify-between gap-2">
             <a-form-item label="等级" name="level" :colon="false">
-              <a-input-number id="inputNumber" v-model:value="groupForm.level" :min="0" :max="999" size="small" />
+              <a-input-number id="inputNumber" v-model:value="groupForm.level" :min="1" :max="5" size="small" />
             </a-form-item>
             <a-form-item label="创建" name="time" :colon="false">
               <a-date-picker v-model:value="groupForm.time" :disabled-date="disableFuture" size="small" />

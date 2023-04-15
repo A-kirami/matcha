@@ -47,7 +47,7 @@ let scrollLock = $ref(false)
 
 watchEffect(async () => {
   const dbGet = chatType === 'group' ? db.groups : db.users
-  chatPerson = (await dbGet.get(Number(chatId))) || null
+  chatPerson = (await dbGet.get(chatId)) || null
 })
 
 const chatList = $computed(() => {
@@ -132,7 +132,7 @@ onBeforeRouteLeave((_, from) => {
             :data-index="index"
           >
             <TimeSeparator v-if="isSeparator(index)" class="py-3" :time="item.scene.time" />
-            <div class="py-3" :class="{'ml-auto': item.scene.user_id !== status.bot!.id.toString()}">
+            <div class="py-3" :class="{'ml-auto': item.scene.user_id !== status.bot!.id}">
               <ChatMessage
                 v-if="item.scene.type === 'message'"
                 :index="index"

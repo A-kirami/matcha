@@ -10,11 +10,11 @@ export const useStatusStore = defineStore(
     /** 当前使用 Bot */
     const bot = $ref<User | null>(null)
     /** 使用 Bot ID */
-    const assignBot = ref<number>(0)
+    const assignBot = ref<string>('')
     /** 当前使用用户 */
     const user = $ref<User | null>(null)
     /** 使用用户 ID */
-    const assignUser = ref<number>(0)
+    const assignUser = ref<string>('')
     /** 最近会话路由 */
     const latelySession = $ref('')
     /** 全局加载状态 */

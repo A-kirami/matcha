@@ -46,7 +46,7 @@ const actionStrategy: ActionStrategy = {
     message: Messages[] | string
     auto_escape: boolean
   }): Promise<ActionResult<{ message_id: number }, PrivateMessageScene>> => {
-    const user = await db.users.get(user_id)
+    const user = await db.users.get(user_id.toString())
     if (!user) {
       throw new Error('用户不存在')
     }
@@ -70,7 +70,7 @@ const actionStrategy: ActionStrategy = {
     message: Messages[] | string
     auto_escape: boolean
   }): Promise<ActionResult<{ message_id: number }, GroupMessageScene>> => {
-    const group = await db.groups.get(group_id)
+    const group = await db.groups.get(group_id.toString())
     if (!group) {
       throw new Error('群聊不存在')
     }

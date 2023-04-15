@@ -188,10 +188,10 @@ async function getMentions(): Promise<Mentions[]> {
   const mentions: Mentions[] = []
   if (chatType === 'group') {
     mentions.push({ id: 0, name: '全体成员' })
-    const members = await db.members.where({ groupId: Number(chatId) }).toArray()
+    const members = await db.members.where({ groupId: chatId }).toArray()
     mentions.push(
       ...(await Promise.all(
-        members.map(async (item) => ({ id: item.userId, name: await getUserNickname(item.userId, Number(chatId)) }))
+        members.map(async (item) => ({ id: Number(item.userId), name: await getUserNickname(item.userId, chatId) }))
       ))
     )
   } else {
