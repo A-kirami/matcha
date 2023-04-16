@@ -18,7 +18,7 @@ const chatList = $computed(() => {
   if (!chatPerson) {
     return []
   }
-  return chat.getChats(chatType, chatPerson.id)
+  return chat.chatLogs.filter((chat) => chat.scene.talker === `${chatType}.${chatPerson.id}`)
 })
 
 /** 最后发言 */

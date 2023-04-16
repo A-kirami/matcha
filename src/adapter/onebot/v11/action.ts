@@ -154,8 +154,9 @@ const actionStrategy: ActionStrategy = {
     >
   > => {
     const chat = useChatStore()
-    const chats = chat.getChats()
-    const messageChat = chats.find((chat) => chat.type === 'message' && chat.scene.message_id === message_id.toString())
+    const messageChat = chat.chatLogs.find(
+      (chat) => chat.type === 'message' && chat.scene.message_id === message_id.toString()
+    )
     if (!messageChat) {
       return result(1404, { message: '消息不存在' })
     }
@@ -512,10 +513,7 @@ function getGroupInfo(group: Group): GroupInfo {
 
 async function getMemberInfo(member: Member, role: 'owner' | 'admin' | 'member'): Promise<MemberInfo> {
   const chat = useChatStore()
-  const lastSentTime = chat
-    .getChats()
-    .filter((chat) => chat.type === 'message')
-    .at(-1)?.scene.time
+  const lastSentTime = chat.chatLogs.filter((chat) => chat.type === 'message').at(-1)?.scene.time
   const cardChangeable = role === 'owner' ? true : role === 'admin' && member.role !== 'owner' ? true : false
   const user = (await db.users.get(member.userId)) as User
   return {

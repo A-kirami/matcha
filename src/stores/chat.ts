@@ -1,9 +1,6 @@
 import { defineStore } from 'pinia'
 
-import { DefaultMap } from '@/utils'
-
 import { useAdapterStore } from './protocol'
-import { useStatusStore } from './status'
 
 import type { Event } from '@/adapter/event'
 import type { Scenes, MessageScenes, NoticeScenes, RequestScenes } from '@/adapter/scene'
@@ -49,10 +46,9 @@ function newChat(scene: Scenes, event?: Event) {
 }
 
 export const useChatStore = defineStore('chat', () => {
-  const botChats = $ref(new DefaultMap<string, Chats[]>(() => []))
+  const chatLogs = $ref<Chats[]>([])
 
   const adapter = useAdapterStore()
-  const status = useStatusStore()
 
   async function appendScene(scene: Scenes, push = true): Promise<void> {
     const event = await adapter.bot.eventHandler.handle(scene)
@@ -76,42 +72,20 @@ export const useChatStore = defineStore('chat', () => {
     if (event && push) {
       chat.push = await adapter.bot.send(event)
     }
-    const botId = status.bot!.id
-    botChats.got(botId).push(chat)
+    chatLogs.push(chat)
   }
 
-  function getChats(chatType?: 'private' | 'group', chatId?: string): Chats[] {
-    const chats = botChats.got(status.bot!.id)
-    if (!chatType && !chatId) {
-      return chats
-    }
-    return chats.filter((chat) => chat.scene.talker === `${chatType}.${chatId}`)
-  }
-
-  function getChat(chatId: string): Chats {
-    const chats = botChats.got(status.bot!.id)
-    return chats.find((chat) => chat.id === chatId) as Chats
-  }
-
-  function getMessage(messageId: string): Message {
-    return getChats().find((chat) => chat.type === 'message' && chat.id === messageId) as Message
-  }
-
-  function getNotice(noticeId: string): Notice {
-    return getChats().find((chat) => chat.type === 'notice' && chat.id === noticeId) as Notice
-  }
-
-  function getRequest(requestId: string): Request {
-    return getChats().find((chat) => chat.type === 'request' && chat.id === requestId) as Request
+  function getChat<T extends Message>(chatId: string, type: 'message'): T
+  function getChat<T extends Notice>(chatId: string, type: 'notice'): T
+  function getChat<T extends Request>(chatId: string, type: 'request'): T
+  function getChat<T extends Chats>(chatId: string, type?: T['type']): T {
+    const chat = type ? chatLogs.find((c) => c.type === type && c.id === chatId) : chatLogs.find((c) => c.id === chatId)
+    return chat as T
   }
 
   return {
-    botChats,
+    chatLogs,
     appendScene,
-    getChats,
     getChat,
-    getMessage,
-    getNotice,
-    getRequest,
   }
 })

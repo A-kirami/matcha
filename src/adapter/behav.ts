@@ -149,8 +149,7 @@ export class Behav {
     operatorId: string
   ): Promise<PrivateMessageDeleteNoticeScene | GroupMessageDeleteNoticeScene> {
     const chat = useChatStore()
-    const chats = chat.getChats()
-    const messageChat = chats.find((chat) => chat.type === 'message' && chat.scene.message_id === messageId) as
+    const messageChat = chat.chatLogs.find((chat) => chat.type === 'message' && chat.scene.message_id === messageId) as
       | Message
       | undefined
     if (!messageChat) {
@@ -235,7 +234,7 @@ export class Behav {
     reason = ''
   ): Promise<GroupMemberIncreaseNoticeScene | undefined> {
     const chat = useChatStore()
-    const request = chat.getRequest(requestId)
+    const request = chat.getChat(requestId, 'request')
     const scene = request.scene as JoinGroupRequestScene
     if (!(await roleCheck('admin', scene.group_id, scene.user_id))) {
       throw new Error('无权操作')
@@ -424,7 +423,7 @@ export class Behav {
     remark = ''
   ): Promise<FriendIncreaseNoticeScene | undefined> {
     const chat = useChatStore()
-    const request = chat.getRequest(requestId)
+    const request = chat.getChat(requestId, 'request')
     const scene = request.scene as AddFriendRequestScene
     if (!approve) {
       request.action = 'refuse'
