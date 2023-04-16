@@ -32,7 +32,7 @@ const options: PartialOptions = {
 
 const behav = new Behav()
 
-const chats = useChatStore()
+const chat = useChatStore()
 
 const status = useStatusStore()
 
@@ -52,8 +52,7 @@ watchEffect(async () => {
 })
 
 const chatList = $computed(() => {
-  const chatKey = chatType === 'group' ? chatId : `${status.bot?.id}.${status.user?.id}`
-  return chats.getChats(chatType, chatKey)
+  return chat.chatLogs.filter((chat) => chat.scene.talker === `${chatType}.${chatId}`)
 })
 
 async function sendMessage(): Promise<void> {
@@ -65,7 +64,7 @@ async function sendMessage(): Promise<void> {
     await runMatchaCommand(chatType, chatId, contents)
   } else {
     const scene = await behav.sendMessage(chatType, status.user!, chatPerson, contents)
-    await chats.appendScene(scene)
+    await chat.appendScene(scene)
   }
   chatInput?.clearContent()
 }
@@ -127,20 +126,15 @@ onBeforeRouteLeave((_, from) => {
     <OverlayScrollbarsComponent ref="scroller" :options="options" defer @os-scroll="scrollEnd">
       <DynamicScroller :items="chatList" :min-item-size="30" class="px-6 py-3" @resize="scrollToBottom">
         <template #default="{ item, index, active }">
-          <DynamicScrollerItem
-            :item="item"
-            :active="active"
-            :size-dependencies="[item.scene.message]"
-            :data-index="index"
-          >
+          <DynamicScrollerItem :item="item" :active="active" :size-dependencies="[item.scene]" :data-index="index">
             <TimeSeparator v-if="isSeparator(index)" class="py-3" :time="item.scene.time" />
-            <div class="py-3" :class="{'ml-auto': item.scene.user_id !== status.bot!.id}">
+            <div class="py-3">
               <ChatMessage
                 v-if="item.type === 'message'"
                 :index="index"
                 :scene="item.scene"
                 :event="item.event"
-                :send="item.send"
+                :send="item.push"
                 @read-message="markReadMessage"
                 @skip-scroll="lockScroll"
               />

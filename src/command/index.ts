@@ -52,9 +52,9 @@ async function openDevtools(): Promise<void> {
 }
 
 function clearChats(chatType: 'private' | 'group', chatId: string): void {
-  chat.getChats(chatType, chatId).length = 0
+  chat.chatLogs = chat.chatLogs.filter((chat) => chat.scene.talker !== `${chatType}.${chatId}`)
 }
 
 function clearAllChats(): void {
-  chat.botChats.clear()
+  chat.chatLogs.length = 0
 }
