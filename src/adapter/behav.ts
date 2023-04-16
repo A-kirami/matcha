@@ -66,16 +66,6 @@ export class Behav {
     }
   }
 
-  getTalker(senderId: string, receiverId: string): string {
-    if (senderId === this.status.bot!.id) {
-      return receiverId
-    } else if (receiverId === this.status.bot!.id) {
-      return senderId
-    } else {
-      throw new Error('Invalid senderId or receiverId.')
-    }
-  }
-
   /** 发送私聊消息 */
   async sendPrivateMessage(sender: User, receiver: User, contents: Contents[]): Promise<PrivateMessageScene> {
     const message_id = getMessageId().toString()
@@ -100,7 +90,9 @@ export class Behav {
       plain_message: await getPlainMessage(contents, { chatType: 'group', chatId: receiver.id }),
       user_id: sender.id,
       user_name: sender.name,
-      talker: `private.${this.getTalker(sender.id, receiver.id)}`,
+      chat_type: 'private',
+      sender_id: sender.id,
+      receiver_id: receiver.id,
     }
   }
 
@@ -125,7 +117,9 @@ export class Behav {
       group_name: receiver.name,
       anonymous: null,
       member,
-      talker: `group.${receiver.id}`,
+      chat_type: 'group',
+      sender_id: sender.id,
+      receiver_id: receiver.id,
     }
   }
 
@@ -163,7 +157,9 @@ export class Behav {
         detail_type: 'private_message_delete',
         message_id: messageId,
         user_id: scene.user_id,
-        talker: scene.talker,
+        chat_type: 'private',
+        sender_id: operatorId,
+        receiver_id: scene.user_id,
       }
     }
     let sub_type: 'delete' | 'recall' = 'recall'
@@ -184,7 +180,9 @@ export class Behav {
       group_id: scene.group_id,
       user_id: scene.user_id,
       operator_id: operatorId,
-      talker: `group.${scene.group_id}}`,
+      chat_type: 'group',
+      sender_id: operatorId,
+      receiver_id: scene.group_id,
     }
   }
 
@@ -206,7 +204,9 @@ export class Behav {
       group_id: groupId,
       invitor_id: invitorId,
       comment,
-      talker: `group.${groupId}`,
+      chat_type: 'group',
+      sender_id: userId,
+      receiver_id: groupId,
     }
   }
 
@@ -222,7 +222,9 @@ export class Behav {
       group_id: groupId,
       user_id: userId,
       invitor_id: invitorId,
-      talker: `private.${this.getTalker(invitorId, userId)}`,
+      chat_type: 'private',
+      sender_id: invitorId,
+      receiver_id: userId,
     }
   }
 
@@ -252,7 +254,9 @@ export class Behav {
       user_id: scene.user_id,
       group_id: scene.group_id,
       operator_id: operatorId,
-      talker: scene.talker,
+      chat_type: 'group',
+      sender_id: operatorId,
+      receiver_id: scene.group_id,
     }
   }
 
@@ -279,7 +283,9 @@ export class Behav {
       group_id: groupId,
       user_id: userId,
       operator_id: operatorId,
-      talker: `group.${groupId}`,
+      chat_type: 'group',
+      sender_id: operatorId,
+      receiver_id: groupId,
     }
   }
 
@@ -301,7 +307,9 @@ export class Behav {
       group_id: groupId,
       user_id: userId,
       operator_id: operatorId,
-      talker: `group.${groupId}`,
+      chat_type: 'group',
+      sender_id: operatorId,
+      receiver_id: groupId,
     }
   }
 
@@ -317,7 +325,9 @@ export class Behav {
       sub_type: enable ? 'open' : 'close',
       group_id: groupId,
       operator_id: operatorId,
-      talker: `group.${groupId}`,
+      chat_type: 'group',
+      sender_id: operatorId,
+      receiver_id: groupId,
     }
   }
 
@@ -339,7 +349,9 @@ export class Behav {
       group_id: groupId,
       user_id: userId,
       operator_id: operatorId,
-      talker: `group.${groupId}`,
+      chat_type: 'group',
+      sender_id: operatorId,
+      receiver_id: groupId,
     }
   }
 
@@ -355,7 +367,9 @@ export class Behav {
       group_id: groupId,
       operator_id: operatorId,
       name: groupName,
-      talker: `group.${groupId}`,
+      chat_type: 'group',
+      sender_id: operatorId,
+      receiver_id: groupId,
     }
   }
 
@@ -377,7 +391,9 @@ export class Behav {
       group_id: groupId,
       user_id: userId,
       operator_id: operatorId,
-      talker: `group.${groupId}`,
+      chat_type: 'group',
+      sender_id: operatorId,
+      receiver_id: groupId,
     }
   }
 
@@ -400,7 +416,9 @@ export class Behav {
       user_id: userId,
       operator_id: operatorId,
       title,
-      talker: `group.${groupId}`,
+      chat_type: 'group',
+      sender_id: operatorId,
+      receiver_id: groupId,
     }
   }
 
@@ -411,7 +429,9 @@ export class Behav {
       detail_type: 'add_friend',
       user_id: userId,
       comment,
-      talker: `private.${this.getTalker(operatorId, userId)}`,
+      chat_type: 'private',
+      sender_id: operatorId,
+      receiver_id: userId,
     }
   }
 
@@ -435,7 +455,9 @@ export class Behav {
       ...this.createScene('notice'),
       detail_type: 'friend_increase',
       user_id: scene.user_id,
-      talker: scene.talker,
+      chat_type: 'private',
+      sender_id: operatorId,
+      receiver_id: scene.user_id,
     }
   }
 
@@ -446,7 +468,9 @@ export class Behav {
       ...this.createScene('notice'),
       detail_type: 'friend_decrease',
       user_id: friendId,
-      talker: `private.${this.getTalker(userId, friendId)}`,
+      chat_type: 'private',
+      sender_id: userId,
+      receiver_id: friendId,
     }
   }
 
@@ -466,12 +490,16 @@ export class Behav {
       return {
         ...poke,
         group_id: groupId,
-        talker: `group.${groupId}`,
+        chat_type: 'group',
+        sender_id: userId,
+        receiver_id: groupId,
       }
     } else {
       return {
         ...poke,
-        talker: `private.${this.getTalker(userId, targeId)}`,
+        chat_type: 'private',
+        sender_id: userId,
+        receiver_id: targeId,
       } as FriendPokeNoticeScene
     }
   }

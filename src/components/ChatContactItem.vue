@@ -2,7 +2,7 @@
 import { unix } from 'dayjs'
 
 import Avatar from '@/components/Avatar.vue'
-import { useChatStore } from '@/stores'
+import { useChatStore, useStatusStore } from '@/stores'
 import { getPlainScene } from '@/utils'
 
 import type { User, Group } from '@/database'
@@ -14,11 +14,19 @@ const { chatType, chatPerson } = defineProps<{
 
 const chat = useChatStore()
 
+const status = useStatusStore()
+
 const chatList = $computed(() => {
   if (!chatPerson) {
     return []
   }
-  return chat.chatLogs.filter((chat) => chat.scene.talker === `${chatType}.${chatPerson.id}`)
+  const chats = chat.chatLogs.filter((chat) => chat.scene.chat_type === chatType)
+  if (chatType === 'group') {
+    return chats.filter((chat) => chat.scene.receiver_id === chatPerson.id)
+  } else {
+    const session = [status.bot?.id, status.user?.id]
+    return chats.filter((chat) => session.includes(chat.scene.sender_id) && session.includes(chat.scene.receiver_id))
+  }
 })
 
 /** 最后发言 */
