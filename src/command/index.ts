@@ -1,11 +1,13 @@
 import { invoke } from '@tauri-apps/api/tauri'
 
-import { useChatStore } from '@/stores'
+import { useChatStore, useStatusStore } from '@/stores'
 import { asyncWrapper } from '@/utils'
 
 import type { Contents, TextContent } from '@/adapter/content'
 
 const chat = useChatStore()
+
+const status = useStatusStore()
 
 /** 检查是否使用了 MatchaCommand */
 export function checkMatchaCommand(contents: Contents[]): boolean {
@@ -52,7 +54,15 @@ async function openDevtools(): Promise<void> {
 }
 
 function clearChats(chatType: 'private' | 'group', chatId: string): void {
-  chat.chatLogs = chat.chatLogs.filter((chat) => chat.scene.talker !== `${chatType}.${chatId}`)
+  if (chatType === 'group') {
+    chat.chatLogs = chat.chatLogs.filter(
+      (chat) => !(chat.scene.chat_type === chatType && chat.scene.receiver_id === chatId)
+    )
+  } else {
+    chat.chatLogs = chat.chatLogs.filter(
+      (chat) => !(chat.scene.chat_type === chatType && [chatId, status.user?.id].includes(chat.scene.receiver_id))
+    )
+  }
 }
 
 function clearAllChats(): void {

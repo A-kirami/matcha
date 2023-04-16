@@ -52,7 +52,13 @@ watchEffect(async () => {
 })
 
 const chatList = $computed(() => {
-  return chat.chatLogs.filter((chat) => chat.scene.talker === `${chatType}.${chatId}`)
+  const chats = chat.chatLogs.filter((chat) => chat.scene.chat_type === chatType)
+  if (chatType === 'group') {
+    return chats.filter((chat) => chat.scene.receiver_id === chatId)
+  } else {
+    const session = [status.bot?.id, status.user?.id]
+    return chats.filter((chat) => session.includes(chat.scene.sender_id) && session.includes(chat.scene.receiver_id))
+  }
 })
 
 async function sendMessage(): Promise<void> {

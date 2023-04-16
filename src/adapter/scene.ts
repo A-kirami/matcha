@@ -2,7 +2,16 @@ import type { Contents } from './content'
 import type { Message } from './message'
 import type { ValueOf } from './typed'
 
-interface Scene {
+interface Session {
+  /** 聊天类型 */
+  chat_type: 'private' | 'group'
+  /** 发送者 id */
+  sender_id: string
+  /** 接收者 id */
+  receiver_id: string
+}
+
+interface Scene extends Session {
   /** 事件唯一标识符 */
   id: string
   /** 事件发生时间（Unix 时间戳），单位：秒 */
@@ -14,8 +23,6 @@ interface Scene {
   }
   /** 事件类型，必须是 meta、message、notice、request 中的一个，分别表示元事件、消息事件、通知事件和请求事件 */
   type: 'message' | 'notice' | 'request'
-  /** 聊天对象 e.g. ‘group.123456’ */
-  talker: string
 }
 
 interface MessageScene<T extends Message = Message> extends Scene {
