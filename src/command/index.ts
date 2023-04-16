@@ -54,13 +54,13 @@ async function openDevtools(): Promise<void> {
 }
 
 function clearChats(chatType: 'private' | 'group', chatId: string): void {
+  const chats = chat.chatLogs.filter((chat) => chat.scene.chat_type === chatType)
   if (chatType === 'group') {
-    chat.chatLogs = chat.chatLogs.filter(
-      (chat) => !(chat.scene.chat_type === chatType && chat.scene.receiver_id === chatId)
-    )
+    chat.chatLogs = chats.filter((chat) => chat.scene.receiver_id === chatId)
   } else {
-    chat.chatLogs = chat.chatLogs.filter(
-      (chat) => !(chat.scene.chat_type === chatType && [chatId, status.user?.id].includes(chat.scene.receiver_id))
+    const session = [status.bot?.id, status.user?.id]
+    chat.chatLogs = chats.filter(
+      (chat) => session.includes(chat.scene.sender_id) && session.includes(chat.scene.receiver_id)
     )
   }
 }
