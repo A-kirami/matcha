@@ -50,7 +50,7 @@ const avatarSize = computed(() => {
       v-if="aid"
       :src="avatarUrl"
       alt="user avatar"
-      class="h-full border-2 border-light-50 rounded-1/2 border-solid text-blue-800"
+      class="h-full w-full border-2 border-light-50 rounded-1/2 border-solid text-blue-800"
       dark="border-dark-800"
       :class="{ border }"
     />
