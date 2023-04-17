@@ -173,5 +173,5 @@ export async function roleCheck(role: 'owner' | 'admin' | 'member', groupId: str
   if (!member) {
     return false
   }
-  return ROLE.indexOf(member.role) >= ROLE.indexOf(role)
+  return ROLE.indexOf(member.role) <= ROLE.indexOf(role)
 }
