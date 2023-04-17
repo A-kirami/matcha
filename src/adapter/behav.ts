@@ -308,6 +308,7 @@ export class Behav {
       user_id: userId,
       operator_id: operatorId,
       chat_type: 'group',
+      duration,
       sender_id: operatorId,
       receiver_id: groupId,
     }
