@@ -10,11 +10,12 @@ import { checkMatchaCommand, runMatchaCommand } from '@/command'
 import ChatBoxTopbar from '@/components/ChatBoxTopbar.vue'
 import ChatInput from '@/components/ChatInput.vue'
 import ChatMessage from '@/components/ChatMessage.vue'
+import ChatNotice from '@/components/ChatNotice.vue'
+import ChatRequest from '@/components/ChatRequest.vue'
 import SendButton from '@/components/SendButton.vue'
 import TimeSeparator from '@/components/TimeSeparator.vue'
 import { db, User, Group } from '@/database'
 import { useChatStore, useStatusStore } from '@/stores'
-import { Message } from '@/stores/chat'
 
 import type { PartialOptions, OverlayScrollbars } from 'overlayscrollbars'
 
@@ -96,12 +97,6 @@ const scrollEnd = useDebounceFn((instance: OverlayScrollbars): void => {
   autoScroll = viewport.scrollTop + viewport.clientHeight === viewport.scrollHeight
 }, 200)
 
-/** 将消息标记为已读 */
-function markReadMessage(index: number): void {
-  const message = chatList[index] as Message
-  message.read = true
-}
-
 /** 分隔消息时间 */
 const splitTime = 60 * 10
 
@@ -110,9 +105,18 @@ function isSeparator(index: number): boolean {
   if (!index) {
     return false
   }
-  const time = chatList[index].scene.time
-  const lastTime = chatList[index - 1]?.scene?.time
-  return lastTime + splitTime < time
+
+  const currentScene = chatList[index].scene
+  if (currentScene.detail_type.endsWith('message_delete')) {
+    return false
+  }
+
+  const prevScene = chatList
+    .slice(0, index)
+    .filter((chat) => !chat.scene.detail_type.endsWith('message_delete'))
+    .pop()?.scene
+
+  return prevScene ? currentScene.time - prevScene.time > splitTime : false
 }
 
 /** 禁用滚动 */
@@ -134,15 +138,9 @@ onBeforeRouteLeave((_, from) => {
           <DynamicScrollerItem :item="item" :active="active" :size-dependencies="[item.scene]" :data-index="index">
             <TimeSeparator v-if="isSeparator(index)" class="py-3" :time="item.scene.time" />
             <div class="py-3">
-              <ChatMessage
-                v-if="item.type === 'message'"
-                :index="index"
-                :scene="item.scene"
-                :event="item.event"
-                :send="item.push"
-                @read-message="markReadMessage"
-                @skip-scroll="lockScroll"
-              />
+              <ChatMessage v-if="item.type === 'message' && !item.recall" :message="item" @skip-scroll="lockScroll" />
+              <ChatNotice v-else-if="item.type === 'notice'" :notice="item" />
+              <ChatRequest v-else-if="item.type === 'request'" :request="item" />
             </div>
           </DynamicScrollerItem>
         </template>

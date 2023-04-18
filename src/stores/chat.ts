@@ -43,7 +43,7 @@ export const useChatStore = defineStore('chat', () => {
 
   const adapter = useAdapterStore()
 
-  async function appendScene<S extends Scenes>(scene: S, push = true): Promise<S> {
+  async function appendScene<S extends Scenes>(scene: S, insert?: string): Promise<S> {
     const event = await adapter.bot.eventHandler.handle(scene)
     let chat: Chats
     switch (scene.type) {
@@ -62,10 +62,17 @@ export const useChatStore = defineStore('chat', () => {
       default:
         throw new Error('unknown scene type')
     }
-    if (event && push) {
+    if (event) {
       chat.push = await adapter.bot.send(event)
     }
-    chatLogs.push(chat)
+    if (insert) {
+      const index = chatLogs.findIndex((chat) => chat.id === insert)
+      if (index !== -1) {
+        chatLogs.splice(index + 1, 0, chat)
+      }
+    } else {
+      chatLogs.push(chat)
+    }
     return scene
   }
 

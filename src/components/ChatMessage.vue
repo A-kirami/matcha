@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useElementVisibility } from '@vueuse/core'
 import { unix } from 'dayjs'
-import { watch, nextTick } from 'vue'
+import { watch } from 'vue'
 import InlineSvg from 'vue-inline-svg'
 
 import ChangeIcon from '@/assets/change.svg?url'
@@ -14,26 +14,20 @@ import { useStatusStore, useChatStore } from '@/stores'
 import { getUUID, getTimestamp, getMessageId } from '@/utils'
 
 import type { ContentMapping } from '@/adapter/content'
-import type { Event } from '@/adapter/event'
-import type { PrivateMessageScene, GroupMessageScene } from '@/adapter/scene'
+import type { MessageScenes } from '@/adapter/scene'
+import type { Message } from '@/stores/chat'
 
-const {
-  index = 0,
-  scene,
-  event,
-  send,
-} = defineProps<{
-  index: number
-  scene: PrivateMessageScene | GroupMessageScene
-  event?: Event
-  send: boolean
+const { message } = defineProps<{
+  message: Message
 }>()
 
-const emit = defineEmits<{ (e: 'readMessage', index: number): void; (e: 'skipScroll'): void }>()
+const emit = defineEmits<{ (e: 'skipScroll'): void }>()
 
 const status = useStatusStore()
 
-const chats = useChatStore()
+const chat = useChatStore()
+
+const scene = $ref(message.scene)
 
 /** 消息是否为Bot发送 */
 const isBot = scene.sender_id === status.bot!.id
@@ -79,12 +73,12 @@ const messageRef = $ref<HTMLElement | null>(null)
 
 const messageIsRead = $(useElementVisibility($$(messageRef)))
 
+/** 将消息标记为已读 */
 watch(
   () => messageIsRead,
   () => {
-    nextTick(() => {
-      messageIsRead && emit('readMessage', index)
-    })
+    const chatMessage = message
+    chatMessage.read = true
   }
 )
 
@@ -108,12 +102,12 @@ function changeContent(): void {
 
 /** 将消息重新发送 */
 async function resendMessage(): Promise<void> {
-  const sceneClone = JSON.parse(JSON.stringify(scene)) as PrivateMessageScene | GroupMessageScene
+  const sceneClone = JSON.parse(JSON.stringify(scene)) as MessageScenes
   sceneClone.id = getUUID()
   sceneClone.time = getTimestamp()
   // eslint-disable-next-line camelcase
   sceneClone.message_id = getMessageId().toString()
-  await chats.appendScene(sceneClone)
+  await chat.appendScene(sceneClone)
 }
 </script>
 
@@ -150,14 +144,14 @@ async function resendMessage(): Promise<void> {
           />
           <HighlightCode
             v-show="!showMessage"
-            v-if="event"
+            v-if="message.event"
             class="bubble-padding"
             language="json"
-            :code="JSON.stringify(event, null, '\t')"
+            :code="JSON.stringify(message.event, null, '\t')"
           />
         </article>
         <Transition name="fade">
-          <div v-show="toolbarShow && event" class="mt-2">
+          <div v-show="toolbarShow && message.event" class="mt-2">
             <div class="my-1 cursor-pointer rounded-1/2 px-1 py-1" active="scale-90" @click="changeContent">
               <InlineSvg class="text-sky-300" :src="ChangeIcon"></InlineSvg>
             </div>
@@ -167,7 +161,7 @@ async function resendMessage(): Promise<void> {
       <div class="flex items-center text-xs text-gray-400">
         <span>{{ time }}</span>
         <span class="ml-1" :class="{ 'cursor-pointer': !isBot }" @click="resendMessage">
-          <InlineSvg v-if="send" class="text-emerald-400" :src="TickIcon"></InlineSvg>
+          <InlineSvg v-if="message.push" class="text-emerald-400" :src="TickIcon"></InlineSvg>
           <InlineSvg v-else class="text-rose-400" :src="FailIcon"></InlineSvg>
         </span>
       </div>
