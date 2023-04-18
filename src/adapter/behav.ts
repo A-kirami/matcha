@@ -151,15 +151,18 @@ export class Behav {
     messageChat.recall = true
     const scene = messageChat.scene
     if (scene.detail_type === 'private') {
-      return await this.chat.appendScene({
-        ...this.createScene('notice'),
-        detail_type: 'private_message_delete',
-        message_id: messageId,
-        user_id: scene.user_id,
-        chat_type: 'private',
-        sender_id: operatorId,
-        receiver_id: scene.user_id,
-      })
+      return await this.chat.appendScene(
+        {
+          ...this.createScene('notice'),
+          detail_type: 'private_message_delete',
+          message_id: messageId,
+          user_id: scene.user_id,
+          chat_type: 'private',
+          sender_id: operatorId,
+          receiver_id: scene.user_id,
+        },
+        messageChat.id
+      )
     }
     let sub_type: 'delete' | 'recall' = 'recall'
     if (scene.user_id !== operatorId) {
@@ -171,18 +174,21 @@ export class Behav {
       }
       sub_type = 'delete'
     }
-    return await this.chat.appendScene({
-      ...this.createScene('notice'),
-      detail_type: 'group_message_delete',
-      sub_type,
-      message_id: messageId,
-      group_id: scene.group_id,
-      user_id: scene.user_id,
-      operator_id: operatorId,
-      chat_type: 'group',
-      sender_id: operatorId,
-      receiver_id: scene.group_id,
-    })
+    return await this.chat.appendScene(
+      {
+        ...this.createScene('notice'),
+        detail_type: 'group_message_delete',
+        sub_type,
+        message_id: messageId,
+        group_id: scene.group_id,
+        user_id: scene.user_id,
+        operator_id: operatorId,
+        chat_type: 'group',
+        sender_id: operatorId,
+        receiver_id: scene.group_id,
+      },
+      messageChat.id
+    )
   }
 
   /** 申请入群 */

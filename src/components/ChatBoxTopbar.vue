@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useObservable, from } from '@vueuse/rxjs'
-import { message } from 'ant-design-vue'
 import { liveQuery } from 'dexie'
 
+import { Behav } from '@/adapter/behav'
 import Avatar from '@/components/Avatar.vue'
 import CreateMemberForm from '@/components/CreateMemberForm.vue'
 import { db, User, Group } from '@/database'
@@ -12,6 +12,8 @@ const { chatType, chatPerson } = defineProps<{
   chatType: 'private' | 'group'
   chatPerson: User | Group | null
 }>()
+
+const behav = new Behav()
 
 const status = useStatusStore()
 
@@ -70,18 +72,15 @@ async function quickAction(): Promise<void> {
       break
     }
     case '退出此群': {
-      await db.members.delete([chatPerson!.id, status.assignUser])
-      message.success(`已退出群【${chatPerson!.name}】`)
+      await behav.removeGroupMember(chatPerson!.id, status.assignUser, status.assignUser)
       break
     }
     case '添加好友': {
-      await db.friends.add({ userId: status.assignUser, friendId: status.assignBot, remark: '' })
-      message.success(`已添加好友【${status.bot!.name}】`)
+      await behav.requestAddFriend(status.assignBot, status.assignUser)
       break
     }
     case '删除好友': {
-      await db.friends.delete([status.assignUser, status.assignBot])
-      message.success(`已删除好友【${status.bot!.name}】`)
+      await behav.removeFriend(status.assignUser, status.assignBot)
       break
     }
     default: {

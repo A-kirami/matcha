@@ -1,18 +1,23 @@
+<!-- eslint-disable camelcase -->
 <!-- eslint-disable @typescript-eslint/ban-ts-comment -->
 <script setup lang="ts">
 // TODO: 标记为💩山，需要重构
 import { UseDraggable } from '@vueuse/components'
 import { useFocus } from '@vueuse/core'
-import { message } from 'ant-design-vue'
 import dayjs from 'dayjs'
 import { watch } from 'vue'
 import { useRoute } from 'vue-router'
 
+import { Behav } from '@/adapter/behav'
 import Avatar from '@/components/Avatar.vue'
 import { db } from '@/database'
-import { useStatusStore } from '@/stores'
+import { useStatusStore, useChatStore } from '@/stores'
 
 import type { Dayjs } from 'dayjs'
+
+const behav = new Behav()
+
+const chat = useChatStore()
 
 const status = useStatusStore()
 
@@ -51,7 +56,17 @@ async function onFinish(member: MemberForm): Promise<void> {
     banExpireTime: 0,
   }
   await db.members.add(newMember)
-  message.success('成员创建成功')
+  await chat.appendScene({
+    ...behav.createScene('notice'),
+    detail_type: 'group_member_increase',
+    sub_type: 'join',
+    user_id: newMember.userId,
+    group_id: newMember.groupId,
+    operator_id: newMember.userId,
+    chat_type: 'group',
+    sender_id: newMember.userId,
+    receiver_id: newMember.groupId,
+  })
   visible = false
 }
 
