@@ -1,0 +1,14 @@
+﻿changelog:
+  categories:
+    - title: 💥 破坏性更新
+      labels:
+        - Semver-Major
+        - breaking-change
+    - title: ✨ 新特性
+      labels:
+        - enhancement
+    - title: 🐛 错误修复
+      labels:
+        - bug
+    - title: 💫 杂项
+        - "*"
