@@ -23,7 +23,7 @@ function specifyUser(type: 'bot' | 'persona', uid: string) {
   } else if (type === 'persona' && uid !== status.assignBot) {
     status.assignUser = uid
   } else {
-    message.error('身份与 Bot 不得为同一用户')
+    ;[status.assignUser, status.assignBot] = [status.assignBot, status.assignUser]
   }
 }
 
