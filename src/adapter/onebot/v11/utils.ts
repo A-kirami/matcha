@@ -1,14 +1,10 @@
-import type { ActionResult } from '@/adapter/action'
-import type { Scenes } from '@/adapter/scene'
+import type { ActionResponse } from '@/adapter/action'
 
-export function result<D, S extends Scenes>(retcode: number, data: D | null = null, scene?: S): ActionResult<D, S> {
+export function response<D>(retcode: number, data: D | null = null): ActionResponse<D> {
   const status = retcode === 0 ? 'ok' : 'failed'
   return {
-    response: {
-      status,
-      retcode,
-      data,
-    },
-    scene,
+    status,
+    retcode,
+    data,
   }
 }

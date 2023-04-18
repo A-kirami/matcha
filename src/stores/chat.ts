@@ -5,29 +5,22 @@ import { useAdapterStore } from './protocol'
 import type { Event } from '@/adapter/event'
 import type { Scenes, MessageScenes, NoticeScenes, RequestScenes } from '@/adapter/scene'
 
-interface Chat {
+interface Chat<T extends Scenes['type'], S extends Scenes> {
   id: string
-  type: 'message' | 'notice' | 'request'
-  scene: Scenes
+  type: T
+  scene: S
   event?: Event
   push: boolean
   read: boolean
 }
 
-export interface Message extends Chat {
-  type: 'message'
-  scene: MessageScenes
+export interface Message extends Chat<'message', MessageScenes> {
   recall: boolean
 }
 
-export interface Notice extends Chat {
-  type: 'notice'
-  scene: NoticeScenes
-}
+export type Notice = Chat<'notice', NoticeScenes>
 
-export interface Request extends Chat {
-  type: 'request'
-  scene: RequestScenes
+export interface Request extends Chat<'request', RequestScenes> {
   action: 'await' | 'agree' | 'refuse'
   reason?: string
 }
@@ -50,9 +43,9 @@ export const useChatStore = defineStore('chat', () => {
 
   const adapter = useAdapterStore()
 
-  async function appendScene(scene: Scenes, push = true): Promise<void> {
+  async function appendScene<S extends Scenes>(scene: S, push = true): Promise<S> {
     const event = await adapter.bot.eventHandler.handle(scene)
-    let chat
+    let chat: Chats
     switch (scene.type) {
       case 'message': {
         chat = { ...newChat(scene, event), recall: false } as Message
@@ -67,20 +60,18 @@ export const useChatStore = defineStore('chat', () => {
         break
       }
       default:
-        return
+        throw new Error('unknown scene type')
     }
     if (event && push) {
       chat.push = await adapter.bot.send(event)
     }
     chatLogs.push(chat)
+    return scene
   }
 
-  function getChat<T extends Message>(chatId: string, type: 'message'): T
-  function getChat<T extends Notice>(chatId: string, type: 'notice'): T
-  function getChat<T extends Request>(chatId: string, type: 'request'): T
-  function getChat<T extends Chats>(chatId: string, type?: T['type']): T {
+  function getChat<T extends Chats['type']>(chatId: string, type?: T): Extract<Chats, { type: T }> {
     const chat = type ? chatLogs.find((c) => c.type === type && c.id === chatId) : chatLogs.find((c) => c.id === chatId)
-    return chat as T
+    return chat as Extract<Chats, { type: T }>
   }
 
   return {

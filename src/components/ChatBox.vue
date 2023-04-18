@@ -69,8 +69,7 @@ async function sendMessage(): Promise<void> {
   if (checkMatchaCommand(contents)) {
     await runMatchaCommand(chatType, chatId, contents)
   } else {
-    const scene = await behav.sendMessage(chatType, status.user!, chatPerson, contents)
-    await chat.appendScene(scene)
+    await behav.sendMessage(chatType, status.user!, chatPerson, contents)
   }
   chatInput?.clearContent()
 }

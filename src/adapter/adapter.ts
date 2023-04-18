@@ -66,10 +66,7 @@ export abstract class Adapter {
 
   async actionHandle(request: ActionRequest): Promise<ActionResponse> {
     try {
-      const { response, scene } = await this.actionHandler.handle(request)
-      // TODO: 允许用户设置是否推送响应事件
-      scene && (await this.chat.appendScene(scene, false))
-      return response
+      return await this.actionHandler.handle(request)
     } catch (error) {
       if (error instanceof ProtocolError) {
         return error.response
