@@ -10,26 +10,11 @@ import { useStatusStore, useChatStore } from '@/stores'
 import { asyncWrapper, getUserAge } from '@/utils'
 
 import { MessageHandler, createMessage } from './message'
-import { result } from './utils'
+import { response } from './utils'
 
 import type { GroupSender, PrivateSender, PrivateMessageEvent, GroupMessageEvent } from './event'
 import type { Messages } from './message'
-import type { ActionResult, ActionRequest, ActionStrategy } from '@/adapter/action'
-import type {
-  PrivateMessageScene,
-  GroupMessageScene,
-  GroupMemberDecreaseNoticeScene,
-  GroupMemberBanNoticeScene,
-  PrivateMessageDeleteNoticeScene,
-  GroupMessageDeleteNoticeScene,
-  GroupWholeBanNoticeScene,
-  GroupAdminNoticeScene,
-  GroupMemberCardNoticeScene,
-  GroupNameNoticeScene,
-  GroupMemberTitleNoticeScene,
-  FriendIncreaseNoticeScene,
-  GroupMemberIncreaseNoticeScene,
-} from '@/adapter/scene'
+import type { ActionResponse, ActionRequest, ActionStrategy } from '@/adapter/action'
 import type { StrKeyObject } from '@/adapter/typed'
 import type { Group, Member, User } from '@/database'
 
@@ -38,18 +23,18 @@ const messageHandler = new MessageHandler()
 export class ActionHandler extends AdapterActionHandler {
   readonly strategy = actionStrategy
 
-  async handle({ action, params }: ActionRequest): Promise<ActionResult> {
+  async handle({ action, params }: ActionRequest): Promise<ActionResponse> {
     try {
       const func = this.strategy[action]
       if (!func) {
-        throw new UnsupportedActionError(result(1404, { message: '不支持的动作请求' }).response)
+        throw new UnsupportedActionError(response(1404, { message: '不支持的动作请求' }))
       }
-      const asyncFn = asyncWrapper<ActionResult>(func)
+      const asyncFn = asyncWrapper<ActionResponse>(func)
       return await asyncFn(params)
     } catch (error) {
       const errStr = (error as Error).toString()
       logger.error(errStr)
-      throw new InternalHandlerError(result(1000, { message: errStr }).response)
+      throw new InternalHandlerError(response(1000, { message: errStr }))
     }
   }
 }
@@ -63,17 +48,17 @@ const actionStrategy: ActionStrategy = {
     user_id: number
     message: Messages[] | string
     auto_escape: boolean
-  }): Promise<ActionResult<{ message_id: number }, PrivateMessageScene> | ActionResult<ErrorInfo>> => {
+  }): Promise<ActionResponse<MessageData> | ActionResponse<ErrorInfo>> => {
     const user = await db.users.get(user_id.toString())
     if (!user) {
-      return result(1404, { message: '用户不存在' })
+      return response(1404, { message: '用户不存在' })
     }
     const messages = typeof message === 'string' ? [createMessage('text', { text: message })] : message
     const contents = await messageHandler.parse(messages)
     const behav = new Behav()
     const scene = await behav.sendPrivateMessage(behav.status.bot!, user, contents)
     scene.original_message = messages
-    return result(0, { message_id: Number(scene.message_id) }, scene)
+    return response(0, { message_id: Number(scene.message_id) })
   },
 
   /** 发送群聊消息 */
@@ -84,17 +69,17 @@ const actionStrategy: ActionStrategy = {
     group_id: number
     message: Messages[] | string
     auto_escape: boolean
-  }): Promise<ActionResult<{ message_id: number }, GroupMessageScene> | ActionResult<ErrorInfo>> => {
+  }): Promise<ActionResponse<MessageData> | ActionResponse<ErrorInfo>> => {
     const group = await db.groups.get(group_id.toString())
     if (!group) {
-      return result(1404, { message: '群聊不存在' })
+      return response(1404, { message: '群聊不存在' })
     }
     const messages = typeof message === 'string' ? [createMessage('text', { text: message })] : message
     const contents = await messageHandler.parse(messages)
     const behav = new Behav()
     const scene = await behav.sendGroupMessage(behav.status.bot!, group, contents)
     scene.original_message = messages
-    return result(0, { message_id: Number(scene.message_id) }, scene)
+    return response(0, { message_id: Number(scene.message_id) })
   },
 
   /** 发送消息 */
@@ -109,30 +94,28 @@ const actionStrategy: ActionStrategy = {
     group_id: number
     message: Messages[] | string
     auto_escape: boolean
-  }): Promise<ActionResult<{ message_id: number }, PrivateMessageScene | GroupMessageScene>> => {
+  }): Promise<ActionResponse<{ message_id: number }>> => {
     if (message_type === 'private') {
-      return (await (actionStrategy.send_private_msg as (request: StrKeyObject) => Promise<ActionResult>)({
-        user_id,
-        message,
-      })) as ActionResult<{ message_id: number }, PrivateMessageScene>
+      return await (actionStrategy.send_private_msg as (request: StrKeyObject) => Promise<ActionResponse<MessageData>>)(
+        {
+          user_id,
+          message,
+        }
+      )
     } else {
-      return (await (actionStrategy.send_group_msg as (request: StrKeyObject) => Promise<ActionResult>)({
+      return await (actionStrategy.send_group_msg as (request: StrKeyObject) => Promise<ActionResponse<MessageData>>)({
         group_id,
         message,
-      })) as ActionResult<{ message_id: number }, GroupMessageScene>
+      })
     }
   },
 
   /** 撤回消息 */
-  'delete_msg': async ({
-    message_id,
-  }: {
-    message_id: number
-  }): Promise<ActionResult<null, PrivateMessageDeleteNoticeScene | GroupMessageDeleteNoticeScene>> => {
+  'delete_msg': async ({ message_id }: { message_id: number }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
     const status = useStatusStore()
-    const scene = await behav.recallMessage(message_id.toString(), status.bot!.id)
-    return result(0, null, scene)
+    await behav.recallMessage(message_id.toString(), status.bot!.id)
+    return response(0)
   },
 
   /** 获取消息 */
@@ -140,28 +123,16 @@ const actionStrategy: ActionStrategy = {
     message_id,
   }: {
     message_id: number
-  }): Promise<
-    ActionResult<
-      | {
-          time: number
-          message_type: 'private' | 'group'
-          message_id: number
-          real_id: number
-          sender: GroupSender | PrivateSender
-          message: Messages[]
-        }
-      | ErrorInfo
-    >
-  > => {
+  }): Promise<ActionResponse<MessageInfo> | ActionResponse<ErrorInfo>> => {
     const chat = useChatStore()
     const messageChat = chat.chatLogs.find(
       (chat) => chat.type === 'message' && chat.scene.message_id === message_id.toString()
     )
     if (!messageChat) {
-      return result(1404, { message: '消息不存在' })
+      return response(1404, { message: '消息不存在' })
     }
     const { time, message_type, sender, message } = messageChat.event as PrivateMessageEvent | GroupMessageEvent
-    return result(0, {
+    return response(0, {
       time,
       message_type,
       message_id,
@@ -179,11 +150,11 @@ const actionStrategy: ActionStrategy = {
     group_id: number
     user_id: number
     reject_add_request: boolean
-  }): Promise<ActionResult<null, GroupMemberDecreaseNoticeScene>> => {
+  }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
     const status = useStatusStore()
-    const scene = await behav.removeGroupMember(group_id.toString(), user_id.toString(), status.bot!.id)
-    return result(0, null, scene)
+    await behav.removeGroupMember(group_id.toString(), user_id.toString(), status.bot!.id)
+    return response(0)
   },
 
   /** 群组单人禁言 */
@@ -195,11 +166,11 @@ const actionStrategy: ActionStrategy = {
     group_id: number
     user_id: number
     duration: number
-  }): Promise<ActionResult<null, GroupMemberBanNoticeScene>> => {
+  }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
     const status = useStatusStore()
-    const scene = await behav.banGroupMember(group_id.toString(), user_id.toString(), status.bot!.id, duration)
-    return result(0, null, scene)
+    await behav.banGroupMember(group_id.toString(), user_id.toString(), status.bot!.id, duration)
+    return response(0)
   },
 
   /** 群组全员禁言 */
@@ -209,11 +180,11 @@ const actionStrategy: ActionStrategy = {
   }: {
     group_id: number
     enable: boolean
-  }): Promise<ActionResult<null, GroupWholeBanNoticeScene>> => {
+  }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
     const status = useStatusStore()
-    const scene = await behav.banGroupWhole(group_id.toString(), status.bot!.id, enable)
-    return result(0, null, scene)
+    await behav.banGroupWhole(group_id.toString(), status.bot!.id, enable)
+    return response(0)
   },
 
   /** 设置群组管理员 */
@@ -225,11 +196,11 @@ const actionStrategy: ActionStrategy = {
     group_id: number
     user_id: number
     enable: boolean
-  }): Promise<ActionResult<null, GroupAdminNoticeScene>> => {
+  }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
     const status = useStatusStore()
-    const scene = await behav.setGroupAdmin(group_id.toString(), user_id.toString(), status.bot!.id, enable)
-    return result(0, null, scene)
+    await behav.setGroupAdmin(group_id.toString(), user_id.toString(), status.bot!.id, enable)
+    return response(0)
   },
 
   /** 设置群名片 */
@@ -241,11 +212,11 @@ const actionStrategy: ActionStrategy = {
     group_id: number
     user_id: number
     card: string
-  }): Promise<ActionResult<null, GroupMemberCardNoticeScene>> => {
+  }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
     const status = useStatusStore()
-    const scene = await behav.editGroupMemberCard(group_id.toString(), user_id.toString(), status.bot!.id, card)
-    return result(0, null, scene)
+    await behav.editGroupMemberCard(group_id.toString(), user_id.toString(), status.bot!.id, card)
+    return response(0)
   },
 
   /** 设置群名 */
@@ -255,11 +226,11 @@ const actionStrategy: ActionStrategy = {
   }: {
     group_id: number
     group_name: string
-  }): Promise<ActionResult<null, GroupNameNoticeScene>> => {
+  }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
     const status = useStatusStore()
-    const scene = await behav.editGroupName(group_id.toString(), status.bot!.id, group_name)
-    return result(0, null, scene)
+    await behav.editGroupName(group_id.toString(), status.bot!.id, group_name)
+    return response(0)
   },
 
   /** 退出群组 */
@@ -269,15 +240,15 @@ const actionStrategy: ActionStrategy = {
   }: {
     group_id: number
     is_dismiss: boolean
-  }): Promise<ActionResult<null | ErrorInfo> | ActionResult<null, GroupMemberDecreaseNoticeScene>> => {
+  }): Promise<ActionResponse<null> | ActionResponse<ErrorInfo>> => {
     const behav = new Behav()
     const status = useStatusStore()
     if (is_dismiss) {
       await behav.dismissGroup(group_id.toString(), status.bot!.id)
-      return result(0)
+      return response(0)
     } else {
-      const scene = await behav.removeGroupMember(group_id.toString(), status.bot!.id, status.bot!.id)
-      return result(0, null, scene)
+      await behav.removeGroupMember(group_id.toString(), status.bot!.id, status.bot!.id)
+      return response(0)
     }
   },
 
@@ -292,17 +263,17 @@ const actionStrategy: ActionStrategy = {
     user_id: number
     special_title: string
     duration: number
-  }): Promise<ActionResult<null, GroupMemberTitleNoticeScene>> => {
+  }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
     const status = useStatusStore()
-    const scene = await behav.editGroupMemberspecialTitle(
+    await behav.editGroupMemberspecialTitle(
       group_id.toString(),
       user_id.toString(),
       status.bot!.id,
       special_title,
       duration
     )
-    return result(0, null, scene)
+    return response(0)
   },
 
   /** 处理加好友请求 */
@@ -314,11 +285,11 @@ const actionStrategy: ActionStrategy = {
     flag: string
     approve: boolean
     remark: string
-  }): Promise<ActionResult<null, FriendIncreaseNoticeScene>> => {
+  }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
     const status = useStatusStore()
-    const scene = await behav.approveAddFriend(flag, status.bot!.id, approve, remark)
-    return result(0, null, scene)
+    await behav.approveAddFriend(flag, status.bot!.id, approve, remark)
+    return response(0)
   },
 
   /** 处理加群请求／邀请 */
@@ -330,17 +301,17 @@ const actionStrategy: ActionStrategy = {
     flag: string
     approve: boolean
     reason: string
-  }): Promise<ActionResult<null, GroupMemberIncreaseNoticeScene>> => {
+  }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
     const status = useStatusStore()
-    const scene = await behav.approveJoinGroup(flag, status.bot!.id, approve, reason)
-    return result(0, null, scene)
+    await behav.approveJoinGroup(flag, status.bot!.id, approve, reason)
+    return response(0)
   },
 
   /** 获取登录号信息 */
-  'get_login_info': async (): Promise<ActionResult<{ user_id: number; nickname: string }>> => {
+  'get_login_info': async (): Promise<ActionResponse<{ user_id: number; nickname: string }>> => {
     const status = useStatusStore()
-    return result(0, { user_id: Number(status.bot!.id), nickname: status.bot!.name })
+    return response(0, { user_id: Number(status.bot!.id), nickname: status.bot!.name })
   },
 
   /** 获取陌生人信息 */
@@ -348,15 +319,12 @@ const actionStrategy: ActionStrategy = {
     user_id,
   }: {
     user_id: number
-  }): Promise<
-    | ActionResult<{ user_id: number; nickname: string; sex: 'male' | 'female' | 'unknown'; age: number }>
-    | ActionResult<ErrorInfo>
-  > => {
+  }): Promise<ActionResponse<StrangerInfo> | ActionResponse<ErrorInfo>> => {
     const user = await db.users.get(user_id.toString())
     if (!user) {
-      return result(1404, { message: '用户不存在' })
+      return response(1404, { message: '用户不存在' })
     }
-    return result(0, {
+    return response(0, {
       user_id,
       nickname: user.name,
       sex: user.sex || 'unknown',
@@ -365,7 +333,7 @@ const actionStrategy: ActionStrategy = {
   },
 
   /** 获取好友列表 */
-  'get_friend_list': async (): Promise<ActionResult<{ user_id: number; nickname: string; remark: string }[]>> => {
+  'get_friend_list': async (): Promise<ActionResponse<{ user_id: number; nickname: string; remark: string }[]>> => {
     const status = useStatusStore()
     const friends = await db.friends.where({ userId: status.bot!.id }).toArray()
     const friendList = friends.map(async (friend) => {
@@ -376,7 +344,7 @@ const actionStrategy: ActionStrategy = {
         remark: friend.remark,
       }
     })
-    return result(0, await Promise.all(friendList))
+    return response(0, await Promise.all(friendList))
   },
 
   /** 获取群信息 */
@@ -384,18 +352,18 @@ const actionStrategy: ActionStrategy = {
     group_id,
   }: {
     group_id: number
-  }): Promise<ActionResult<GroupInfo> | ActionResult<ErrorInfo>> => {
+  }): Promise<ActionResponse<GroupInfo> | ActionResponse<ErrorInfo>> => {
     const group = await db.groups.get(group_id.toString())
     if (!group) {
-      return result(1404, { message: '群组不存在' })
+      return response(1404, { message: '群组不存在' })
     }
-    return result(0, getGroupInfo(group))
+    return response(0, getGroupInfo(group))
   },
 
   /** 获取群列表 */
-  'get_group_list': async (): Promise<ActionResult<GroupInfo[]>> => {
+  'get_group_list': async (): Promise<ActionResponse<GroupInfo[]>> => {
     const groupList = await db.groups.toArray()
-    return result(
+    return response(
       0,
       groupList.map((group) => getGroupInfo(group))
     )
@@ -408,18 +376,18 @@ const actionStrategy: ActionStrategy = {
   }: {
     group_id: string
     user_id: string
-  }): Promise<ActionResult<MemberInfo> | ActionResult<ErrorInfo>> => {
+  }): Promise<ActionResponse<MemberInfo> | ActionResponse<ErrorInfo>> => {
     const status = useStatusStore()
     const operator = await db.members.get({ groupId: group_id, userId: status.bot!.id })
     if (!operator) {
-      return result(1403, { message: '没有加入该群' })
+      return response(1403, { message: '没有加入该群' })
     }
     const member = await db.members.get({ groupId: group_id, userId: user_id })
     if (!member) {
-      return result(1404, { message: '群成员不存在' })
+      return response(1404, { message: '群成员不存在' })
     }
     const info = await getMemberInfo(member, operator.role)
-    return result(0, info)
+    return response(0, info)
   },
 
   /** 获取群成员列表 */
@@ -427,34 +395,34 @@ const actionStrategy: ActionStrategy = {
     group_id,
   }: {
     group_id: string
-  }): Promise<ActionResult<MemberInfo[]> | ActionResult<ErrorInfo>> => {
+  }): Promise<ActionResponse<MemberInfo[]> | ActionResponse<ErrorInfo>> => {
     const status = useStatusStore()
     const operator = await db.members.get({ groupId: group_id, userId: status.bot!.id })
     if (!operator) {
-      return result(1403, { message: '没有加入该群' })
+      return response(1403, { message: '没有加入该群' })
     }
     const members = await db.members.where({ groupId: group_id }).toArray()
     const infoList = members.map(async (member) => await getMemberInfo(member, operator.role))
-    return result(0, await Promise.all(infoList))
+    return response(0, await Promise.all(infoList))
   },
 
   /** 检查是否可以发送图片 */
-  'can_send_image': (): ActionResult<{ yes: boolean }> => {
-    return result(0, {
+  'can_send_image': (): ActionResponse<{ yes: boolean }> => {
+    return response(0, {
       yes: true,
     })
   },
 
   /** 检查是否可以发送图片 */
-  'can_send_record': (): ActionResult<{ yes: boolean }> => {
-    return result(0, {
+  'can_send_record': (): ActionResponse<{ yes: boolean }> => {
+    return response(0, {
       yes: true,
     })
   },
 
   /** 获取运行状态 */
-  'get_status': (): ActionResult<{ online: boolean; good: boolean }> => {
-    return result(0, {
+  'get_status': (): ActionResponse<{ online: boolean; good: boolean }> => {
+    return response(0, {
       online: true,
       good: true,
     })
@@ -462,15 +430,35 @@ const actionStrategy: ActionStrategy = {
 
   /** 获取版本信息 */
   'get_version_info': async (): Promise<
-    ActionResult<{ app_name: string; app_version: string; protocol_version: string }>
+    ActionResponse<{ app_name: string; app_version: string; protocol_version: string }>
   > => {
     const appVersion = await getVersion()
-    return result(0, {
+    return response(0, {
       'app_name': 'matcha',
       'app_version': appVersion,
       'protocol_version': 'v11',
     })
   },
+}
+
+interface MessageData {
+  message_id: number
+}
+
+interface MessageInfo {
+  time: number
+  message_type: 'private' | 'group'
+  message_id: number
+  real_id: number
+  sender: GroupSender | PrivateSender
+  message: Messages[]
+}
+
+interface StrangerInfo {
+  user_id: number
+  nickname: string
+  sex: 'male' | 'female' | 'unknown'
+  age: number
 }
 
 interface ErrorInfo {

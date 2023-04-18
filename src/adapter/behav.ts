@@ -60,7 +60,7 @@ export class Behav {
       time: getTimestamp(),
       self: {
         platform: 'qq',
-        bot_id: this.status.bot!.id,
+        bot_id: this.status.assignBot,
       },
       type,
     }
@@ -81,7 +81,7 @@ export class Behav {
         sub_type = 'group'
       }
     }
-    return {
+    return await this.chat.appendScene({
       ...this.createScene('message'),
       detail_type: 'private',
       sub_type,
@@ -93,7 +93,7 @@ export class Behav {
       chat_type: 'private',
       sender_id: sender.id,
       receiver_id: receiver.id,
-    }
+    })
   }
 
   /** 发送群聊消息 */
@@ -104,7 +104,7 @@ export class Behav {
       throw new Error('不是本群成员')
     }
     const message_id = getMessageId().toString()
-    return {
+    return await this.chat.appendScene({
       ...this.createScene('message'),
       detail_type: 'group',
       sub_type: 'normal',
@@ -120,7 +120,7 @@ export class Behav {
       chat_type: 'group',
       sender_id: sender.id,
       receiver_id: receiver.id,
-    }
+    })
   }
 
   /** 发送消息 */
@@ -142,17 +142,16 @@ export class Behav {
     messageId: string,
     operatorId: string
   ): Promise<PrivateMessageDeleteNoticeScene | GroupMessageDeleteNoticeScene> {
-    const chat = useChatStore()
-    const messageChat = chat.chatLogs.find((chat) => chat.type === 'message' && chat.scene.message_id === messageId) as
-      | Message
-      | undefined
+    const messageChat = this.chat.chatLogs.find(
+      (chat) => chat.type === 'message' && chat.scene.message_id === messageId
+    ) as Message | undefined
     if (!messageChat) {
       throw new Error('消息不存在')
     }
     messageChat.recall = true
     const scene = messageChat.scene
     if (scene.detail_type === 'private') {
-      return {
+      return await this.chat.appendScene({
         ...this.createScene('notice'),
         detail_type: 'private_message_delete',
         message_id: messageId,
@@ -160,7 +159,7 @@ export class Behav {
         chat_type: 'private',
         sender_id: operatorId,
         receiver_id: scene.user_id,
-      }
+      })
     }
     let sub_type: 'delete' | 'recall' = 'recall'
     if (scene.user_id !== operatorId) {
@@ -172,7 +171,7 @@ export class Behav {
       }
       sub_type = 'delete'
     }
-    return {
+    return await this.chat.appendScene({
       ...this.createScene('notice'),
       detail_type: 'group_message_delete',
       sub_type,
@@ -183,7 +182,7 @@ export class Behav {
       chat_type: 'group',
       sender_id: operatorId,
       receiver_id: scene.group_id,
-    }
+    })
   }
 
   /** 申请入群 */
@@ -197,7 +196,7 @@ export class Behav {
     if (!group) {
       throw new Error('群组不存在')
     }
-    return {
+    return await this.chat.appendScene({
       ...this.createScene('request'),
       detail_type: 'join_group',
       user_id: userId,
@@ -207,7 +206,7 @@ export class Behav {
       chat_type: 'group',
       sender_id: userId,
       receiver_id: groupId,
-    }
+    })
   }
 
   /** 邀请入群 */
@@ -216,7 +215,7 @@ export class Behav {
     if (!group) {
       throw new Error('群组不存在')
     }
-    return {
+    return await this.chat.appendScene({
       ...this.createScene('request'),
       detail_type: 'group_invite',
       group_id: groupId,
@@ -225,7 +224,7 @@ export class Behav {
       chat_type: 'private',
       sender_id: invitorId,
       receiver_id: userId,
-    }
+    })
   }
 
   /** 批准入群 */
@@ -235,8 +234,7 @@ export class Behav {
     approve = true,
     reason = ''
   ): Promise<GroupMemberIncreaseNoticeScene | undefined> {
-    const chat = useChatStore()
-    const request = chat.getChat(requestId, 'request')
+    const request = this.chat.getChat(requestId, 'request')
     const scene = request.scene as JoinGroupRequestScene
     if (!(await roleCheck('admin', scene.group_id, scene.user_id))) {
       throw new Error('无权操作')
@@ -247,7 +245,7 @@ export class Behav {
       return
     }
     request.action = 'agree'
-    return {
+    return await this.chat.appendScene({
       ...this.createScene('notice'),
       detail_type: 'group_member_increase',
       sub_type: scene.invitor_id ? 'invite' : 'join',
@@ -257,7 +255,7 @@ export class Behav {
       chat_type: 'group',
       sender_id: operatorId,
       receiver_id: scene.group_id,
-    }
+    })
   }
 
   /** 移除群成员 */
@@ -276,7 +274,7 @@ export class Behav {
       }
     }
     await db.members.delete([groupId, userId])
-    return {
+    return await this.chat.appendScene({
       ...this.createScene('notice'),
       detail_type: 'group_member_decrease',
       sub_type: userId === operatorId ? 'leave' : 'remove',
@@ -286,7 +284,7 @@ export class Behav {
       chat_type: 'group',
       sender_id: operatorId,
       receiver_id: groupId,
-    }
+    })
   }
 
   /** 禁言群成员 */
@@ -300,7 +298,7 @@ export class Behav {
       throw new Error('无权操作')
     }
     await db.members.update([groupId, userId], { banExpireTime: getTimestamp() + duration })
-    return {
+    return await this.chat.appendScene({
       ...this.createScene('notice'),
       detail_type: 'group_member_ban',
       sub_type: duration ? 'ban' : 'lift_ban',
@@ -311,7 +309,7 @@ export class Behav {
       duration,
       sender_id: operatorId,
       receiver_id: groupId,
-    }
+    })
   }
 
   /** 禁言全体成员 */
@@ -320,7 +318,7 @@ export class Behav {
       throw new Error('无权操作')
     }
     await db.groups.update(groupId, { wholeBanned: enable })
-    return {
+    return await this.chat.appendScene({
       ...this.createScene('notice'),
       detail_type: 'group_whole_ban',
       sub_type: enable ? 'open' : 'close',
@@ -329,7 +327,7 @@ export class Behav {
       chat_type: 'group',
       sender_id: operatorId,
       receiver_id: groupId,
-    }
+    })
   }
 
   /** 设置群管理员 */
@@ -343,7 +341,7 @@ export class Behav {
       throw new Error('无权操作')
     }
     await db.members.update([groupId, userId], { role: enable ? 'admin' : 'member' })
-    return {
+    return await this.chat.appendScene({
       ...this.createScene('notice'),
       detail_type: 'group_admin',
       sub_type: enable ? 'set' : 'unset',
@@ -353,7 +351,7 @@ export class Behav {
       chat_type: 'group',
       sender_id: operatorId,
       receiver_id: groupId,
-    }
+    })
   }
 
   /** 编辑群名 */
@@ -362,7 +360,7 @@ export class Behav {
       throw new Error('无权操作')
     }
     await db.groups.update(groupId, { name: groupName })
-    return {
+    return await this.chat.appendScene({
       ...this.createScene('notice'),
       detail_type: 'group_name',
       group_id: groupId,
@@ -371,7 +369,7 @@ export class Behav {
       chat_type: 'group',
       sender_id: operatorId,
       receiver_id: groupId,
-    }
+    })
   }
 
   /** 编辑群成员名片 */
@@ -385,7 +383,7 @@ export class Behav {
       throw new Error('无权操作')
     }
     await db.members.update([groupId, userId], { card })
-    return {
+    return await this.chat.appendScene({
       ...this.createScene('notice'),
       detail_type: 'group_member_card',
       card,
@@ -395,7 +393,7 @@ export class Behav {
       chat_type: 'group',
       sender_id: operatorId,
       receiver_id: groupId,
-    }
+    })
   }
 
   /** 编辑群成员专属头衔 */
@@ -410,7 +408,7 @@ export class Behav {
       throw new Error('无权操作')
     }
     await db.members.update([groupId, userId], { title, titleExpireTime: duration })
-    return {
+    return await this.chat.appendScene({
       ...this.createScene('notice'),
       detail_type: 'group_member_title',
       group_id: groupId,
@@ -420,12 +418,12 @@ export class Behav {
       chat_type: 'group',
       sender_id: operatorId,
       receiver_id: groupId,
-    }
+    })
   }
 
   /** 申请成为好友 */
   async requestAddFriend(userId: string, operatorId: string, comment = ''): Promise<AddFriendRequestScene> {
-    return {
+    return await this.chat.appendScene({
       ...this.createScene('request'),
       detail_type: 'add_friend',
       user_id: userId,
@@ -433,7 +431,7 @@ export class Behav {
       chat_type: 'private',
       sender_id: operatorId,
       receiver_id: userId,
-    }
+    })
   }
 
   /** 处理好友申请 */
@@ -443,8 +441,7 @@ export class Behav {
     approve = true,
     remark = ''
   ): Promise<FriendIncreaseNoticeScene | undefined> {
-    const chat = useChatStore()
-    const request = chat.getChat(requestId, 'request')
+    const request = this.chat.getChat(requestId, 'request')
     const scene = request.scene as AddFriendRequestScene
     if (!approve) {
       request.action = 'refuse'
@@ -452,27 +449,27 @@ export class Behav {
     }
     request.action = 'agree'
     await db.friends.add({ userId: operatorId, friendId: scene.user_id, remark })
-    return {
+    return await this.chat.appendScene({
       ...this.createScene('notice'),
       detail_type: 'friend_increase',
       user_id: scene.user_id,
       chat_type: 'private',
       sender_id: operatorId,
       receiver_id: scene.user_id,
-    }
+    })
   }
 
   /** 删除好友 */
   async removeFriend(userId: string, friendId: string): Promise<FriendDecreaseNoticeScene> {
     await db.friends.delete([userId, friendId])
-    return {
+    return await this.chat.appendScene({
       ...this.createScene('notice'),
       detail_type: 'friend_decrease',
       user_id: friendId,
       chat_type: 'private',
       sender_id: userId,
       receiver_id: friendId,
-    }
+    })
   }
 
   /** 戳一戳 */
@@ -488,20 +485,20 @@ export class Behav {
       target_id: targeId,
     } as const
     if (groupId) {
-      return {
+      return await this.chat.appendScene({
         ...poke,
         group_id: groupId,
         chat_type: 'group',
         sender_id: userId,
         receiver_id: groupId,
-      }
+      })
     } else {
-      return {
+      return await this.chat.appendScene({
         ...poke,
         chat_type: 'private',
         sender_id: userId,
         receiver_id: targeId,
-      } as FriendPokeNoticeScene
+      } as FriendPokeNoticeScene)
     }
   }
 
