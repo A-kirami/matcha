@@ -426,7 +426,7 @@ export class Behav {
     return await this.chat.appendScene({
       ...this.createScene('request'),
       detail_type: 'add_friend',
-      user_id: userId,
+      user_id: operatorId,
       comment,
       chat_type: 'private',
       sender_id: operatorId,
@@ -449,10 +449,11 @@ export class Behav {
     }
     request.action = 'agree'
     await db.friends.add({ userId: operatorId, friendId: scene.user_id, remark })
+    await db.friends.add({ userId: scene.user_id, friendId: operatorId, remark: '' })
     return await this.chat.appendScene({
       ...this.createScene('notice'),
       detail_type: 'friend_increase',
-      user_id: scene.user_id,
+      user_id: operatorId,
       chat_type: 'private',
       sender_id: operatorId,
       receiver_id: scene.user_id,
