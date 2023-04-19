@@ -113,8 +113,7 @@ const actionStrategy: ActionStrategy = {
   /** 撤回消息 */
   'delete_msg': async ({ message_id }: { message_id: number }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
-    const status = useStatusStore()
-    await behav.recallMessage(message_id.toString(), status.bot!.id)
+    await behav.recallMessage(message_id.toString(), behav.status.assignBot)
     return response(0)
   },
 
@@ -152,8 +151,7 @@ const actionStrategy: ActionStrategy = {
     reject_add_request: boolean
   }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
-    const status = useStatusStore()
-    await behav.removeGroupMember(group_id.toString(), user_id.toString(), status.bot!.id)
+    await behav.removeGroupMember(group_id.toString(), user_id.toString(), behav.status.assignBot)
     return response(0)
   },
 
@@ -168,8 +166,7 @@ const actionStrategy: ActionStrategy = {
     duration: number
   }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
-    const status = useStatusStore()
-    await behav.banGroupMember(group_id.toString(), user_id.toString(), status.bot!.id, duration)
+    await behav.banGroupMember(group_id.toString(), user_id.toString(), behav.status.assignBot, duration)
     return response(0)
   },
 
@@ -182,8 +179,7 @@ const actionStrategy: ActionStrategy = {
     enable: boolean
   }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
-    const status = useStatusStore()
-    await behav.banGroupWhole(group_id.toString(), status.bot!.id, enable)
+    await behav.banGroupWhole(group_id.toString(), behav.status.assignBot, enable)
     return response(0)
   },
 
@@ -198,8 +194,7 @@ const actionStrategy: ActionStrategy = {
     enable: boolean
   }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
-    const status = useStatusStore()
-    await behav.setGroupAdmin(group_id.toString(), user_id.toString(), status.bot!.id, enable)
+    await behav.setGroupAdmin(group_id.toString(), user_id.toString(), behav.status.assignBot, enable)
     return response(0)
   },
 
@@ -214,8 +209,7 @@ const actionStrategy: ActionStrategy = {
     card: string
   }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
-    const status = useStatusStore()
-    await behav.editGroupMemberCard(group_id.toString(), user_id.toString(), status.bot!.id, card)
+    await behav.editGroupMemberCard(group_id.toString(), user_id.toString(), behav.status.assignBot, card)
     return response(0)
   },
 
@@ -228,8 +222,7 @@ const actionStrategy: ActionStrategy = {
     group_name: string
   }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
-    const status = useStatusStore()
-    await behav.editGroupName(group_id.toString(), status.bot!.id, group_name)
+    await behav.editGroupName(group_id.toString(), behav.status.assignBot, group_name)
     return response(0)
   },
 
@@ -242,12 +235,11 @@ const actionStrategy: ActionStrategy = {
     is_dismiss: boolean
   }): Promise<ActionResponse<null> | ActionResponse<ErrorInfo>> => {
     const behav = new Behav()
-    const status = useStatusStore()
     if (is_dismiss) {
-      await behav.dismissGroup(group_id.toString(), status.bot!.id)
+      await behav.dismissGroup(group_id.toString(), behav.status.assignBot)
       return response(0)
     } else {
-      await behav.removeGroupMember(group_id.toString(), status.bot!.id, status.bot!.id)
+      await behav.removeGroupMember(group_id.toString(), behav.status.assignBot, behav.status.assignBot)
       return response(0)
     }
   },
@@ -265,11 +257,10 @@ const actionStrategy: ActionStrategy = {
     duration: number
   }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
-    const status = useStatusStore()
     await behav.editGroupMemberspecialTitle(
       group_id.toString(),
       user_id.toString(),
-      status.bot!.id,
+      behav.status.assignBot,
       special_title,
       duration
     )
@@ -287,8 +278,7 @@ const actionStrategy: ActionStrategy = {
     remark: string
   }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
-    const status = useStatusStore()
-    await behav.approveAddFriend(flag, status.bot!.id, approve, remark)
+    await behav.approveAddFriend(flag, behav.status.assignBot, approve, remark)
     return response(0)
   },
 
@@ -303,15 +293,14 @@ const actionStrategy: ActionStrategy = {
     reason: string
   }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
-    const status = useStatusStore()
-    await behav.approveJoinGroup(flag, status.bot!.id, approve, reason)
+    await behav.approveJoinGroup(flag, behav.status.assignBot, approve, reason)
     return response(0)
   },
 
   /** 获取登录号信息 */
   'get_login_info': async (): Promise<ActionResponse<{ user_id: number; nickname: string }>> => {
     const status = useStatusStore()
-    return response(0, { user_id: Number(status.bot!.id), nickname: status.bot!.name })
+    return response(0, { user_id: Number(status.assignBot), nickname: status.bot!.name })
   },
 
   /** 获取陌生人信息 */
@@ -335,7 +324,7 @@ const actionStrategy: ActionStrategy = {
   /** 获取好友列表 */
   'get_friend_list': async (): Promise<ActionResponse<{ user_id: number; nickname: string; remark: string }[]>> => {
     const status = useStatusStore()
-    const friends = await db.friends.where({ userId: status.bot!.id }).toArray()
+    const friends = await db.friends.where({ userId: status.assignBot }).toArray()
     const friendList = friends.map(async (friend) => {
       const user = await db.users.get(friend.friendId)
       return {
@@ -378,7 +367,7 @@ const actionStrategy: ActionStrategy = {
     user_id: string
   }): Promise<ActionResponse<MemberInfo> | ActionResponse<ErrorInfo>> => {
     const status = useStatusStore()
-    const operator = await db.members.get({ groupId: group_id, userId: status.bot!.id })
+    const operator = await db.members.get({ groupId: group_id, userId: status.assignBot })
     if (!operator) {
       return response(1403, { message: '没有加入该群' })
     }
@@ -397,7 +386,7 @@ const actionStrategy: ActionStrategy = {
     group_id: string
   }): Promise<ActionResponse<MemberInfo[]> | ActionResponse<ErrorInfo>> => {
     const status = useStatusStore()
-    const operator = await db.members.get({ groupId: group_id, userId: status.bot!.id })
+    const operator = await db.members.get({ groupId: group_id, userId: status.assignBot })
     if (!operator) {
       return response(1403, { message: '没有加入该群' })
     }

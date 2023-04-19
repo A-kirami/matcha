@@ -30,7 +30,7 @@ const chat = useChatStore()
 const scene = $ref(message.scene)
 
 /** 消息是否为Bot发送 */
-const isBot = scene.sender_id === status.bot!.id
+const isBot = scene.sender_id === status.assignBot
 
 /** 单个消息 */
 const onlySingle = scene.message.length === 1
