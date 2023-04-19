@@ -11,6 +11,7 @@ export interface Config {
   reconnectInterval: number
   heartbeatInterval: number
   timeout: number
+  postSelfEvents: boolean
 }
 
 export const useConfigStore = defineStore(
@@ -26,6 +27,7 @@ export const useConfigStore = defineStore(
     const reconnectInterval = ref(3)
     const heartbeatInterval = ref(3)
     const timeout = ref(3)
+    const postSelfEvents = ref(false)
 
     return {
       protocol,
@@ -37,6 +39,7 @@ export const useConfigStore = defineStore(
       reconnectInterval,
       heartbeatInterval,
       timeout,
+      postSelfEvents,
     }
   },
 

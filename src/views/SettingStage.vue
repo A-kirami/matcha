@@ -19,6 +19,7 @@ const configState = $ref<Config>({
   reconnectInterval: configStore.reconnectInterval,
   heartbeatInterval: configStore.heartbeatInterval,
   timeout: configStore.timeout,
+  postSelfEvents: configStore.postSelfEvents,
 })
 
 const throttledFn = useThrottleFn(async () => {
@@ -68,6 +69,9 @@ async function onFinish(config: Config) {
       </a-form-item>
       <a-form-item label="心跳间隔" name="heartbeatInterval" :colon="false">
         <a-input-number id="inputNumber" v-model:value="configState.heartbeatInterval" :min="0" addon-after="秒" />
+      </a-form-item>
+      <a-form-item label="上报自身事件" name="postSelfEvents" :colon="false">
+        <a-switch v-model:checked="configState.postSelfEvents" />
       </a-form-item>
       <a-form-item :wrapper-col="{ offset: 2 }">
         <a-button type="primary" html-type="submit">保存设置</a-button>
