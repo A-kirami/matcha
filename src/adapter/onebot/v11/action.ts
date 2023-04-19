@@ -351,11 +351,13 @@ const actionStrategy: ActionStrategy = {
 
   /** 获取群列表 */
   'get_group_list': async (): Promise<ActionResponse<GroupInfo[]>> => {
-    const groupList = await db.groups.toArray()
-    return response(
-      0,
-      groupList.map((group) => getGroupInfo(group))
-    )
+    const status = useStatusStore()
+    const members = await db.members.where({ userId: status.assignBot }).toArray()
+    const groupList = members.map(async (member) => {
+      const group = await db.groups.get(member.groupId)
+      return getGroupInfo(group!)
+    })
+    return response(0, await Promise.all(groupList))
   },
 
   /** 获取群成员信息 */
