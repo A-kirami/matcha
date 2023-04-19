@@ -24,7 +24,6 @@ import type {
   JoinGroupRequestScene,
   GroupInviteRequestScene,
 } from '@/adapter/scene'
-import type { ValueOf } from '@/adapter/typed'
 
 /** 事件 */
 interface Event extends BaseEvent {
@@ -36,6 +35,25 @@ interface Event extends BaseEvent {
 
   /** 上报类型 */
   post_type: 'message' | 'notice' | 'request' | 'meta_event'
+}
+
+/** 元事件 */
+interface MetaEvent extends Event {
+  post_type: 'meta_event'
+}
+
+export interface LifeCycleEvent extends MetaEvent {
+  meta_event_type: 'lifecycle'
+  sub_type: 'enable' | 'disable' | 'connect'
+}
+
+export interface HeartbeatEvent extends MetaEvent {
+  meta_event_type: 'heartbeat'
+  status: {
+    online: boolean
+    good: boolean
+  }
+  interval: number
 }
 
 /** 消息事件 */
@@ -344,32 +362,30 @@ export interface GroupRequestEvent extends AddRequestEvent {
   group_id: number
 }
 
-export interface EventMapping {
-  'message.private': PrivateMessageEvent
-  'message.group': GroupMessageEvent
-  'notice.group_upload': GroupUploadNoticeEvent
-  'notice.group_admin': GroupAdminNoticeEvent
-  'notice.group_decrease': GroupDecreaseNoticeEvent
-  'notice.group_increase': GroupIncreaseNoticeEvent
-  'notice.group_ban': GroupBanNoticeEvent
-  'notice.friend_add': FriendAddNoticeEvent
-  'notice.group_recall': GroupRecallNoticeEvent
-  'notice.friend_recall': FriendRecallNoticeEvent
-  'notice.notify.poke': GroupPokeNotifyEvent
-  'notice.notify.lucky_king': GroupHongbaoLuckyNotifyEvent
-  'notice.notify.honor': GroupMemberHonorNotifyEvent
-  'request.friend': FriendRequestEvent
-  'request.group': GroupRequestEvent
-}
-
-export type Events = ValueOf<EventMapping>
+export type Events =
+  | PrivateMessageEvent
+  | GroupMessageEvent
+  | GroupUploadNoticeEvent
+  | GroupAdminNoticeEvent
+  | GroupDecreaseNoticeEvent
+  | GroupIncreaseNoticeEvent
+  | GroupBanNoticeEvent
+  | FriendAddNoticeEvent
+  | GroupRecallNoticeEvent
+  | FriendRecallNoticeEvent
+  | GroupPokeNotifyEvent
+  | GroupHongbaoLuckyNotifyEvent
+  | GroupMemberHonorNotifyEvent
+  | FriendRequestEvent
+  | GroupRequestEvent
 
 const messageHandler = new MessageHandler()
 
-const eventBuildStrategy: EventStrategy<SceneMapping<Messages>> = {
+const eventStrategy: EventStrategy<SceneMapping<Messages>> = {
   'message.private': async (scene: PrivateMessageScene<Messages>): Promise<PrivateMessageEvent> => {
     const {
       time,
+      self_id,
       type: post_type,
       detail_type: message_type,
       sub_type,
@@ -381,13 +397,13 @@ const eventBuildStrategy: EventStrategy<SceneMapping<Messages>> = {
     } = scene
     return {
       time,
-      self_id: Number(scene.self.bot_id),
+      self_id: Number(self_id),
       post_type,
       message_type,
       sub_type: sub_type === 'temp' ? 'other' : sub_type,
       user_id: Number(user_id),
       message_id: Number(message_id),
-      message: scene.original_message || (await messageHandler.build(message)),
+      message: await messageHandler.build(message),
       raw_message,
       font: 0,
       sender: {
@@ -402,6 +418,7 @@ const eventBuildStrategy: EventStrategy<SceneMapping<Messages>> = {
   'message.group': async (scene: GroupMessageScene<Messages>): Promise<GroupMessageEvent> => {
     const {
       time,
+      self_id,
       type: post_type,
       detail_type: message_type,
       sub_type,
@@ -416,14 +433,14 @@ const eventBuildStrategy: EventStrategy<SceneMapping<Messages>> = {
     } = scene
     return {
       time,
-      self_id: Number(scene.self.bot_id),
+      self_id: Number(self_id),
       post_type,
       message_type,
       sub_type,
       user_id: Number(user_id),
       group_id: Number(group_id),
       message_id: Number(message_id),
-      message: scene.original_message || (await messageHandler.build(message)),
+      message: await messageHandler.build(message),
       raw_message,
       font: 0,
       anonymous: anonymous ? { id: Number(anonymous.id), name: anonymous.name, flag: anonymous.id } : null,
@@ -442,10 +459,10 @@ const eventBuildStrategy: EventStrategy<SceneMapping<Messages>> = {
   },
 
   'notice.friend_increase': (scene: FriendIncreaseNoticeScene): FriendAddNoticeEvent => {
-    const { time, type: post_type, user_id } = scene
+    const { time, self_id, type: post_type, user_id } = scene
     return {
       time,
-      self_id: Number(scene.self.bot_id),
+      self_id: Number(self_id),
       post_type,
       notice_type: 'friend_add',
       user_id: Number(user_id),
@@ -453,10 +470,10 @@ const eventBuildStrategy: EventStrategy<SceneMapping<Messages>> = {
   },
 
   'notice.private_message_delete': (scene: PrivateMessageDeleteNoticeScene): FriendRecallNoticeEvent => {
-    const { time, type: post_type, user_id, message_id } = scene
+    const { time, self_id, type: post_type, user_id, message_id } = scene
     return {
       time,
-      self_id: Number(scene.self.bot_id),
+      self_id: Number(self_id),
       post_type,
       notice_type: 'friend_recall',
       user_id: Number(user_id),
@@ -465,10 +482,10 @@ const eventBuildStrategy: EventStrategy<SceneMapping<Messages>> = {
   },
 
   'notice.group_member_increase': (scene: GroupMemberIncreaseNoticeScene): GroupIncreaseNoticeEvent => {
-    const { time, type: post_type, sub_type, group_id, operator_id, user_id } = scene
+    const { time, self_id, type: post_type, sub_type, group_id, operator_id, user_id } = scene
     return {
       time,
-      self_id: Number(scene.self.bot_id),
+      self_id: Number(self_id),
       post_type,
       notice_type: 'group_increase',
       sub_type: sub_type === 'join' ? 'approve' : sub_type,
@@ -479,13 +496,13 @@ const eventBuildStrategy: EventStrategy<SceneMapping<Messages>> = {
   },
 
   'notice.group_member_decrease': (scene: GroupMemberDecreaseNoticeScene): GroupDecreaseNoticeEvent => {
-    const { time, type: post_type, sub_type, group_id, operator_id, user_id } = scene
+    const { time, self_id, type: post_type, sub_type, group_id, operator_id, user_id } = scene
     return {
       time,
-      self_id: Number(scene.self.bot_id),
+      self_id: Number(self_id),
       post_type,
       notice_type: 'group_decrease',
-      sub_type: sub_type === 'leave' ? sub_type : user_id === scene.self.bot_id ? 'kick_me' : 'kick',
+      sub_type: sub_type === 'leave' ? sub_type : user_id === self_id ? 'kick_me' : 'kick',
       user_id: Number(user_id),
       group_id: Number(group_id),
       operator_id: Number(operator_id),
@@ -493,10 +510,10 @@ const eventBuildStrategy: EventStrategy<SceneMapping<Messages>> = {
   },
 
   'notice.group_message_delete': (scene: GroupMessageDeleteNoticeScene): GroupRecallNoticeEvent => {
-    const { time, type: post_type, group_id, operator_id, user_id, message_id } = scene
+    const { time, self_id, type: post_type, group_id, operator_id, user_id, message_id } = scene
     return {
       time,
-      self_id: Number(scene.self.bot_id),
+      self_id: Number(self_id),
       post_type,
       notice_type: 'group_recall',
       user_id: Number(user_id),
@@ -507,10 +524,10 @@ const eventBuildStrategy: EventStrategy<SceneMapping<Messages>> = {
   },
 
   'notice.group_poke': (scene: GroupPokeNoticeScene): GroupPokeNotifyEvent => {
-    const { time, type: post_type, user_id, group_id, target_id } = scene
+    const { time, self_id, type: post_type, user_id, group_id, target_id } = scene
     return {
       time,
-      self_id: Number(scene.self.bot_id),
+      self_id: Number(self_id),
       post_type,
       notice_type: 'notify',
       sub_type: 'poke',
@@ -521,10 +538,10 @@ const eventBuildStrategy: EventStrategy<SceneMapping<Messages>> = {
   },
 
   'notice.group_admin': (scene: GroupAdminNoticeScene): GroupAdminNoticeEvent => {
-    const { time, type: post_type, detail_type: notice_type, sub_type, user_id, group_id } = scene
+    const { time, self_id, type: post_type, detail_type: notice_type, sub_type, user_id, group_id } = scene
     return {
       time,
-      self_id: Number(scene.self.bot_id),
+      self_id: Number(self_id),
       post_type,
       notice_type,
       sub_type,
@@ -534,10 +551,10 @@ const eventBuildStrategy: EventStrategy<SceneMapping<Messages>> = {
   },
 
   'notice.group_member_ban': (scene: GroupMemberBanNoticeScene): GroupBanNoticeEvent => {
-    const { time, type: post_type, sub_type, group_id, operator_id, user_id, duration = 0 } = scene
+    const { time, self_id, type: post_type, sub_type, group_id, operator_id, user_id, duration = 0 } = scene
     return {
       time,
-      self_id: Number(scene.self.bot_id),
+      self_id: Number(self_id),
       post_type,
       notice_type: 'group_ban',
       sub_type,
@@ -549,10 +566,10 @@ const eventBuildStrategy: EventStrategy<SceneMapping<Messages>> = {
   },
 
   'notice.group_member_honor': (scene: GroupMemberHonorNoticeScene): GroupMemberHonorNotifyEvent => {
-    const { time, type: post_type, user_id, group_id, honor: honor_type } = scene
+    const { time, self_id, type: post_type, user_id, group_id, honor: honor_type } = scene
     return {
       time,
-      self_id: Number(scene.self.bot_id),
+      self_id: Number(self_id),
       post_type,
       notice_type: 'notify',
       sub_type: 'honor',
@@ -563,10 +580,10 @@ const eventBuildStrategy: EventStrategy<SceneMapping<Messages>> = {
   },
 
   'notice.group_hongbao_lucky': (scene: GroupHongbaoLuckyNoticeScene): GroupHongbaoLuckyNotifyEvent => {
-    const { time, type: post_type, user_id, group_id, target_id } = scene
+    const { time, self_id, type: post_type, user_id, group_id, target_id } = scene
     return {
       time,
-      self_id: Number(scene.self.bot_id),
+      self_id: Number(self_id),
       post_type,
       notice_type: 'notify',
       sub_type: 'lucky_king',
@@ -577,10 +594,10 @@ const eventBuildStrategy: EventStrategy<SceneMapping<Messages>> = {
   },
 
   'notice.group_file_upload': (scene: GroupFileUploadNoticeScene): GroupUploadNoticeEvent => {
-    const { time, type: post_type, user_id, group_id, file } = scene
+    const { time, self_id, type: post_type, user_id, group_id, file } = scene
     return {
       time,
-      self_id: Number(scene.self.bot_id),
+      self_id: Number(self_id),
       post_type,
       notice_type: 'group_upload',
       user_id: Number(user_id),
@@ -590,10 +607,10 @@ const eventBuildStrategy: EventStrategy<SceneMapping<Messages>> = {
   },
 
   'request.add_friend': (scene: AddFriendRequestScene): FriendRequestEvent => {
-    const { time, type: post_type, user_id, comment } = scene
+    const { time, self_id, type: post_type, user_id, comment } = scene
     return {
       time,
-      self_id: Number(scene.self.bot_id),
+      self_id: Number(self_id),
       post_type,
       request_type: 'friend',
       user_id: Number(user_id),
@@ -603,10 +620,10 @@ const eventBuildStrategy: EventStrategy<SceneMapping<Messages>> = {
   },
 
   'request.join_group': (scene: JoinGroupRequestScene): GroupRequestEvent => {
-    const { time, type: post_type, user_id, group_id, comment } = scene
+    const { time, self_id, type: post_type, user_id, group_id, comment } = scene
     return {
       time,
-      self_id: Number(scene.self.bot_id),
+      self_id: Number(self_id),
       post_type,
       request_type: 'group',
       sub_type: 'add',
@@ -618,10 +635,10 @@ const eventBuildStrategy: EventStrategy<SceneMapping<Messages>> = {
   },
 
   'request.group_invite': (scene: GroupInviteRequestScene): GroupRequestEvent => {
-    const { time, type: post_type, user_id, group_id } = scene
+    const { time, self_id, type: post_type, user_id, group_id } = scene
     return {
       time,
-      self_id: Number(scene.self.bot_id),
+      self_id: Number(self_id),
       post_type,
       request_type: 'group',
       sub_type: 'invite',
@@ -634,5 +651,5 @@ const eventBuildStrategy: EventStrategy<SceneMapping<Messages>> = {
 }
 
 export class EventHandler extends AdapterEventHandler<Events> {
-  readonly strategy = eventBuildStrategy
+  readonly strategy = eventStrategy
 }

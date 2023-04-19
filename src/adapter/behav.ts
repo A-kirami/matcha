@@ -49,19 +49,13 @@ export class Behav {
   ): {
     id: string
     time: number
-    self: {
-      platform: string
-      bot_id: string
-    }
+    self_id: string
     type: T
   } {
     return {
       id: getUUID(),
       time: getTimestamp(),
-      self: {
-        platform: 'qq',
-        bot_id: this.status.assignBot,
-      },
+      self_id: this.status.assignBot,
       type,
     }
   }
