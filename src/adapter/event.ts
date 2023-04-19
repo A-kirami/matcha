@@ -17,19 +17,11 @@ export abstract class AdapterEventHandler<E extends Event> {
   abstract readonly strategy: EventStrategy<unknown>
 
   async handle(scene: Scenes): Promise<E | undefined> {
-    const key = this.getSceneKey(scene)
+    const key = `${scene.type}.${scene.detail_type}`
     const func = (this.strategy as Strategy<Scenes, E>)[key]
     if (func) {
       const asyncFn = asyncWrapper<E>(func)
       return await asyncFn(scene)
     }
-  }
-
-  createKey(...args: Array<string | undefined>): string {
-    return args.filter(Boolean).join('.')
-  }
-
-  getSceneKey(scene: Scenes): string {
-    return this.createKey(scene.type, scene.detail_type)
   }
 }

@@ -16,13 +16,12 @@ interface Scene extends Session {
   id: string
   /** 事件发生时间（Unix 时间戳），单位：秒 */
   time: number
-  /** 机器人自身标识 */
-  self: {
-    platform: string
-    bot_id: string
-  }
+  /** 机器人自身 ID */
+  self_id: string
   /** 事件类型，必须是 meta、message、notice、request 中的一个，分别表示元事件、消息事件、通知事件和请求事件 */
   type: 'message' | 'notice' | 'request'
+  /** 事件子类型 */
+  detail_type: string
 }
 
 interface MessageScene<T extends Message = Message> extends Scene {
@@ -78,7 +77,6 @@ export type MessageScenes<T extends Message = Message> = PrivateMessageScene<T> 
 
 interface NoticeScene extends Scene {
   type: 'notice'
-  detail_type: string
 }
 
 interface PrivateNoticeScene extends NoticeScene {
