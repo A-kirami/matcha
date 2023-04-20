@@ -30,7 +30,7 @@ export class websocketClient implements Driver {
       return false
     }
     try {
-      await this.ws.send({ type: 'Text', data: JSON.stringify(event) })
+      await this.ws.send(JSON.stringify(event))
       return true
     } catch (error) {
       return false
@@ -76,6 +76,8 @@ export class websocketClient implements Driver {
           }
         })
         logger.info(`已连接到反向 WebSocket 服务器 ${connectUrl}`)
+        await this.adapter.onConnect()
+        await this.startHeartbeat()
       } catch (error) {
         logger.error(`[WebSocket] 连接到反向 WebSocket 服务器 ${connectUrl} 时出现错误: ${error}`)
         if (this.adapter.config.reconnectInterval) {
@@ -99,5 +101,12 @@ export class websocketClient implements Driver {
       connectConfig.extraHeaders.Authorization = 'Bearer' + this.adapter.config.accessToken
     }
     return connectConfig
+  }
+
+  async startHeartbeat(): Promise<void> {
+    if (this.ws && this.adapter.config.heartbeatInterval) {
+      await this.adapter.onHeartbeat()
+      setTimeout(this.startHeartbeat.bind(this), this.adapter.config.heartbeatInterval * 1000)
+    }
   }
 }
