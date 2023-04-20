@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import * as CommDriver from '@/driver'
 import { useChatStore, useStatusStore } from '@/stores'
 
@@ -77,4 +78,16 @@ export abstract class Adapter {
 
   /** 获取协议请求头 */
   abstract getConnectHeaders(): OneBotHeaders | Promise<OneBotHeaders>
+
+  /** 当适配器启动时 */
+  async onStartup(): Promise<void> {}
+
+  /** 当适配器关闭时 */
+  async onShutdown(): Promise<void> {}
+
+  /** 当 WebSocket 连接建立时 */
+  async onConnect(): Promise<void> {}
+
+  /** 当产生心跳时 */
+  async onHeartbeat(): Promise<void> {}
 }

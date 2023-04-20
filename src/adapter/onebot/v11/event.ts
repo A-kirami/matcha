@@ -42,12 +42,12 @@ interface MetaEvent extends Event {
   post_type: 'meta_event'
 }
 
-export interface LifeCycleEvent extends MetaEvent {
+export interface LifeCycleMetaEvent extends MetaEvent {
   meta_event_type: 'lifecycle'
   sub_type: 'enable' | 'disable' | 'connect'
 }
 
-export interface HeartbeatEvent extends MetaEvent {
+export interface HeartbeatMetaEvent extends MetaEvent {
   meta_event_type: 'heartbeat'
   status: {
     online: boolean
