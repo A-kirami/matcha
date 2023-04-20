@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 
 import { useConfigStore } from './config'
 import { useAdapterStore } from './protocol'
+import { useStatusStore } from './status'
 
 import type { Event } from '@/adapter/event'
 import type { Scenes, MessageScenes, NoticeScenes, RequestScenes } from '@/adapter/scene'
@@ -46,6 +47,8 @@ export const useChatStore = defineStore('chat', () => {
 
   const config = useConfigStore()
 
+  const status = useStatusStore()
+
   async function appendScene<S extends Scenes>(scene: S, insert?: string): Promise<S> {
     const event = await adapter.bot.eventHandler.handle(scene)
     let chat: Chats
@@ -65,8 +68,12 @@ export const useChatStore = defineStore('chat', () => {
       default:
         throw new Error('unknown scene type')
     }
-    if (event && config.postSelfEvents) {
-      chat.push = await adapter.bot.send(event)
+    if (event) {
+      if (config.postSelfEvents || scene.sender_id !== status.assignBot) {
+        chat.push = await adapter.bot.send(event)
+      } else {
+        chat.push = true
+      }
     }
     if (insert) {
       const index = chatLogs.findIndex((chat) => chat.id === insert)
