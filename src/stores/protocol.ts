@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { watch } from 'vue'
+import { watch, computed } from 'vue'
 
 import { adapters } from '@/adapter'
 
@@ -10,7 +10,7 @@ export const useAdapterStore = defineStore('adapter', () => {
 
   const bots = adapters.map((Adapter) => new Adapter(config))
 
-  const bot = $computed(() => {
+  const bot = computed(() => {
     for (const bot of bots) {
       if (bot.protocolId === config.protocol) {
         return bot
@@ -20,9 +20,9 @@ export const useAdapterStore = defineStore('adapter', () => {
   })
 
   watch(
-    () => bot,
+    () => bot.value,
     async (newBot, oldBot) => {
-      await oldBot?.shutdown()
+      await oldBot.shutdown()
       await newBot.startup()
     }
   )
