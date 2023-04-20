@@ -72,7 +72,9 @@ export class websocketClient implements Driver {
               break
             default:
               logger.error(`[WebSocket] 反向 WebSocket 服务器 ${connectUrl} 的连接被关闭: ${message.data?.reason}`)
-              await autoConnect()
+              if (this.adapter.config.reconnectInterval) {
+                setTimeout(autoConnect, this.adapter.config.reconnectInterval * 1000)
+              }
           }
         })
         logger.info(`已连接到反向 WebSocket 服务器 ${connectUrl}`)
