@@ -1,4 +1,4 @@
-import { decode } from '@msgpack/msgpack'
+import { decode, encode } from '@msgpack/msgpack'
 
 import { Adapter } from '@/adapter/adapter'
 import { logger } from '@/plugins'
@@ -61,9 +61,10 @@ export class websocketClient implements Driver {
           switch (message.type) {
             case 'Text':
             case 'Binary': {
-              const data: ActionRequest = message.type === 'Text' ? JSON.parse(message.data) : decode(message.data)
-              const result = { ...(await this.adapter.actionHandle(data)), echo: data.echo }
-              await this.ws?.send({ type: 'Text', data: JSON.stringify(result) })
+              const request: ActionRequest = message.type === 'Text' ? JSON.parse(message.data) : decode(message.data)
+              const response = { ...(await this.adapter.actionHandle(request)), echo: request.echo }
+              const data = message.type === 'Text' ? JSON.stringify(response) : Array.from(encode(response))
+              await this.ws?.send(data)
               break
             }
             case 'Ping':
