@@ -71,6 +71,7 @@ export class websocketClient implements Driver {
             case 'Pong':
               break
             default:
+              logger.error(`[WebSocket] 反向 WebSocket 服务器 ${connectUrl} 的连接被关闭: ${message.data?.reason}`)
               await autoConnect()
           }
         })
