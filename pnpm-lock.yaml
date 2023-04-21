@@ -7,7 +7,6 @@ specifiers:
   '@tauri-apps/api': ^1.2.0
   '@tauri-apps/cli': ^1.2.3
   '@types/node': ^18.15.12
-  '@types/spark-md5': ^3.0.2
   '@typescript-eslint/eslint-plugin': ^5.59.0
   '@typescript-eslint/parser': ^5.59.0
   '@unocss/eslint-config': ^0.49.8
@@ -44,7 +43,6 @@ specifiers:
   postcss-html: ^1.5.0
   postcss-preset-env: ^8.3.2
   prettier: ^2.8.7
-  spark-md5: ^3.0.2
   stylelint: ^15.5.0
   stylelint-color-format: ^1.1.0
   stylelint-config-css-modules: ^4.2.0
@@ -89,7 +87,6 @@ dependencies:
   overlayscrollbars-vue: 0.5.1_5x6ruloqeeypzutmgy6qhil34y
   pinia: 2.0.35_dtjfskxukdxv24psui2m5c75zy
   pinia-plugin-persistedstate: 3.1.0_pinia@2.0.35
-  spark-md5: 3.0.2
   tributejs: 5.1.3
   vue: 3.2.47
   vue-inline-svg: 3.1.2_vue@3.2.47
@@ -101,7 +98,6 @@ dependencies:
 devDependencies:
   '@tauri-apps/cli': 1.2.3
   '@types/node': 18.15.12
-  '@types/spark-md5': 3.0.2
   '@typescript-eslint/eslint-plugin': 5.59.0_wsbkzerfphvgr4lle7vmeh64yi
   '@typescript-eslint/parser': 5.59.0_voubu7prgxjfsfbgx5d4sqnwiy
   '@unocss/eslint-config': 0.49.8_voubu7prgxjfsfbgx5d4sqnwiy
@@ -1115,10 +1111,6 @@ packages:
 
   /@types/semver/7.3.13:
     resolution: {integrity: sha512-21cFJr9z3g5dW8B0CVI9g2O9beqaThGQ6ZFBqHfwhzLDKUxaqTIy3vnfah/UPkfOiF2pLq+tGz+W8RyCskuslw==}
-    dev: true
-
-  /@types/spark-md5/3.0.2:
-    resolution: {integrity: sha512-82E/lVRaqelV9qmRzzJ1PKTpyrpnT7mwdneKNJB9hUtypZDMggloDfFUCIqRRx3lYRxteCwXSq9c+W71Vf0QnQ==}
     dev: true
 
   /@types/web-bluetooth/0.0.16:
@@ -5069,10 +5061,6 @@ packages:
   /sourcemap-codec/1.4.8:
     resolution: {integrity: sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==}
     deprecated: Please use @jridgewell/sourcemap-codec instead
-
-  /spark-md5/3.0.2:
-    resolution: {integrity: sha512-wcFzz9cDfbuqe0FZzfi2or1sgyIrsDwmPwfZC4hiNidPdPINjeUwNfv5kldczoEAcjl9Y1L3SM7Uz2PUEQzxQw==}
-    dev: false
 
   /spdx-correct/3.2.0:
     resolution: {integrity: sha512-kN9dJbvnySHULIluDHy32WHRUu3Og7B9sbY7tsFLctQkIqnMh3hErYgdMjTYuqmcXX+lK5T1lnUt3G7zNswmZA==}

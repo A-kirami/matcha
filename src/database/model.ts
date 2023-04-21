@@ -69,3 +69,14 @@ export interface Member {
   /** 禁言到期时间 */
   banExpireTime: number
 }
+
+export interface CacheFile {
+  /** 文件 ID */
+  id: string
+  /** 文件名 */
+  name: string
+  /** 文件大小 */
+  size: number
+  /** 文件数据的 SHA256 校验和 */
+  sha256: string
+}

@@ -30,11 +30,11 @@ warp = "0.3.3"
 reqwest = "0.11.14"
 regex = "1.7.1"
 base64 = "0.21.0"
-md5 = "0.7.0"
 serde_repr = "0.1"
 byte-unit = "4.0"
 fern = "0.6"
 time = { version = "0.3", features = ["formatting", "local-offset"] }
+sha2 = "0.10"
 
 [features]
 # by default Tauri runs in production mode
