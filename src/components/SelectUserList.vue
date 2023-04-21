@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useObservable, from } from '@vueuse/rxjs'
-import { message } from 'ant-design-vue'
 import { liveQuery } from 'dexie'
 
 import { db } from '@/database'
