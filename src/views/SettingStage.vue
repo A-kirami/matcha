@@ -27,6 +27,7 @@ const throttledFn = useThrottleFn(async () => {
 }, 3000)
 
 async function onFinish(config: Config) {
+  const needReboot = config.protocol === configStore.protocol
   for (const key in config) {
     if (Object.prototype.hasOwnProperty.call(config, key)) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -34,7 +35,7 @@ async function onFinish(config: Config) {
       configStore[key] = config[key]
     }
   }
-  throttledFn()
+  needReboot && throttledFn()
 }
 </script>
 
