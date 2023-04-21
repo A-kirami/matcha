@@ -27,6 +27,7 @@ const throttledFn = useThrottleFn(async () => {
 }, 3000)
 
 async function onFinish(config: Config) {
+  const needReboot = config.protocol === configStore.protocol
   for (const key in config) {
     if (Object.prototype.hasOwnProperty.call(config, key)) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -34,7 +35,7 @@ async function onFinish(config: Config) {
       configStore[key] = config[key]
     }
   }
-  throttledFn()
+  needReboot && throttledFn()
 }
 </script>
 
@@ -51,6 +52,7 @@ async function onFinish(config: Config) {
       <a-form-item label="协议" name="protocol" :colon="false">
         <a-select v-model:value="configState.protocol" placeholder="Please select a country">
           <a-select-option value="OneBot.V11.Standard">OneBot v11 标准</a-select-option>
+          <a-select-option value="OneBot.V12.Standard">OneBot v12 标准</a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item label="驱动" name="comm" :colon="false">
