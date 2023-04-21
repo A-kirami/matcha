@@ -10,11 +10,7 @@ interface FileSource {
   Binary?: number[]
 }
 
-/**
- * 计算文件的 SHA256
- * @param file 文件二进制
- */
-async function getFileSHA256(buffer: ArrayBuffer): Promise<string> {
+async function getSHA256(buffer: ArrayBuffer): Promise<string> {
   const hashBuffer = await crypto.subtle.digest('SHA-256', buffer)
   const hashArray = Array.from(new Uint8Array(hashBuffer))
   const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('')
@@ -35,7 +31,7 @@ export async function createFileCache(
   const fileSource: FileSource = {}
   if (file instanceof File) {
     const buffer = await file.arrayBuffer()
-    const fileSHA256 = await getFileSHA256(buffer)
+    const fileSHA256 = await getSHA256(buffer)
     const cacheFile = await db.files.where({ sha256: fileSHA256 }).first()
     if (cacheFile) {
       return {
