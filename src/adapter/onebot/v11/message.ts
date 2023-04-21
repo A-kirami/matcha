@@ -439,7 +439,7 @@ const messageParseStrategy: MessageParseStrategy<MessageMapping> = {
   },
 
   'image': async (message: ImageMessage): Promise<ImageContent> => {
-    const { id, url } = await createFileCache('image', message.data.file, true)
+    const { id, url } = await createFileCache(message.data.file, 'image')
     return createContent('image', {
       id,
       url,
@@ -448,7 +448,7 @@ const messageParseStrategy: MessageParseStrategy<MessageMapping> = {
   },
 
   'record': async (message: RecordMessage): Promise<VoiceContent> => {
-    const { id, url } = await createFileCache('audio', message.data.file, true)
+    const { id, url } = await createFileCache(message.data.file, 'audio')
     return createContent('voice', {
       id,
       url,
@@ -456,7 +456,7 @@ const messageParseStrategy: MessageParseStrategy<MessageMapping> = {
   },
 
   'video': async (message: VideoMessage): Promise<VideoContent> => {
-    const { id, url } = await createFileCache('video', message.data.file, true)
+    const { id, url } = await createFileCache(message.data.file, 'video')
     return createContent('video', {
       id,
       url,

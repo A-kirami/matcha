@@ -2,7 +2,7 @@ import Dexie from 'dexie'
 
 import { getTimestamp } from '@/utils'
 
-import type { User, Friend, Group, Member } from './model'
+import type { User, Friend, Group, Member, CacheFile } from './model'
 import type { Table } from 'dexie'
 
 export class MatchaDB extends Dexie {
@@ -10,6 +10,7 @@ export class MatchaDB extends Dexie {
   friends!: Table<Friend, [string, string]>
   groups!: Table<Group, string>
   members!: Table<Member, [string, string]>
+  files!: Table<CacheFile, string>
 
   constructor() {
     super('matcha')
@@ -68,6 +69,7 @@ export class MatchaDB extends Dexie {
           member.banExpireTime ??= 0
         })
       })
+    this.version(3).stores({ files: 'id, sha256' })
   }
 }
 

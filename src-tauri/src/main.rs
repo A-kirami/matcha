@@ -46,7 +46,7 @@ fn main() {
             command::read_file,
             command::get_file_type,
             command::open_devtools,
-            command::create_file_cache
+            command::create_cache_file,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

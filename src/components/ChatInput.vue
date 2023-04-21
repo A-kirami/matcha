@@ -75,7 +75,7 @@ async function onPaste(e: Event): Promise<void> {
             throw new TypeError('不支持的文件类型')
           }
           const type = pasteFile.type.split('/')[0] as 'image' | 'video' | 'audio'
-          const { id, url } = await createFileCache(type, pasteFile)
+          const { id, url } = await createFileCache(pasteFile)
           const imageNode = new Image()
           imageNode.id = id
           imageNode.src = type === 'image' ? URL.createObjectURL(pasteFile) : type === 'audio' ? AudioIcon : VideoIcon
