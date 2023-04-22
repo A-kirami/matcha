@@ -6,8 +6,8 @@ import { db } from '@/database'
 import { getUUID } from './utils'
 
 interface FileSource {
-  Str?: string
-  Binary?: number[]
+  str?: string
+  binary?: number[]
 }
 
 async function getSHA256(buffer: ArrayBuffer): Promise<string> {
@@ -39,9 +39,9 @@ export async function createFileCache(
         url: await getFile(GetType.URL, cacheFile.id),
       }
     }
-    fileSource.Binary = Array.from(new Uint8Array(buffer))
+    fileSource.binary = Array.from(new Uint8Array(buffer))
   } else {
-    fileSource.Str = file
+    fileSource.str = file
   }
   const fileId = getUUID()
   const { size, sha256 } = await invoke<{ size: number; sha256: string }>('create_cache_file', {
