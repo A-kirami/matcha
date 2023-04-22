@@ -90,4 +90,9 @@ export abstract class Adapter {
 
   /** 当产生心跳时 */
   async onHeartbeat(): Promise<void> {}
+
+  /** JSON 编码器 */
+  JSONEncode(_key: string, value: unknown): unknown {
+    return value
+  }
 }

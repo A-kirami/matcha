@@ -29,6 +29,7 @@
     "dayjs": "^1.11.7",
     "dexie": "^3.2.3",
     "highlight.js": "^11.7.0",
+    "js-base64": "^3.7.5",
     "overlayscrollbars": "^2.1.1",
     "overlayscrollbars-vue": "^0.5.1",
     "pinia": "^2.0.35",
