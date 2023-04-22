@@ -63,7 +63,10 @@ export class websocketClient implements Driver {
             case 'Binary': {
               const request: ActionRequest = message.type === 'Text' ? JSON.parse(message.data) : decode(message.data)
               const response = { ...(await this.adapter.actionHandle(request)), echo: request.echo }
-              const data = message.type === 'Text' ? JSON.stringify(response) : Array.from(encode(response))
+              const data =
+                message.type === 'Text'
+                  ? JSON.stringify(response, this.adapter.JSONEncode)
+                  : Array.from(encode(response))
               await this.ws?.send(data)
               break
             }

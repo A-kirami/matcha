@@ -52,6 +52,7 @@ async function onFinish(config: Config) {
       <a-form-item label="协议" name="protocol" :colon="false">
         <a-select v-model:value="configState.protocol" placeholder="Please select a country">
           <a-select-option value="OneBot.V11.Standard">OneBot v11 标准</a-select-option>
+          <a-select-option value="OneBot.V12.Standard">OneBot v12 标准</a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item label="驱动" name="comm" :colon="false">

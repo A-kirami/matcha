@@ -12,8 +12,8 @@ export interface ActionResponse<D = unknown> {
   echo?: string
 }
 
-export interface ActionStrategy {
-  [key: string]: ((request: ActionRequest['params']) => ActionResponse | Promise<ActionResponse>) | undefined
+export interface ActionStrategy<R = ActionResponse> {
+  [key: string]: ((request: ActionRequest['params']) => R | Promise<R>) | undefined
 }
 
 export abstract class AdapterActionHandler {

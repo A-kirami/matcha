@@ -35,6 +35,7 @@ specifiers:
   happy-dom: ^8.9.0
   highlight.js: ^11.7.0
   husky: ^8.0.3
+  js-base64: ^3.7.5
   lint-staged: ^13.2.1
   overlayscrollbars: ^2.1.1
   overlayscrollbars-vue: ^0.5.1
@@ -83,6 +84,7 @@ dependencies:
   dayjs: 1.11.7
   dexie: 3.2.3
   highlight.js: 11.7.0
+  js-base64: 3.7.5
   overlayscrollbars: 2.1.1
   overlayscrollbars-vue: 0.5.1_5x6ruloqeeypzutmgy6qhil34y
   pinia: 2.0.35_dtjfskxukdxv24psui2m5c75zy
@@ -3631,6 +3633,10 @@ packages:
     resolution: {integrity: sha512-QAdOptna2NYiSSpv0O/BwoHBSmz4YhpzJHyi+fnMRTXFjp7B8i/YG5Z8IfusxB1ufjcD2Sre1F3R+nX3fvy7gg==}
     hasBin: true
     dev: true
+
+  /js-base64/3.7.5:
+    resolution: {integrity: sha512-3MEt5DTINKqfScXKfJFrRbxkrnk2AxPWGBL/ycjz4dK8iqiSJ06UxD8jh8xuh6p10TX4t2+7FsBYVxxQbMg+qA==}
+    dev: false
 
   /js-beautify/1.14.6:
     resolution: {integrity: sha512-GfofQY5zDp+cuHc+gsEXKPpNw2KbPddreEo35O6jT6i0RVK6LhsoYBhq5TvK4/n74wnA0QbK8gGd+jUZwTMKJw==}

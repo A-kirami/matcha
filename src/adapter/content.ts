@@ -29,7 +29,7 @@ export type ReplyContent = Content<
     /** 回复的消息 id */
     message_id: string
     /** 回复的用户 id */
-    user_id: string
+    user_id?: string
   }
 >
 

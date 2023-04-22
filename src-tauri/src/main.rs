@@ -47,6 +47,9 @@ fn main() {
             command::get_file_type,
             command::open_devtools,
             command::create_cache_file,
+            command::upload_file,
+            command::create_file_fragment,
+            command::merge_file_fragment,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

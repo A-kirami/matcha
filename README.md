@@ -96,7 +96,7 @@ Matcha 是一个专为 KiramiBot 设计的辅助开发工具，能够与 KiramiB
 ## 🔌 协议适配
 
 - <details>
-  <summary>OneBot v11</summary>
+  <summary>OneBot v11 标准</summary>
 
   ### 动作
 
@@ -150,6 +150,42 @@ Matcha 是一个专为 KiramiBot 设计的辅助开发工具，能够与 KiramiB
   - [ ] 群成员荣誉变更
   - [x] 加好友请求
   - [x] 加群请求／邀请
+  </details>
+
+- <details>
+  <summary>OneBot v12 标准</summary>
+
+  ### 动作
+
+  - [x] 获取支持的动作列表（get_supported_actions）
+  - [x] 获取运行状态（get_status）
+  - [x] 获取版本信息（get_version）
+  - [x] 发送消息（send_message）
+  - [x] 撤回消息（delete_message）
+  - [x] 获取机器人自身信息（get_self_info）
+  - [x] 获取用户信息（get_user_info）
+  - [x] 获取好友列表（get_friend_list）
+  - [x] 获取群信息（get_group_info）
+  - [x] 获取群列表（get_group_list）
+  - [x] 获取群成员信息（get_group_member_info）
+  - [x] 获取群成员列表（get_group_member_list）
+  - [x] 设置群名称（set_group_name）
+  - [x] 退出群（leave_group）
+  - [x] 上传文件（upload_file）
+  - [x] 分片上传文件（upload_file_fragmented）
+  - [x] 获取文件（get_file）
+  - [x] 分片获取文件（get_file_fragmented）
+
+  ### 事件
+
+  - [x] 私聊消息（message.private）
+  - [x] 好友增加（notice.friend_increase）
+  - [x] 好友减少（notice.friend_decrease）
+  - [x] 私聊消息删除（notice.private_message_delete）
+  - [x] 群消息（message.group）
+  - [x] 群成员增加（notice.group_member_increase）
+  - [x] 群成员减少（notice.group_member_decrease）
+  - [x] 群消息删除（notice.group_message_delete）
   </details>
 
 ## 📋 路线图
