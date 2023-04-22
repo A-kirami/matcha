@@ -245,6 +245,10 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
           return response(0, { file_id: file.id })
         }
       }
+      if (fileInfo.type === 'data') {
+        fileInfo.data =
+          fileInfo.data instanceof Uint8Array ? { binary: fileInfo.data } : { str: fileInfo.data as string }
+      }
       const { size, sha256 } = await invoke<{ size: number; sha256: string }>('upload_file', { file: fileInfo })
       const fileId = getUUID()
       await db.files.add({ id: fileId, name: fileInfo.name, sha256, size })
@@ -342,7 +346,9 @@ type FileURL<T extends FileType = never> = FileInfo<T> & { url: string; headers?
 
 type FilePath<T extends FileType = never> = FileInfo<T> & { path: string }
 
-type FileData<T extends FileType = never> = FileInfo<T> & { data: string | Uint8Array }
+type FileData<T extends FileType = never> = FileInfo<T> & {
+  data: string | Uint8Array | { str?: string; binary?: Uint8Array }
+}
 
 interface UploadFilePrepare {
   stage: 'prepare'

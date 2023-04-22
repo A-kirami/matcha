@@ -53,9 +53,11 @@ pub fn open_devtools(window: Window) {
     window.open_devtools();
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub enum OBFile {
+    #[serde(rename = "str")]
     Str(String),
+    #[serde(rename = "binary")]
     Binary(Vec<u8>),
 }
 
