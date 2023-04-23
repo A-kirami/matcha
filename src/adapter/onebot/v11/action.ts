@@ -101,7 +101,7 @@ const actionStrategy: ActionStrategy = {
     group_id,
     message,
   }: {
-    message_type: 'private' | 'group'
+    message_type?: 'private' | 'group'
     user_id?: number
     group_id?: number
     message: Messages[] | string

@@ -5,8 +5,10 @@ import { liveQuery } from 'dexie'
 import { Behav } from '@/adapter/behav'
 import Avatar from '@/components/Avatar.vue'
 import CreateMemberForm from '@/components/CreateMemberForm.vue'
-import { db, User, Group } from '@/database'
+import { db } from '@/database'
 import { useStatusStore } from '@/stores'
+
+import type { User, Group } from '@/database'
 
 const { chatType, chatPerson } = defineProps<{
   chatType: 'private' | 'group'

@@ -1,5 +1,6 @@
 import { Adapter } from '@/adapter/adapter'
-import { Event } from '@/adapter/event'
+
+import type { Event } from '@/adapter/event'
 
 export abstract class Driver {
   constructor(public adapter: Adapter) {}
