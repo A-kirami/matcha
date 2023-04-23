@@ -4,7 +4,7 @@ import { invoke } from '@tauri-apps/api/tauri'
 
 import { AdapterActionHandler } from '@/adapter/action'
 import { Behav } from '@/adapter/behav'
-import { UnsupportedActionError, InternalHandlerError } from '@/adapter/errors'
+import { UnsupportedActionError, InternalHandlerError, ProtocolError } from '@/adapter/errors'
 import { db } from '@/database'
 import { logger } from '@/plugins'
 import { useStatusStore } from '@/stores'
@@ -26,14 +26,18 @@ export class ActionHandler extends AdapterActionHandler {
     try {
       const func = this.strategy[action]
       if (!func) {
-        throw new UnsupportedActionError(response(1404, { message: '不支持的动作请求' }))
+        throw new UnsupportedActionError(response(10002, null, '不支持的动作请求'))
       }
       const asyncFn = asyncWrapper<ActionResponse>(func)
       return await asyncFn(params)
     } catch (error) {
       const errStr = (error as Error).toString()
       logger.error(errStr)
-      throw new InternalHandlerError(response(1000, { message: errStr }))
+      if (error instanceof ProtocolError) {
+        throw error
+      } else {
+        throw new InternalHandlerError(response(20002, null, errStr))
+      }
     }
   }
 }
