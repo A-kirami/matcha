@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import * as CommDriver from '@/driver'
+import { logger } from '@/plugins'
 import { useChatStore, useStatusStore } from '@/stores'
 
 import { ProtocolError } from './errors'
@@ -67,7 +68,16 @@ export abstract class Adapter {
 
   async actionHandle(request: ActionRequest): Promise<ActionResponse> {
     try {
-      return await this.actionHandler.handle(request)
+      logger.info(
+        `[${this.protocolName}] 收到 ${this.status.assignBot} 的请求 ${request.action}: ${JSON.stringify(
+          request.params
+        )}`
+      )
+      const response = await this.actionHandler.handle(request)
+      logger.info(
+        `[${this.protocolName}] 响应 ${this.status.assignBot} 的请求 ${request.action}: ${JSON.stringify(response)}`
+      )
+      return response
     } catch (error) {
       if (error instanceof ProtocolError) {
         return error.response
