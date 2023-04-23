@@ -102,23 +102,25 @@ const actionStrategy: ActionStrategy = {
     message,
   }: {
     message_type: 'private' | 'group'
-    user_id: number
-    group_id: number
+    user_id?: number
+    group_id?: number
     message: Messages[] | string
     auto_escape: boolean
-  }): Promise<ActionResponse<{ message_id: number }>> => {
-    if (message_type === 'private') {
+  }): Promise<ActionResponse<{ message_id: number }> | ActionResponse<ErrorInfo>> => {
+    if (message_type === 'private' || user_id) {
       return await (actionStrategy.send_private_msg as (request: StrKeyObject) => Promise<ActionResponse<MessageData>>)(
         {
           user_id,
           message,
         }
       )
-    } else {
+    } else if (message_type === 'group' || group_id) {
       return await (actionStrategy.send_group_msg as (request: StrKeyObject) => Promise<ActionResponse<MessageData>>)({
         group_id,
         message,
       })
+    } else {
+      return response(1000, { message: '参数错误' })
     }
   },
 
