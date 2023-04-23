@@ -12,7 +12,14 @@ import { asyncWrapper, getUserAge } from '@/utils'
 import { MessageHandler, createMessage } from './message'
 import { response } from './utils'
 
-import type { GroupSender, PrivateSender, PrivateMessageEvent, GroupMessageEvent } from './event'
+import type {
+  GroupSender,
+  PrivateSender,
+  PrivateMessageEvent,
+  GroupMessageEvent,
+  FriendRequestEvent,
+  GroupRequestEvent,
+} from './event'
 import type { Messages } from './message'
 import type { ActionResponse, ActionRequest, ActionStrategy } from '@/adapter/action'
 import type { StrKeyObject } from '@/adapter/typed'
@@ -434,6 +441,56 @@ const actionStrategy: ActionStrategy = {
       'protocol_version': 'v11',
     })
   },
+
+  /** 对事件执行快速操作 */
+  '.handle_quick_operation': async ({
+    context,
+    operation,
+  }:
+    | PrivateMessageQuickOperation
+    | GroupMessageQuickOperation
+    | FriendRequestQuickOperation
+    | GroupRequestQuickOperation): Promise<ActionResponse> => {
+    if (context.post_type === 'message') {
+      if ('reply' in operation && operation.reply) {
+        let message = operation.reply
+        if ('at_sender' in operation && operation.at_sender) {
+          message = typeof message === 'string' ? [createMessage('text', { text: message })] : message
+          message.unshift(createMessage('at', { qq: context.user_id.toString() }))
+        }
+        return await actionStrategy.send_msg!({
+          message_type: context.message_type,
+          group_id: context.group_id,
+          user_id: context.user_id,
+          message,
+        })
+      }
+      if ('delete' in operation && operation.delete) {
+        return await actionStrategy.delete_msg!({ message_id: context.message_id })
+      }
+      if ('kick' in operation && operation.kick) {
+        return await actionStrategy.set_group_kick!({
+          group_id: context.group_id,
+          user_id: context.user_id,
+          reject_add_request: false,
+        })
+      }
+      if ('ban' in operation && operation.ban) {
+        return await actionStrategy.set_group_ban!({
+          group_id: context.group_id,
+          user_id: context.user_id,
+          duration: operation.ban_duration ?? 60 * 30,
+        })
+      }
+    } else if (context.post_type === 'request') {
+      const action = context.request_type === 'friend' ? 'set_friend_add_request' : 'set_group_add_request'
+      return await actionStrategy[action]!({
+        flag: context.flag,
+        ...operation,
+      })
+    }
+    return response(1000, { message: '事件对象不支持快速操作' })
+  },
 }
 
 interface MessageData {
@@ -483,6 +540,43 @@ interface MemberInfo {
   title: string
   title_expire_time: number
   card_changeable: boolean
+}
+
+interface PrivateMessageQuickOperation {
+  context: PrivateMessageEvent
+  operation: {
+    reply: string | Messages[]
+    auto_escape: boolean
+  }
+}
+
+interface GroupMessageQuickOperation {
+  context: GroupMessageEvent
+  operation: {
+    reply: string | Messages[]
+    auto_escape: boolean
+    at_sender: boolean
+    delete: boolean
+    kick: boolean
+    ban: boolean
+    ban_duration: number
+  }
+}
+
+interface FriendRequestQuickOperation {
+  context: FriendRequestEvent
+  operation: {
+    approve: boolean
+    remark: string
+  }
+}
+
+interface GroupRequestQuickOperation {
+  context: GroupRequestEvent
+  operation: {
+    approve: boolean
+    reason: string
+  }
 }
 
 function getGroupInfo(group: Group): GroupInfo {
