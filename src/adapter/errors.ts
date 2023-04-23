@@ -1,4 +1,4 @@
-import { ActionResponse } from './action'
+import type { ActionResponse } from './action'
 
 class AdapterError extends Error {}
 

@@ -14,9 +14,10 @@ import ChatNotice from '@/components/ChatNotice.vue'
 import ChatRequest from '@/components/ChatRequest.vue'
 import SendButton from '@/components/SendButton.vue'
 import TimeSeparator from '@/components/TimeSeparator.vue'
-import { db, User, Group } from '@/database'
+import { db } from '@/database'
 import { useChatStore, useStatusStore } from '@/stores'
 
+import type { User, Group } from '@/database'
 import type { PartialOptions, OverlayScrollbars } from 'overlayscrollbars'
 
 const { chatType, chatId } = defineProps<{
