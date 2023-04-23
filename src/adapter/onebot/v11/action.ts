@@ -3,7 +3,7 @@ import { getVersion } from '@tauri-apps/api/app'
 
 import { AdapterActionHandler } from '@/adapter/action'
 import { Behav } from '@/adapter/behav'
-import { UnsupportedActionError, InternalHandlerError } from '@/adapter/errors'
+import { UnsupportedActionError, InternalHandlerError, ProtocolError } from '@/adapter/errors'
 import { db } from '@/database'
 import { logger } from '@/plugins'
 import { useStatusStore, useChatStore } from '@/stores'
@@ -34,7 +34,11 @@ export class ActionHandler extends AdapterActionHandler {
     } catch (error) {
       const errStr = (error as Error).toString()
       logger.error(errStr)
-      throw new InternalHandlerError(response(1000, { message: errStr }))
+      if (error instanceof ProtocolError) {
+        throw error
+      } else {
+        throw new InternalHandlerError(response(1000, { message: errStr }))
+      }
     }
   }
 }
