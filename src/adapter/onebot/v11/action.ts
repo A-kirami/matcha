@@ -25,6 +25,7 @@ export class ActionHandler extends AdapterActionHandler {
 
   async handle({ action, params }: ActionRequest): Promise<ActionResponse> {
     try {
+      action = action.replace(/_async$/, '')
       const func = this.strategy[action]
       if (!func) {
         throw new UnsupportedActionError(response(1404, { message: '不支持的动作请求' }))
