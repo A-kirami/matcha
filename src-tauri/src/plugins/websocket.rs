@@ -85,7 +85,7 @@ enum WebSocketMessage {
 }
 
 #[tauri::command]
-fn connect<R: Runtime>(
+async fn connect<R: Runtime>(
     window: Window<R>,
     url: String,
     callback_function: CallbackFn,
@@ -112,10 +112,8 @@ fn connect<R: Runtime>(
             request = request.header(name, value);
         }
     }
-    let (ws_stream, _) = tauri::async_runtime::block_on(connect_async_with_config(
-        request.body(()).unwrap(),
-        config.map(Into::into),
-    ))?;
+    let (ws_stream, _) =
+        connect_async_with_config(request.body(()).unwrap(), config.map(Into::into)).await?;
 
     let id = rand::random();
 
