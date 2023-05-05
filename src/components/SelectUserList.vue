@@ -46,7 +46,7 @@ const visible = $computed({
     :wrap-style="{ overflow: 'hidden' }"
     :mask="false"
     :footer="null"
-    width="20rem"
+    width="24rem"
     :body-style="{ padding: 0 }"
     centered
     title="选择用户操作"
@@ -61,9 +61,6 @@ const visible = $computed({
             </template>
             <a-skeleton avatar :title="false" :loading="!!item.loading" active>
               <a-list-item-meta :description="`${item.name}(${item.id})`">
-                <template #title>
-                  <a href="https://www.antdv.com/">{{ item.name.last }}</a>
-                </template>
                 <template #avatar>
                   <a-avatar :src="getUserAvatar(item.id)" />
                 </template>
@@ -79,5 +76,9 @@ const visible = $computed({
 <style scoped lang="postcss">
 :deep(.ant-list-item-action) {
   @apply ml-0;
+}
+
+:deep(.ant-list-item-meta) {
+  @apply flex items-center;
 }
 </style>
