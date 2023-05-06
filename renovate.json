@@ -17,18 +17,6 @@
   },
   "packageRules": [
     {
-      "groupName": "test packages",
-      "matchPackagePatterns": ["vitest"],
-      "matchPackageNames": [
-        "happy-dom",
-        "@vue/test-utils"
-      ]
-    },
-    {
-      "groupName": "lint packages",
-      "matchPackagePatterns": ["eslint", "stylelint"]
-    },
-    {
       "groupName": "vue packages",
       "matchPackagePrefixes": ["vue"]
     },
@@ -44,6 +32,18 @@
     {
       "groupName": "unocss packages",
       "matchPackagePatterns": ["unocss"]
+    },
+    {
+      "groupName": "test packages",
+      "matchPackagePatterns": ["vitest"],
+      "matchPackageNames": [
+        "happy-dom",
+        "@vue/test-utils"
+      ]
+    },
+    {
+      "groupName": "lint packages",
+      "matchPackagePatterns": ["eslint", "stylelint"]
     }
   ]
 }
