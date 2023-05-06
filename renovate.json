@@ -38,7 +38,8 @@
     },
     {
       "groupName": "vite packages",
-      "matchPackagePrefixes": ["vite"]
+      "matchPackagePatterns": ["vite"],
+      "excludePackagePatterns": ["vitest"]
     },
     {
       "groupName": "unocss packages",
