@@ -26,8 +26,7 @@
     },
     {
       "groupName": "vite packages",
-      "matchPackagePatterns": ["vite"],
-      "excludePackagePatterns": ["vitest"]
+      "matchPackagePatterns": ["vite"]
     },
     {
       "groupName": "unocss packages",
