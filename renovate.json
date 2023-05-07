@@ -1,0 +1,48 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "labels": [
+    "dependencies"
+  ],
+  "dependencyDashboard": false,
+  "minimumReleaseAge": "3 days",
+  "commitMessagePrefix": "⬆️",
+  "commitMessageTopic": "dependency `{{depName}}`",
+  "vulnerabilityAlerts": {
+    "addLabels": ["security"],
+    "commitMessagePrefix": "🔒️",
+    "assigneesFromCodeOwners": true
+  },
+  "packageRules": [
+    {
+      "groupName": "vue packages",
+      "matchPackagePrefixes": ["vue"]
+    },
+    {
+      "groupName": "vueuse packages",
+      "matchPackagePrefixes": ["@vueuse"]
+    },
+    {
+      "groupName": "vite packages",
+      "matchPackagePatterns": ["vite"]
+    },
+    {
+      "groupName": "unocss packages",
+      "matchPackagePatterns": ["unocss"]
+    },
+    {
+      "groupName": "test packages",
+      "matchPackagePatterns": ["vitest"],
+      "matchPackageNames": [
+        "happy-dom",
+        "@vue/test-utils"
+      ]
+    },
+    {
+      "groupName": "lint packages",
+      "matchPackagePatterns": ["eslint", "stylelint"]
+    }
+  ]
+}
