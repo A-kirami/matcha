@@ -12,6 +12,10 @@ on:
       - "src/**"
       - "src-tauri/src/**"
       - "tests/**"
+      - "package.json"
+      - "vite.config.ts"
+      - "Cargo.toml"
+      - "tauri.conf.json"
   workflow_dispatch:
 
 concurrency:
@@ -25,6 +29,8 @@ jobs:
       matrix:
         platform: [macos-latest, ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.platform }}
+    if: |
+      (!contains(github.event.head_commit.message, '🔖') && !contains(github.event.head_commit.message, '🚧'))
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
