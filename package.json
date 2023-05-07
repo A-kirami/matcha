@@ -43,6 +43,7 @@
     "waveform-path": "^0.0.1"
   },
   "devDependencies": {
+    "@iconify-json/carbon": "^1.1.16",
     "@tauri-apps/cli": "^1.2.3",
     "@types/node": "^18.15.12",
     "@typescript-eslint/eslint-plugin": "^5.59.0",
