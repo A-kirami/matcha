@@ -40,22 +40,22 @@ export const router = createRouter({
         {
           name: 'code',
           path: '/code',
-          component: () => import('@/views/EmptyStage.vue'),
+          component: () => import('@/components/JumbotronDev.vue'),
         },
         {
           name: 'service',
           path: '/service',
-          component: () => import('@/views/EmptyStage.vue'),
+          component: () => import('@/components/JumbotronDev.vue'),
         },
         {
           name: 'test',
           path: '/test',
-          component: () => import('@/views/EmptyStage.vue'),
+          component: () => import('@/components/JumbotronDev.vue'),
         },
         {
           name: 'tool',
           path: '/tool',
-          component: () => import('@/views/EmptyStage.vue'),
+          component: () => import('@/components/JumbotronDev.vue'),
         },
         {
           name: 'setting',
