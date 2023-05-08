@@ -20,9 +20,9 @@ specifiers:
   '@vitest/coverage-c8': ^0.28.5
   '@vitest/ui': ^0.28.5
   '@vue/test-utils': ^2.3.2
-  '@vueuse/components': ^9.13.0
-  '@vueuse/core': ^9.13.0
-  '@vueuse/rxjs': ^9.13.0
+  '@vueuse/components': ^10.0.0
+  '@vueuse/core': ^10.0.0
+  '@vueuse/rxjs': ^10.0.0
   ant-design-vue: ^3.2.17
   dayjs: ^1.11.7
   dexie: ^3.2.3
@@ -78,9 +78,9 @@ dependencies:
   '@msgpack/msgpack': 2.8.0
   '@tauri-apps/api': 1.2.0
   '@unocss/reset': 0.51.12
-  '@vueuse/components': 9.13.0_vue@3.2.47
-  '@vueuse/core': 9.13.0_vue@3.2.47
-  '@vueuse/rxjs': 9.13.0_rxjs@7.8.0+vue@3.2.47
+  '@vueuse/components': 10.1.2_vue@3.2.47
+  '@vueuse/core': 10.1.2_vue@3.2.47
+  '@vueuse/rxjs': 10.1.2_rxjs@7.8.0+vue@3.2.47
   ant-design-vue: 3.2.17_vue@3.2.47
   dayjs: 1.11.7
   dexie: 3.2.3
@@ -1123,8 +1123,8 @@ packages:
     resolution: {integrity: sha512-21cFJr9z3g5dW8B0CVI9g2O9beqaThGQ6ZFBqHfwhzLDKUxaqTIy3vnfah/UPkfOiF2pLq+tGz+W8RyCskuslw==}
     dev: true
 
-  /@types/web-bluetooth/0.0.16:
-    resolution: {integrity: sha512-oh8q2Zc32S6gd/j50GowEjKLoOVOwHP/bWVjKJInBwQqdOYMdPrf1oVlelTlyfFK3CKxL1uahMDAr+vy8T7yMQ==}
+  /@types/web-bluetooth/0.0.17:
+    resolution: {integrity: sha512-4p9vcSmxAayx72yn70joFoL44c9MO/0+iVEBIQXe3v2h2SiAsEIo/G5v6ObFWvNKRFjbrVadNf9LqEEZeQPzdA==}
     dev: false
 
   /@typescript-eslint/eslint-plugin/5.59.0_wsbkzerfphvgr4lle7vmeh64yi:
@@ -1776,39 +1776,39 @@ packages:
       '@vue/server-renderer': 3.2.47_vue@3.2.47
     dev: true
 
-  /@vueuse/components/9.13.0_vue@3.2.47:
-    resolution: {integrity: sha512-UJ8PjQ4SGb2rsVIy9vhEc6aCu+3+2cc+xEfGNX8/M1NKIuL2Vo6c2Kc2fYFaRzWZkP8HWXu+IcwvnAzL44IEFA==}
+  /@vueuse/components/10.1.2_vue@3.2.47:
+    resolution: {integrity: sha512-HlYFYCg3twMhnQgPS4/muz8XIYKViFVKnpL0Xtw5+9ib2gtWvu1Qu7hj6kDMDtOIw1CnNRsUbMLiNI+LXkxSSQ==}
     dependencies:
-      '@vueuse/core': 9.13.0_vue@3.2.47
-      '@vueuse/shared': 9.13.0_vue@3.2.47
+      '@vueuse/core': 10.1.2_vue@3.2.47
+      '@vueuse/shared': 10.1.2_vue@3.2.47
       vue-demi: 0.14.0_vue@3.2.47
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
     dev: false
 
-  /@vueuse/core/9.13.0_vue@3.2.47:
-    resolution: {integrity: sha512-pujnclbeHWxxPRqXWmdkKV5OX4Wk4YeK7wusHqRwU0Q7EFusHoqNA/aPhB6KCh9hEqJkLAJo7bb0Lh9b+OIVzw==}
+  /@vueuse/core/10.1.2_vue@3.2.47:
+    resolution: {integrity: sha512-roNn8WuerI56A5uiTyF/TEYX0Y+VKlhZAF94unUfdhbDUI+NfwQMn4FUnUscIRUhv3344qvAghopU4bzLPNFlA==}
     dependencies:
-      '@types/web-bluetooth': 0.0.16
-      '@vueuse/metadata': 9.13.0
-      '@vueuse/shared': 9.13.0_vue@3.2.47
+      '@types/web-bluetooth': 0.0.17
+      '@vueuse/metadata': 10.1.2
+      '@vueuse/shared': 10.1.2_vue@3.2.47
       vue-demi: 0.14.0_vue@3.2.47
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
     dev: false
 
-  /@vueuse/metadata/9.13.0:
-    resolution: {integrity: sha512-gdU7TKNAUVlXXLbaF+ZCfte8BjRJQWPCa2J55+7/h+yDtzw3vOoGQDRXzI6pyKyo6bXFT5/QoPE4hAknExjRLQ==}
+  /@vueuse/metadata/10.1.2:
+    resolution: {integrity: sha512-3mc5BqN9aU2SqBeBuWE7ne4OtXHoHKggNgxZR2K+zIW4YLsy6xoZ4/9vErQs6tvoKDX6QAqm3lvsrv0mczAwIQ==}
     dev: false
 
-  /@vueuse/rxjs/9.13.0_rxjs@7.8.0+vue@3.2.47:
-    resolution: {integrity: sha512-6RpKlI4ez3rsHf50sWqc+3dkVosOUVTpCvaBmLwIVi61VPDIzfllfdHIIoAH+niZoZ3QvuyuqwstUeI1mjrTZg==}
+  /@vueuse/rxjs/10.1.2_rxjs@7.8.0+vue@3.2.47:
+    resolution: {integrity: sha512-uVynYKuk52nQbNND0kCac8te4yuVvWxdXOI6OrhgYN54OrpwmKiXzt3LNL+APYSjMGmsR99uOI7KDh49VDur4w==}
     peerDependencies:
       rxjs: '>=6.0.0'
     dependencies:
-      '@vueuse/shared': 9.13.0_vue@3.2.47
+      '@vueuse/shared': 10.1.2_vue@3.2.47
       rxjs: 7.8.0
       vue-demi: 0.14.0_vue@3.2.47
     transitivePeerDependencies:
@@ -1816,8 +1816,8 @@ packages:
       - vue
     dev: false
 
-  /@vueuse/shared/9.13.0_vue@3.2.47:
-    resolution: {integrity: sha512-UrnhU+Cnufu4S6JLCPZnkWh0WwZGUp72ktOF2DFptMlOs3TOdVv8xJN53zhHGARmVOsz5KqOls09+J1NR6sBKw==}
+  /@vueuse/shared/10.1.2_vue@3.2.47:
+    resolution: {integrity: sha512-1uoUTPBlgyscK9v6ScGeVYDDzlPSFXBlxuK7SfrDGyUTBiznb3mNceqhwvZHjtDRELZEN79V5uWPTF1VDV8svA==}
     dependencies:
       vue-demi: 0.14.0_vue@3.2.47
     transitivePeerDependencies:
