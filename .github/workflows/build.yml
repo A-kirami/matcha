@@ -14,8 +14,8 @@ on:
       - "tests/**"
       - "package.json"
       - "vite.config.ts"
-      - "Cargo.toml"
-      - "tauri.conf.json"
+      - "src-tauri/Cargo.toml"
+      - "src-tauri/tauri.conf.json"
   workflow_dispatch:
 
 concurrency:
