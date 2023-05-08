@@ -16,7 +16,7 @@ specifiers:
   '@unocss/preset-uno': ^0.49.8
   '@unocss/reset': ^0.49.8
   '@unocss/transformer-directives': ^0.49.8
-  '@vitejs/plugin-vue': 4.1.0
+  '@vitejs/plugin-vue': 4.2.1
   '@vitest/coverage-c8': ^0.28.5
   '@vitest/ui': ^0.28.5
   '@vue/test-utils': ^2.3.2
@@ -109,7 +109,7 @@ devDependencies:
   '@unocss/preset-icons': 0.49.8
   '@unocss/preset-uno': 0.49.8
   '@unocss/transformer-directives': 0.49.8
-  '@vitejs/plugin-vue': 4.1.0_vite@4.3.0+vue@3.2.47
+  '@vitejs/plugin-vue': 4.2.1_vite@4.3.0+vue@3.2.47
   '@vitest/coverage-c8': 0.28.5_jrgx6dl2ycbbfv6padpdvpcimm
   '@vitest/ui': 0.28.5
   '@vue/test-utils': 2.3.2_vue@3.2.47
@@ -1453,8 +1453,8 @@ packages:
       - rollup
     dev: true
 
-  /@vitejs/plugin-vue/4.1.0_vite@4.3.0+vue@3.2.47:
-    resolution: {integrity: sha512-++9JOAFdcXI3lyer9UKUV4rfoQ3T1RN8yDqoCLar86s0xQct5yblxAE+yWgRnU5/0FOlVCpTZpYSBV/bGWrSrQ==}
+  /@vitejs/plugin-vue/4.2.1_vite@4.3.0+vue@3.2.47:
+    resolution: {integrity: sha512-ZTZjzo7bmxTRTkb8GSTwkPOYDIP7pwuyV+RV53c9PYUouwcbkIZIvWvNWlX2b1dYZqtOv7D6iUAnJLVNGcLrSw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       vite: ^4.0.0
