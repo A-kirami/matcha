@@ -65,6 +65,8 @@ jobs:
 
       - uses: JonasKruckenberg/tauri-build@v1
         id: tauri_build
+        with:
+          args: --verbose
 
       - uses: actions/upload-artifact@v3
         with:
