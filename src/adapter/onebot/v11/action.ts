@@ -107,14 +107,14 @@ const actionStrategy: ActionStrategy = {
     message: Messages[] | string
     auto_escape: boolean
   }): Promise<ActionResponse<{ message_id: number }> | ActionResponse<ErrorInfo>> => {
-    if (message_type === 'private' || user_id) {
+    if (message_type === 'private' || (!message_type && user_id)) {
       return await (actionStrategy.send_private_msg as (request: StrKeyObject) => Promise<ActionResponse<MessageData>>)(
         {
           user_id,
           message,
         }
       )
-    } else if (message_type === 'group' || group_id) {
+    } else if (message_type === 'group' || (!message_type && group_id)) {
       return await (actionStrategy.send_group_msg as (request: StrKeyObject) => Promise<ActionResponse<MessageData>>)({
         group_id,
         message,
