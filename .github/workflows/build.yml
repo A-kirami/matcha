@@ -63,10 +63,8 @@ jobs:
       - name: Install app dependencies and build web
         run: pnpm i
 
-      - uses: JonasKruckenberg/tauri-build@v1
+      - uses: A-kirami/tauri-build@main
         id: tauri_build
-        with:
-          args: --verbose
 
       - uses: actions/upload-artifact@v3
         with:
