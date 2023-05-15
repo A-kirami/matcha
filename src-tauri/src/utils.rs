@@ -10,7 +10,7 @@ use std::str;
 use tauri::AppHandle;
 
 const HTTP_URL_REGEX: &str = r#"^(https?://)[^\s]+"#;
-const FILE_URL_REGEX: &str = r#"^file:///?"#;
+const FILE_URL_REGEX: &str = r#"^file://"#;
 const DATA_URL_REGEX: &str = r#"^data:[^,]+;base64,"#;
 const BASE64_REGEX: &str = r#"^base64://"#;
 
