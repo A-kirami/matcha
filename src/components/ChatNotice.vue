@@ -39,7 +39,9 @@ const noticeStrategy = {
   'friend_increase': () => '{sender}已经和{target}成为好友，现在可以开始聊天了',
   'friend_decrease': () => '{sender}和{target}不再是好友了，友谊的小船说翻就翻',
   'private_message_delete': () => '{sender}撤回了一条消息',
-  'friend_poke': () => '{sender}👉戳了戳{target}',
+  'friend_poke': (_, context: Context) => {
+    return `{sender}👉戳了戳${context.sender === context.target ? '自己' : '{target}'}`
+  },
   'offline_file': (scene: OfflineFileNoticeScene) => {
     return `{sender}向{target}发送了文件${scene.file.name}`
   },
@@ -54,7 +56,7 @@ const noticeStrategy = {
   'group_message_delete': () => '{sender}撤回了一条消息',
   'group_poke': (scene: GroupPokeNoticeScene, context: Context) => {
     context.target = scene.target_id
-    return '{sender}👉戳了戳{target}'
+    return `{sender}👉戳了戳${context.sender === context.target ? '自己' : '{target}'}`
   },
   'group_admin': (scene: GroupAdminNoticeScene, context: Context) => {
     context.target = scene.user_id
