@@ -20,7 +20,7 @@ import type {
   FriendRequestEvent,
   GroupRequestEvent,
 } from './event'
-import type { Messages } from './message'
+import type { Messages, PokeMessage } from './message'
 import type { ActionResponse, ActionRequest, ActionStrategy } from '@/adapter/action'
 import type { StrKeyObject } from '@/adapter/typed'
 import type { Group, Member, User } from '@/database'
@@ -107,6 +107,12 @@ const actionStrategy: ActionStrategy = {
     message: Messages[] | string
     auto_escape: boolean
   }): Promise<ActionResponse<{ message_id: number }> | ActionResponse<ErrorInfo>> => {
+    const pokeMs = message instanceof Array ? (message.find((ms) => ms.type === 'poke') as PokeMessage) : undefined
+    if (pokeMs) {
+      const behav = new Behav()
+      await behav.pokeUser(behav.status.assignBot, pokeMs.data.id, group_id ? group_id.toString() : undefined)
+      return response(0, { message_id: 0 })
+    }
     if (message_type === 'private' || (!message_type && user_id)) {
       return await (actionStrategy.send_private_msg as (request: StrKeyObject) => Promise<ActionResponse<MessageData>>)(
         {

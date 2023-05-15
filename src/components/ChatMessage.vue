@@ -4,6 +4,7 @@ import { unix } from 'dayjs'
 import { watch } from 'vue'
 import InlineSvg from 'vue-inline-svg'
 
+import { Behav } from '@/adapter/behav'
 import ChangeIcon from '@/assets/change.svg?url'
 import FailIcon from '@/assets/fail.svg?url'
 import TickIcon from '@/assets/tick.svg?url'
@@ -22,6 +23,8 @@ const { message } = defineProps<{
 }>()
 
 const emit = defineEmits<{ (e: 'skipScroll'): void }>()
+
+const behav = new Behav()
 
 const status = useStatusStore()
 
@@ -109,11 +112,23 @@ async function resendMessage(): Promise<void> {
   sceneClone.message_id = getMessageId().toString()
   await chat.appendScene(sceneClone)
 }
+
+/** 戳一戳用户 */
+async function pokeUser(): Promise<void> {
+  await behav.pokeUser(status.assignUser, scene.user_id, 'group_id' in scene ? scene.group_id : undefined)
+}
 </script>
 
 <template>
   <div class="flex cursor-default gap-3" :class="{ 'flex-row-reverse': !isBot }">
-    <Avatar type="user" :aid="scene.user_id" :role="role" size="3rem" class="cursor-pointer"></Avatar>
+    <Avatar
+      type="user"
+      :aid="scene.user_id"
+      :role="role"
+      size="3rem"
+      class="cursor-pointer"
+      @dblclick="pokeUser"
+    ></Avatar>
     <div class="w-full flex flex-col" :class="[isBot ? 'items-start' : 'items-end']">
       <div class="flex items-center gap-2" :class="{ 'flex-row-reverse': !isBot }">
         <span class="text-sm font-bold">{{ userName }}</span>
