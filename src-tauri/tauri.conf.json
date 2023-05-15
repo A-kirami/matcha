@@ -74,6 +74,13 @@
         },
         "wix": {
           "language": "zh-CN"
+        },
+        "nsis": {
+          "license": "../LICENSE",
+          "headerImage": "images/installer_header.bmp",
+          "sidebarImage": "images/installer_sidebar.bmp",
+          "installerIcon": "icons/icon.ico",
+          "languages": ["SimpChinese"]
         }
       }
     },
