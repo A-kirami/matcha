@@ -62,6 +62,10 @@ export class Behav {
 
   /** 发送私聊消息 */
   async sendPrivateMessage(sender: User, receiver: User, contents: Contents[]): Promise<PrivateMessageScene> {
+    const lastContent = contents.at(-1)
+    if (lastContent?.type === 'text') {
+      lastContent.data.text = lastContent.data.text.trimEnd()
+    }
     const message_id = getMessageId().toString()
     let sub_type: 'temp' | 'friend' | 'group' = 'temp'
     const isFriend = !!(await db.friends.get({ userId: this.status.assignUser, friendId: this.status.assignBot }))
@@ -96,6 +100,10 @@ export class Behav {
     if (!member) {
       message.error('只有群成员才能发送消息')
       throw new Error('不是本群成员')
+    }
+    const lastContent = contents.at(-1)
+    if (lastContent?.type === 'text') {
+      lastContent.data.text = lastContent.data.text.trimEnd()
     }
     const message_id = getMessageId().toString()
     return await this.chat.appendScene({
