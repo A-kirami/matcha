@@ -242,7 +242,7 @@ const messageBuildStrategy: MessageBuildStrategy<ContentMapping> = {
 
   'mention': (content: MentionContent): AtMessage => {
     return createMessage('at', {
-      qq: content.data.target ? 'all' : content.data.target,
+      qq: content.data.target,
     })
   },
 
