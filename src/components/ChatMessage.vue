@@ -105,6 +105,9 @@ function changeContent(): void {
 
 /** 将消息重新发送 */
 async function resendMessage(): Promise<void> {
+  if (isBot) {
+    return
+  }
   const sceneClone = JSON.parse(JSON.stringify(scene)) as MessageScenes
   sceneClone.id = getUUID()
   sceneClone.time = getTimestamp()
