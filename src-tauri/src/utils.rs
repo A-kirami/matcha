@@ -65,8 +65,9 @@ pub async fn get_file_contents(file: &str) -> Result<Vec<u8>, Box<dyn Error>> {
         let response = download_file(file, None).await?;
         Ok(response)
     } else if file_type.file_url.is_match(file) {
-        let path = file_type.file_url.replace(file, "");
-        let contents = tokio::fs::read(&*path).await?;
+        let uri = url::Url::parse(file)?;
+        let path = uri.to_file_path().unwrap();
+        let contents = tokio::fs::read(path).await?;
         Ok(contents)
     } else {
         let file_rex = if file_type.data_url.is_match(file) {

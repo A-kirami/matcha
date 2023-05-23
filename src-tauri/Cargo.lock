@@ -1642,6 +1642,7 @@ dependencies = [
  "time",
  "tokio",
  "tokio-tungstenite",
+ "url",
  "warp",
  "window-shadows",
 ]
