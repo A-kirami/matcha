@@ -53,7 +53,7 @@
     "@unocss/preset-icons": "^0.51.0",
     "@unocss/preset-uno": "^0.51.0",
     "@unocss/transformer-directives": "^0.51.0",
-    "@vitejs/plugin-vue": "4.2.1",
+    "@vitejs/plugin-vue": "4.2.3",
     "@vitest/coverage-c8": "^0.31.0",
     "@vitest/ui": "^0.31.0",
     "@vue/test-utils": "^2.3.2",
