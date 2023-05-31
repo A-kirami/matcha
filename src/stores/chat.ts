@@ -91,9 +91,18 @@ export const useChatStore = defineStore('chat', () => {
     return chat as Extract<Chats, { type: T }>
   }
 
+  function getMessage(messageId: string): Message | null {
+    return (
+      (chatLogs.find((chat) => chat.type === 'message' && chat.scene.message_id === messageId) as
+        | Message
+        | undefined) || null
+    )
+  }
+
   return {
     chatLogs,
     appendScene,
     getChat,
+    getMessage,
   }
 })

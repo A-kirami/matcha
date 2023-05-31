@@ -144,9 +144,7 @@ const actionStrategy: ActionStrategy = {
     message_id: number
   }): Promise<ActionResponse<MessageInfo> | ActionResponse<ErrorInfo>> => {
     const chat = useChatStore()
-    const messageChat = chat.chatLogs.find(
-      (chat) => chat.type === 'message' && chat.scene.message_id === message_id.toString()
-    )
+    const messageChat = chat.getMessage(message_id.toString())
     if (!messageChat) {
       return response(1404, { message: '消息不存在' })
     }
