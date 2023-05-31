@@ -1,9 +1,11 @@
+<!-- eslint-disable camelcase -->
 <script setup lang="ts">
 import { unix } from 'dayjs'
+import { watch } from 'vue'
 
 import Avatar from '@/components/Avatar.vue'
 import { useChatStore, useStatusStore } from '@/stores'
-import { getPlainScene } from '@/utils'
+import { getPlainScene, getUserNickname } from '@/utils'
 
 import type { User, Group } from '@/database'
 
@@ -15,6 +17,8 @@ const { chatType, chatPerson } = defineProps<{
 const chat = useChatStore()
 
 const status = useStatusStore()
+
+let previewMessage = $ref<string>('')
 
 const chatList = $computed(() => {
   if (!chatPerson) {
@@ -46,6 +50,23 @@ const lastTime = $computed(() => {
 const unreadMessage = $computed(() => {
   return chatList.filter((chat) => !chat.read).length
 })
+
+watch(
+  () => lastChat,
+  async (lastChat) => {
+    if (!lastChat) {
+      return
+    }
+    let message = getPlainScene(lastChat.scene)
+    const { user_id, group_id } = lastChat.scene as { user_id?: string; group_id?: string }
+    if (!group_id || !user_id || user_id === status.assignUser) {
+      previewMessage = message
+    } else {
+      const nickname = await getUserNickname(user_id, group_id)
+      previewMessage = `${nickname}: ${message}`
+    }
+  }
+)
 </script>
 
 <template>
@@ -59,7 +80,7 @@ const unreadMessage = $computed(() => {
         <span class="text-xs text-zinc-400">{{ lastTime }}</span>
       </div>
       <div v-show="lastChat" class="flex flex-row items-center justify-between">
-        <span class="max-w-34 truncate text-xs text-zinc-400">{{ getPlainScene(lastChat?.scene) }}</span>
+        <span class="max-w-34 truncate text-xs text-zinc-400">{{ previewMessage }}</span>
         <span
           v-show="unreadMessage"
           class="h-22px w-22px flex items-center justify-center rounded-full bg-blue-100 text-xs font-medium text-blue-500"
