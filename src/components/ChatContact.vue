@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { useObservable, from } from '@vueuse/rxjs'
 import { liveQuery } from 'dexie'
+import InlineSvg from 'vue-inline-svg'
 
+import AddChatIcon from '@/assets/add-chat.svg?url'
 import ChatContactItem from '@/components/ChatContactItem.vue'
 import CreateGroupForm from '@/components/CreateGroupForm.vue'
 import CreateUserForm from '@/components/CreateUserForm.vue'
@@ -41,7 +43,7 @@ function openGroupForm() {
     <div class="w-full flex items-center justify-around px-2">
       <SearchBox></SearchBox>
       <a-dropdown>
-        <div class="h-8 w-8 cursor-pointer rounded-1/2 bg-blue-300"></div>
+        <InlineSvg :src="AddChatIcon" class="h-5 w-5 cursor-pointer text-gray-400 outline-none" hover="text-blue-300" />
         <template #overlay>
           <a-menu>
             <a-menu-item>
