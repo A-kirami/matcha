@@ -144,9 +144,7 @@ export class Behav {
     messageId: string,
     operatorId: string
   ): Promise<PrivateMessageDeleteNoticeScene | GroupMessageDeleteNoticeScene> {
-    const messageChat = this.chat.chatLogs.find(
-      (chat) => chat.type === 'message' && chat.scene.message_id === messageId
-    ) as Message | undefined
+    const messageChat = this.chat.getMessage(messageId)
     if (!messageChat) {
       throw new Error('消息不存在')
     }
