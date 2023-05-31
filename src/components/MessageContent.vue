@@ -16,9 +16,6 @@ const { messages, onlyImage } = defineProps<{
 const screenWidth = window.screen.width
 const screenHeight = window.screen.height
 
-/** 初始显示比例 */
-const INIT_SCALE = 0.8
-
 const imageMap = $ref<Map<string, string>>(new Map())
 
 interface VideoInfo {
@@ -43,15 +40,15 @@ let isLoading = $ref(true)
 
 const mentionMap = $ref<Map<string, string>>(new Map())
 
-function getWindowSize(width: number, height: number) {
+function getWindowSize(width: number, height: number, scale = 0.8): { width: number; height: number } {
   let windowWidth = width
   let windowHeight = height
-  if (windowWidth > screenWidth * INIT_SCALE) {
-    windowWidth = screenWidth * INIT_SCALE
+  if (windowWidth > screenWidth * scale) {
+    windowWidth = screenWidth * scale
     windowHeight = (windowWidth * height) / width
   }
-  if (windowHeight > screenHeight * INIT_SCALE) {
-    windowHeight = screenHeight * INIT_SCALE
+  if (windowHeight > screenHeight * scale) {
+    windowHeight = screenHeight * scale
     windowWidth = (windowHeight * width) / height
   }
   return {
