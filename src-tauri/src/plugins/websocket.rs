@@ -113,7 +113,7 @@ async fn connect<R: Runtime>(
         }
     }
     let (ws_stream, _) =
-        connect_async_with_config(request.body(()).unwrap(), config.map(Into::into)).await?;
+        connect_async_with_config(request.body(()).unwrap(), config.map(Into::into), false).await?;
 
     let id = rand::random();
 
