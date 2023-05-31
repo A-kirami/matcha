@@ -4,7 +4,8 @@ import { WebviewWindow } from '@tauri-apps/api/window'
 import { onBeforeMount } from 'vue'
 
 import WaveAudioPlayer from '@/components/WaveAudioPlayer.vue'
-import { getMentionString } from '@/utils'
+import { useChatStore } from '@/stores'
+import { getMentionString, getPlainScene } from '@/utils'
 
 import type { Contents } from '@/adapter/content'
 
@@ -15,6 +16,8 @@ const { messages, onlyImage } = defineProps<{
 
 const screenWidth = window.screen.width
 const screenHeight = window.screen.height
+
+const chat = useChatStore()
 
 const imageMap = $ref<Map<string, string>>(new Map())
 
@@ -106,6 +109,10 @@ function initVideoInfo(url: string): Promise<void> {
   })
 }
 
+function getReplyMessage(messageId: string): string {
+  return getPlainScene(chat.getMessage(messageId)?.scene)
+}
+
 onBeforeMount(async () => {
   for (const message of messages) {
     if (message.type === 'image') {
@@ -134,6 +141,12 @@ onBeforeMount(async () => {
       <span></span>
     </div>
     <template v-for="message in messages" v-else :key="message.type">
+      <div
+        v-if="message.type === 'reply'"
+        class="reply-message overflow-hidden text-ellipsis border-l-3 border-blue-200 pl-2 text-gray-400"
+      >
+        {{ getReplyMessage(message.data.message_id) }}
+      </div>
       <span v-if="message.type === 'text'">{{ message.data.text }}</span>
       <span v-else-if="message.type === 'mention'" class="text-sky-400 not-last:mr-1">{{
         mentionMap.get(message.data.target)
@@ -240,5 +253,11 @@ onBeforeMount(async () => {
   20% {
     transform: scaleY(1);
   }
+}
+
+.reply-message {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
 }
 </style>
