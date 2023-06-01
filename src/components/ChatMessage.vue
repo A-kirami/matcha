@@ -30,7 +30,7 @@ const status = useStatusStore()
 
 const chat = useChatStore()
 
-const scene = $ref(message.scene)
+const scene = $computed(() => message.scene)
 
 /** 消息是否为Bot发送 */
 const isBot = scene.sender_id === status.assignBot
@@ -58,7 +58,7 @@ const title = (() => {
 
 const time = unix(scene.time).format('HH:mm:ss')
 
-const role = (() => {
+const role = $computed(() => {
   if (scene.detail_type === 'group') {
     if (scene.anonymous) {
       return undefined
@@ -67,7 +67,7 @@ const role = (() => {
   } else {
     return undefined
   }
-})()
+})
 
 /** 用户名 */
 const userName = scene.detail_type === 'group' ? scene.member.card || scene.user_name : scene.user_name
