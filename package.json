@@ -30,6 +30,8 @@
     "dexie": "^3.2.3",
     "highlight.js": "^11.7.0",
     "js-base64": "^3.7.5",
+    "linkify-string": "^4.1.1",
+    "linkifyjs": "^4.1.1",
     "overlayscrollbars": "^2.1.1",
     "overlayscrollbars-vue": "^0.5.1",
     "pinia": "^2.0.35",
