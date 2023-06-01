@@ -44,6 +44,14 @@ let isLoading = $ref(true)
 
 const mentionMap = $ref<Map<string, string>>(new Map())
 
+let contextmenuShow = $ref(false)
+
+const contextmenuOptions = $ref({
+  theme: 'matcha-theme',
+  x: 0,
+  y: 0,
+})
+
 function getWindowSize(width: number, height: number, scale = 0.8): { width: number; height: number } {
   let windowWidth = width
   let windowHeight = height
@@ -134,10 +142,44 @@ onBeforeMount(async () => {
   }
   isLoading = false
 })
+
+function openContextmenu(e: MouseEvent): void {
+  contextmenuShow = true
+  contextmenuOptions.x = e.clientX
+  contextmenuOptions.y = e.clientY
+}
 </script>
 
 <template>
-  <div>
+  <div @contextmenu.prevent="openContextmenu">
+    <context-menu v-model:show="contextmenuShow" :options="contextmenuOptions">
+      <context-menu-item label="复制" @click="openContextmenu">
+        <template #icon>
+          <span i="carbon-copy" class="inline-block"></span>
+        </template>
+      </context-menu-item>
+      <context-menu-item label="编辑" @click="openContextmenu">
+        <template #icon>
+          <span i="carbon-edit" class="inline-block"></span>
+        </template>
+      </context-menu-item>
+      <context-menu-sperator />
+      <context-menu-item label="回复" @click="openContextmenu">
+        <template #icon>
+          <span i="carbon-reply" class="inline-block"></span>
+        </template>
+      </context-menu-item>
+      <context-menu-item label="撤回" @click="openContextmenu">
+        <template #icon>
+          <span i="carbon-direction-u-turn" class="inline-block"></span>
+        </template>
+      </context-menu-item>
+      <context-menu-item label="转发" @click="openContextmenu">
+        <template #icon>
+          <span i="carbon-chat-launch" class="inline-block"></span>
+        </template>
+      </context-menu-item>
+    </context-menu>
     <div v-if="isLoading" class="loading">
       <span></span>
       <span></span>

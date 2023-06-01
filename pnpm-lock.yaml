@@ -11,6 +11,9 @@ dependencies:
   '@highlightjs/vue-plugin':
     specifier: ^2.1.0
     version: 2.1.0(highlight.js@11.7.0)(vue@3.2.47)
+  '@imengyu/vue3-context-menu':
+    specifier: ^1.2.10
+    version: 1.2.10
   '@msgpack/msgpack':
     specifier: ^2.8.0
     version: 2.8.0
@@ -934,6 +937,10 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@imengyu/vue3-context-menu@1.2.10:
+    resolution: {integrity: sha512-L+qIoqcewQ8SPk2PMvsaMD9HWxFouij0JAqYwn19Fz7giqz0rLpWMf9aJRpQ3ysOySEKPdilg8dLYYB96QmGHA==}
+    dev: false
 
   /@istanbuljs/schema@0.1.3:
     resolution: {integrity: sha512-ZXRY4jNvVgSVQ8DL3LTcakaAtXwTVUxE81hslsyD2AtoXW/wVob10HkOJ1X/pAlcI7D+2YoZKg5do8G/w6RYgA==}
