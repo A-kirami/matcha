@@ -11,4 +11,8 @@
       labels:
         - bug
     - title: 💫 杂项
+      labels:
         - "*"
+      exclude:
+        labels:
+          - dependencies
