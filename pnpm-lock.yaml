@@ -44,6 +44,12 @@ dependencies:
   js-base64:
     specifier: ^3.7.5
     version: 3.7.5
+  linkify-string:
+    specifier: ^4.1.1
+    version: 4.1.1(linkifyjs@4.1.1)
+  linkifyjs:
+    specifier: ^4.1.1
+    version: 4.1.1
   overlayscrollbars:
     specifier: ^2.1.1
     version: 2.1.1
@@ -3855,6 +3861,18 @@ packages:
   /lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
     dev: true
+
+  /linkify-string@4.1.1(linkifyjs@4.1.1):
+    resolution: {integrity: sha512-9+kj8xr7GLiyNyO9ri7lIxq2ixVYjjqvtomPQpeYNNT56/PxQq6utzXFLm8HxOaGTiMpimj1UAQWwYYPV88L1g==}
+    peerDependencies:
+      linkifyjs: ^4.0.0
+    dependencies:
+      linkifyjs: 4.1.1
+    dev: false
+
+  /linkifyjs@4.1.1:
+    resolution: {integrity: sha512-zFN/CTVmbcVef+WaDXT63dNzzkfRBKT1j464NJQkV7iSgJU0sLBus9W0HBwnXK13/hf168pbrx/V/bjEHOXNHA==}
+    dev: false
 
   /lint-staged@13.2.1:
     resolution: {integrity: sha512-8gfzinVXoPfga5Dz/ZOn8I2GOhf81Wvs+KwbEXQn/oWZAvCVS2PivrXfVbFJc93zD16uC0neS47RXHIjXKYZQw==}

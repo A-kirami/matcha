@@ -1,6 +1,7 @@
 <!-- eslint-disable no-await-in-loop -->
 <script setup lang="ts">
 import { WebviewWindow } from '@tauri-apps/api/window'
+import linkifyStr from 'linkify-string'
 import { onBeforeMount } from 'vue'
 
 import WaveAudioPlayer from '@/components/WaveAudioPlayer.vue'
@@ -113,6 +114,10 @@ function getReplyMessage(messageId: string): string {
   return getPlainScene(chat.getMessage(messageId)?.scene)
 }
 
+function getTextMessage(text: string): string {
+  return linkifyStr(text, { target: '_blank', validate: { email: () => false } })
+}
+
 onBeforeMount(async () => {
   for (const message of messages) {
     if (message.type === 'image') {
@@ -147,7 +152,8 @@ onBeforeMount(async () => {
       >
         {{ getReplyMessage(message.data.message_id) }}
       </div>
-      <span v-if="message.type === 'text'">{{ message.data.text }}</span>
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <span v-if="message.type === 'text'" v-html="getTextMessage(message.data.text)"></span>
       <span v-else-if="message.type === 'mention'" class="text-sky-400 not-last:mr-1">{{
         mentionMap.get(message.data.target)
       }}</span>
