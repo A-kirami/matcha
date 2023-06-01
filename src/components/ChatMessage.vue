@@ -157,6 +157,7 @@ async function pokeUser(): Promise<void> {
             v-show="showMessage"
             class="!bg-transparent"
             :class="{ 'bubble-padding': !(onlyImage || onlyType('video')) }"
+            :message-id="scene.message_id"
             :messages="scene.message"
             :only-image="onlyImage"
           />

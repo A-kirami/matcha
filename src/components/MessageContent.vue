@@ -4,19 +4,23 @@ import { WebviewWindow } from '@tauri-apps/api/window'
 import linkifyStr from 'linkify-string'
 import { onBeforeMount } from 'vue'
 
+import { Behav } from '@/adapter/behav'
 import WaveAudioPlayer from '@/components/WaveAudioPlayer.vue'
 import { useChatStore } from '@/stores'
 import { getMentionString, getPlainScene } from '@/utils'
 
 import type { Contents } from '@/adapter/content'
 
-const { messages, onlyImage } = defineProps<{
+const { messageId, messages, onlyImage } = defineProps<{
+  messageId: string
   messages: Contents[]
   onlyImage: boolean
 }>()
 
 const screenWidth = window.screen.width
 const screenHeight = window.screen.height
+
+const behav = new Behav()
 
 const chat = useChatStore()
 
@@ -169,7 +173,7 @@ function openContextmenu(e: MouseEvent): void {
           <span i="carbon-reply" class="inline-block"></span>
         </template>
       </context-menu-item>
-      <context-menu-item label="撤回" @click="openContextmenu">
+      <context-menu-item label="撤回" @click="behav.recallMessage(messageId, behav.status.assignUser)">
         <template #icon>
           <span i="carbon-direction-u-turn" class="inline-block"></span>
         </template>
