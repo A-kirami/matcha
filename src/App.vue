@@ -16,6 +16,12 @@ onBeforeMount(async () => {
 
   await logger.attachConsole()
 })
+
+document.addEventListener('contextmenu', (e) => {
+  if (import.meta.env.PROD) {
+    e.preventDefault()
+  }
+})
 </script>
 
 <template>
