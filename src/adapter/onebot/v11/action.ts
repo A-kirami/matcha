@@ -383,15 +383,16 @@ const actionStrategy: ActionStrategy = {
     group_id,
     user_id,
   }: {
-    group_id: string
-    user_id: string
+    group_id: number
+    user_id: number
   }): Promise<ActionResponse<MemberInfo> | ActionResponse<ErrorInfo>> => {
+    const groupId = group_id.toString()
     const status = useStatusStore()
-    const operator = await db.members.get({ groupId: group_id, userId: status.assignBot })
+    const operator = await db.members.get({ groupId, userId: status.assignBot })
     if (!operator) {
       return response(1403, { message: '没有加入该群' })
     }
-    const member = await db.members.get({ groupId: group_id, userId: user_id })
+    const member = await db.members.get({ groupId, userId: user_id.toString() })
     if (!member) {
       return response(1404, { message: '群成员不存在' })
     }
@@ -403,10 +404,10 @@ const actionStrategy: ActionStrategy = {
   'get_group_member_list': async ({
     group_id,
   }: {
-    group_id: string
+    group_id: number
   }): Promise<ActionResponse<MemberInfo[]> | ActionResponse<ErrorInfo>> => {
     const status = useStatusStore()
-    const operator = await db.members.get({ groupId: group_id, userId: status.assignBot })
+    const operator = await db.members.get({ groupId: group_id.toString(), userId: status.assignBot })
     if (!operator) {
       return response(1403, { message: '没有加入该群' })
     }
