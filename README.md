@@ -194,7 +194,7 @@ Matcha 是一个专为 KiramiBot 设计的辅助开发工具，能够与 KiramiB
 
 ## 🤝 贡献
 
-请参阅[贡献指南](#)
+请参阅[贡献指南](./.github/CONTRIBUTING.md)
 
 ## 🎊 活动
 
