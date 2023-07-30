@@ -62,7 +62,7 @@ export class OneBotV12 extends Adapter {
         bots: [
           {
             self: {
-              platform: 'qq',
+              platform: 'matcha',
               user_id: this.status.assignBot,
             },
             online: true,
