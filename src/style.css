@@ -15,7 +15,7 @@ html, body {
 }
 
 pre {
-  @apply break-all whitespace-pre-wrap;
+  @apply break-all whitespace-pre-wrap !mb-0;
 }
 
 .hljs {
