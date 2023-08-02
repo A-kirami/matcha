@@ -1453,9 +1453,9 @@ dependencies = [
 
 [[package]]
 name = "infer"
-version = "0.13.0"
+version = "0.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f551f8c3a39f68f986517db0d1759de85881894fdc7db798bd2a9df9cb04b7fc"
+checksum = "cb33622da908807a06f9513c19b3c1ad50fab3e4137d82a78107d502075aa199"
 
 [[package]]
 name = "instant"
@@ -1663,7 +1663,7 @@ dependencies = [
  "byte-unit",
  "fern",
  "futures-util",
- "infer 0.13.0",
+ "infer 0.15.0",
  "log",
  "rand 0.8.5",
  "regex",
