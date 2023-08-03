@@ -28,7 +28,6 @@ import type {
   FriendPokeNoticeScene,
 } from './scene'
 import type { User, Group } from '@/database'
-import type { Message } from '@/stores/chat'
 
 export class Behav {
   readonly status = useStatusStore()
