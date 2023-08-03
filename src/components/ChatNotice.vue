@@ -18,6 +18,7 @@ import type {
   GroupMemberCardNoticeScene,
   GroupEssenceNoticeScene,
   GroupHongbaoLuckyNoticeScene,
+  GroupWholeBanNoticeScene,
 } from '@/adapter/scene'
 import type { Notice } from '@/stores/chat'
 
@@ -68,7 +69,9 @@ const noticeStrategy = {
     const time = Math.ceil(duration / 60)
     return time > 0 ? `{target} 被{sender}禁言${time}分钟` : '{target} 被{sender}解除禁言'
   },
-  'group_whole_ban': () => '{sender}开启/关闭了全员禁言',
+  'group_whole_ban': (scene: GroupWholeBanNoticeScene) => {
+    return `{sender}${scene.sub_type === 'open' ? '开启' : '关闭'}了全员禁言`
+  },
   'group_anonymous': () => '管理员已允许群内匿名聊天',
   'group_name': () => '{sender}修改了群名',
   'group_member_card': (scene: GroupMemberCardNoticeScene, context: Context) => {
