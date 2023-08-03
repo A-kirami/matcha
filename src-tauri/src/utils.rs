@@ -5,6 +5,7 @@ use sha2::{Digest, Sha256};
 use std::collections::HashMap;
 use std::error::Error;
 use std::fs;
+use std::net::TcpListener;
 use std::path::PathBuf;
 use std::str;
 use tauri::AppHandle;
@@ -119,4 +120,11 @@ pub fn validate_file(
         }
     }
     Ok(())
+}
+
+pub fn get_unused_port() -> u16 {
+    let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+    let port = listener.local_addr().unwrap().port();
+    drop(listener);
+    port
 }

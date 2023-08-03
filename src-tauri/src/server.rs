@@ -1,7 +1,14 @@
+use crate::utils::get_unused_port;
+use std::net::TcpListener;
 use std::path::PathBuf;
 use warp::Filter;
 
 pub fn start_static_file_server(cache_path: PathBuf, port: u16) {
+    let port = match TcpListener::bind(("127.0.0.1", port)) {
+        Ok(_) => port,
+        Err(_) => get_unused_port(),
+    };
+
     let static_route = warp::path("matcha")
         .and(warp::path("cache"))
         .and(warp::path::param::<String>())
