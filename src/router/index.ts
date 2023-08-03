@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import { useStatusStore } from '@/stores'
+import { useStatusStore, useSessionStore } from '@/stores'
+
+import type { State } from '@/stores/session'
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -29,10 +31,16 @@ export const router = createRouter({
                 action: () => import('@/components/ChatAction.vue'),
               },
               props: { default: true, action: true },
-              beforeEnter: (to) => {
+              beforeEnter: async (to) => {
                 if (!Number(to.params.chatId)) {
                   return '/chat'
                 }
+                const session = useSessionStore()
+                await session.loadSessionState(
+                  to.fullPath,
+                  to.params.chatType as State['type'],
+                  to.params.chatId as State['id']
+                )
               },
             },
           ],

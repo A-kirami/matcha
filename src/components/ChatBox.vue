@@ -2,7 +2,7 @@
 import { useDebounceFn } from '@vueuse/core'
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-vue'
 import { watchEffect } from 'vue'
-import { onBeforeRouteLeave } from 'vue-router'
+import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 
 import { Behav } from '@/adapter/behav'
@@ -15,9 +15,10 @@ import ChatRequest from '@/components/ChatRequest.vue'
 import SendButton from '@/components/SendButton.vue'
 import TimeSeparator from '@/components/TimeSeparator.vue'
 import { db } from '@/database'
-import { useChatStore, useStatusStore } from '@/stores'
+import { useChatStore, useStatusStore, useSessionStore } from '@/stores'
 
 import type { User, Group } from '@/database'
+import type { State } from '@/stores/session'
 import type { PartialOptions, OverlayScrollbars } from 'overlayscrollbars'
 
 const { chatType, chatId } = defineProps<{
@@ -37,6 +38,8 @@ const behav = new Behav()
 const chat = useChatStore()
 
 const status = useStatusStore()
+
+const session = useSessionStore()
 
 const chatInput = $ref<InstanceType<typeof ChatInput> | null>(null)
 
@@ -124,6 +127,11 @@ function isSeparator(index: number): boolean {
 function lockScroll() {
   scrollLock = true
 }
+
+onBeforeRouteUpdate(async (to, from) => {
+  session.saveSessionState(from.fullPath)
+  await session.loadSessionState(to.fullPath, to.params.chatType as State['type'], to.params.chatId as State['id'])
+})
 
 onBeforeRouteLeave((_, from) => {
   status.latelySession = from.fullPath

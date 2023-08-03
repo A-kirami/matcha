@@ -8,7 +8,7 @@ import { useRoute } from 'vue-router'
 import AudioIcon from '@/assets/audio_file.svg?url'
 import VideoIcon from '@/assets/video_file.svg?url'
 import { db } from '@/database'
-import { useStatusStore } from '@/stores'
+import { useStatusStore, useSessionStore } from '@/stores'
 import { createFileCache, getUserAvatar, getGroupAvatar, nonNullable, getUserNickname } from '@/utils'
 
 import type { Contents } from '@/adapter/content'
@@ -24,6 +24,8 @@ const { chatType, chatId } = defineProps<{
 const route = useRoute()
 
 const status = useStatusStore()
+
+const session = useSessionStore()
 
 const inputBox = $ref<HTMLDivElement | null>(null)
 
@@ -106,6 +108,7 @@ function clearContent(): void {
   if (inputBox) {
     inputBox.textContent = ''
   }
+  clearReplyMessage()
 }
 
 /** 获取输入内容 */
@@ -122,6 +125,14 @@ function getContent(): Contents[] | null {
     } else {
       contents.push(content)
     }
+  }
+  if (session.state?.replyMessage) {
+    contents.unshift({
+      type: 'reply',
+      data: {
+        message_id: session.state.replyMessage.id,
+      },
+    })
   }
   return contents
 }
@@ -221,16 +232,45 @@ const tribute = new Tribute<Mentions>({
     return item.name + item.id
   },
 })
+
+function clearReplyMessage(): void {
+  if (session.state) {
+    session.state.replyMessage = undefined
+  }
+}
+
+function onBackspace(): void {
+  if (inputBox?.textContent === '') {
+    clearReplyMessage()
+  }
+}
 </script>
 
 <template>
   <OverlayScrollbarsComponent class="h-full max-h-25 w-full rounded-2xl bg-gray-100" defer>
+    <div v-show="session.state?.replyMessage" class="mx-2 mt-1.5 rounded-lg bg-gray-200 px-3 py-1.5">
+      <div class="text-sm text-gray-400">
+        <div>{{ session.state?.replyMessage?.nickname }}:</div>
+        <div class="flex flex-row items-center justify-between gap-1">
+          <div class="restrict-rows-1">
+            {{ session.state?.replyMessage?.message }}
+          </div>
+          <span
+            i="carbon-close-outline"
+            class="inline-block flex-none text-base"
+            hover="text-gray-500"
+            @click="clearReplyMessage"
+          ></span>
+        </div>
+      </div>
+    </div>
     <div
       ref="inputBox"
       class="whitespace-pre-wrap break-all bg-gray-100 px-2 py-1 align-middle text-sm text-gray-500 caret-gray-500/50 outline-none"
       contenteditable
       @paste.prevent="onPaste"
       @keydown.ctrl.enter="$emit('send')"
+      @keydown.backspace="onBackspace"
     ></div>
   </OverlayScrollbarsComponent>
 </template>
