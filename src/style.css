@@ -33,8 +33,5 @@ pre code.hljs {
 }
 
 .hljs-string.line-fold {
-  @apply overflow-hidden text-ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+  @apply restrict-rows-3
 }

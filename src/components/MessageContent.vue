@@ -7,10 +7,11 @@ import { onBeforeMount, onUnmounted } from 'vue'
 
 import { Behav } from '@/adapter/behav'
 import WaveAudioPlayer from '@/components/WaveAudioPlayer.vue'
-import { useChatStore } from '@/stores'
-import { getMentionString, getPlainScene } from '@/utils'
+import { useChatStore, useSessionStore } from '@/stores'
+import { getMentionString, getUserNickname } from '@/utils'
 
 import type { Contents } from '@/adapter/content'
+import type { ReplyMessageInfo } from '@/stores/session'
 
 const { messageId, messages, onlyImage } = defineProps<{
   messageId: string
@@ -24,6 +25,8 @@ const screenHeight = window.screen.height
 const behav = new Behav()
 
 const chat = useChatStore()
+
+const session = useSessionStore()
 
 const imageMap = $ref<Map<string, string>>(new Map())
 
@@ -123,10 +126,6 @@ function initVideoInfo(url: string): Promise<void> {
   })
 }
 
-function getReplyMessage(messageId: string): string {
-  return getPlainScene(chat.getMessage(messageId)?.scene)
-}
-
 function getTextMessage(text: string): string {
   return linkifyStr(text, { target: '_blank', validate: { email: () => false } })
 }
@@ -141,6 +140,28 @@ clipboard.on('error', (e) => {
   e.clearSelection()
 })
 
+let replyMessage = $ref<ReplyMessageInfo>()
+
+async function getReplyMessage(messageId: string): Promise<ReplyMessageInfo | undefined> {
+  const message = chat.getMessage(messageId)
+  if (message) {
+    // eslint-disable-next-line camelcase
+    const { user_id, group_id } = message.scene as { user_id: string; group_id?: string }
+    const nickname = await getUserNickname(user_id, group_id)
+    return {
+      id: messageId,
+      nickname,
+      message: message.scene.plain_message,
+    }
+  } else {
+    return
+  }
+}
+
+async function setReplyMessage(messageId: string): Promise<void> {
+  session.state!.replyMessage = await getReplyMessage(messageId)
+}
+
 onBeforeMount(async () => {
   for (const message of messages) {
     if (message.type === 'image') {
@@ -153,6 +174,8 @@ onBeforeMount(async () => {
     } else if (message.type === 'mention') {
       const mentionString = await getMentionString(message)
       mentionMap.set(message.data.target, mentionString)
+    } else if (message.type === 'reply') {
+      replyMessage = await getReplyMessage(message.data.message_id)
     }
   }
   isLoading = false
@@ -187,7 +210,7 @@ function openContextmenu(e: MouseEvent): void {
         </template>
       </context-menu-item>
       <context-menu-sperator />
-      <context-menu-item label="回复" @click="openContextmenu">
+      <context-menu-item label="回复" @click="setReplyMessage(messageId)">
         <template #icon>
           <span i="carbon-reply" class="inline-block"></span>
         </template>
@@ -211,13 +234,10 @@ function openContextmenu(e: MouseEvent): void {
       <span></span>
     </div>
     <div v-else :id="`message-content-${messageId}`" @contextmenu.prevent="openContextmenu">
-      <span></span>
       <template v-for="msg in messages" :key="msg.type">
-        <div
-          v-if="msg.type === 'reply'"
-          class="reply-message overflow-hidden text-ellipsis border-l-3 border-blue-200 pl-2 text-gray-400"
-        >
-          {{ getReplyMessage(msg.data.message_id) }}
+        <div v-if="msg.type === 'reply'" class="border-l-3 border-blue-300 px-2 text-xs text-gray-400">
+          <div>{{ replyMessage?.nickname }}:</div>
+          <div class="restrict-rows-1">{{ replyMessage?.message }}</div>
         </div>
         <!-- eslint-disable-next-line vue/no-v-html -->
         <span v-if="msg.type === 'text'" v-html="getTextMessage(msg.data.text)"></span>
@@ -327,11 +347,5 @@ function openContextmenu(e: MouseEvent): void {
   20% {
     transform: scaleY(1);
   }
-}
-
-.reply-message {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
 }
 </style>
