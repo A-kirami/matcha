@@ -56,13 +56,11 @@
 
 Matcha is mock chat.
 
-Matcha 是一个专为 KiramiBot 设计的辅助开发工具，能够与 KiramiBot 进行模拟聊天交互，同时提供一系列的开发辅助功能。
+Matcha 是一个专为 [KiramiBot](https://github.com/A-kirami/KiramiBot) 设计的辅助开发工具，能够与 KiramiBot 进行模拟聊天交互，同时提供一系列的开发辅助功能。
 
 它旨在降低开发者的调试与测试的负担，从而更有效率的专注于功能开发。
 
 尽管它主要为 KiramiBot 设计，但只要是符合 Matcha 支持协议的机器人，都可接入并能够使用大部分基础功能。
-
-> KiramiBot 是一个尚在开发中的机器人
 
 ## ✨ 特性
 
