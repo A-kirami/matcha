@@ -88,7 +88,7 @@ function onInput(e: Event, editType: 'name' | 'id'): void {
       }
     }
     // @ts-ignore
-    userForm[editType] = el.innerText
+    // userForm[editType] = el.innerText
   }
 }
 
