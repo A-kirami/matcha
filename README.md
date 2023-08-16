@@ -194,6 +194,14 @@ Matcha 是一个专为 [KiramiBot](https://github.com/A-kirami/KiramiBot) 设计
 
 请参阅[贡献指南](./.github/CONTRIBUTING.md)
 
+### 🍻 鸣谢
+
+感谢以下开发者对本项目的贡献
+
+<a href="https://github.com/A-kirami/matcha/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=A-kirami/matcha" />
+</a>
+
 ## 🎊 活动
 
 ![Alt](https://repobeats.axiom.co/api/embed/647a10251f545090f351a6afc3b2a124494df1a2.svg 'Repobeats analytics image')
