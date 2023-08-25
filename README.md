@@ -62,6 +62,8 @@ Matcha 是一个专为 [KiramiBot](https://github.com/A-kirami/KiramiBot) 设计
 
 尽管它主要为 KiramiBot 设计，但只要是符合 Matcha 支持协议的机器人，都可接入并能够使用大部分基础功能。
 
+> [KiramiBot](https://github.com/A-kirami/KiramiBot) 是一个简明轻快的聊天机器人应用，它与 [NoneBot2](https://github.com/nonebot/nonebot2) 完全兼容，同时提供了更多的功能与特性，欢迎体验！
+
 ## ✨ 特性
 
 - 小而美，轻巧体积，简约 UI
