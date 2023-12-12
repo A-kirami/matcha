@@ -87,5 +87,5 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: 'matcha-${{ matrix.os }}-${{ steps.short-sha.outputs.sha }}'
+          name: 'matcha-${{ matrix.label }}-${{ steps.short-sha.outputs.sha }}'
           path: "${{ join(fromJSON(steps.tauri_build.outputs.artifacts), '\n') }}"
