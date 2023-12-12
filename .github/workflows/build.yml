@@ -27,19 +27,30 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [macos-latest, ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.platform }}
-    if: |
-      (!contains(github.event.head_commit.message, '🔖') && !contains(github.event.head_commit.message, '🚧'))
+        include:
+          - os: ubuntu-latest
+            label: linux-amd64
+            target: x86_64-unknown-linux-gnu
+          - os: macos-latest
+            label: macos-amd64
+            target: x86_64-apple-darwin
+          - os: macos-latest
+            label: macos-arm64
+            target: aarch64-apple-darwin
+          - os: windows-latest
+            label: windows-amd64
+            target: x86_64-pc-windows-msvc
+    name: ${{ matrix.label }}
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: install dependencies (ubuntu only)
-        if: matrix.platform == 'ubuntu-latest'
+      - name: Install dependencies (ubuntu only)
+        if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgtk-3-dev webkit2gtk-4.0 libappindicator3-dev librsvg2-dev patchelf
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
 
       - name: Rust setup
         uses: dtolnay/rust-toolchain@stable
@@ -63,10 +74,18 @@ jobs:
       - name: Install app dependencies and build web
         run: pnpm i
 
-      - uses: A-kirami/tauri-build@main
+      - name: Rustup add target
+        run: rustup target add ${{ matrix.target }}
+
+      - uses: JonasKruckenberg/tauri-build@v1.4
         id: tauri_build
+        with:
+          target: ${{ matrix.target }}
+
+      - uses: benjlevesque/short-sha@v2.2
+        id: short-sha
 
       - uses: actions/upload-artifact@v3
         with:
-          name: 'Matcha-${{ matrix.platform }}'
+          name: 'matcha-${{ matrix.os }}-${{ steps.short-sha.outputs.sha }}'
           path: "${{ join(fromJSON(steps.tauri_build.outputs.artifacts), '\n') }}"
