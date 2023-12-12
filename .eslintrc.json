@@ -36,7 +36,7 @@
     "$$": "readonly"
   },
   "rules": {
-    "linebreak-style": ["warn", "windows"],
+    "linebreak-style": 0,
     "quotes": ["warn", "single"],
     "semi": ["warn", "never"],
     "object-shorthand": ["warn", "always"],
