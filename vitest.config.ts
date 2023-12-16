@@ -7,7 +7,7 @@ export default defineConfig({
     reporters: 'html',
     open: true,
     coverage: {
-      provider: 'c8',
+      provider: 'v8',
       reporter: ['text', 'text-summary', 'json', 'html', 'lcovonly'],
     },
   },

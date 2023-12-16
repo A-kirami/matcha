@@ -53,7 +53,10 @@ export function asyncWrapper<T>(func: (...param: any[]) => T | Promise<T>): (...
  * @classdesc 设置默认值函数，当键不存在时，将调用此函数并将结果设置为对应键的默认值
  */
 export class DefaultMap<K, V> extends Map<K, V> {
-  constructor(private getDefaultValue: (key: K) => V, entries?: readonly (readonly [K, V])[] | null) {
+  constructor(
+    private getDefaultValue: (key: K) => V,
+    entries?: readonly (readonly [K, V])[] | null
+  ) {
     super(entries)
   }
 

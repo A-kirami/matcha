@@ -220,7 +220,7 @@ let visible = $computed({
             </a-radio-group>
           </a-form-item>
           <button
-            class="mt-2 w-full rounded-full bg-sky-400 py-1 tracking-widest text-light-50 outline-none transition-transform"
+            class="mt-2 w-full rounded-full bg-sky-400 py-1 text-light-50 tracking-widest outline-none transition-transform"
             active="scale-98"
           >
             创建群组

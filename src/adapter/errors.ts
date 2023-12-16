@@ -5,7 +5,10 @@ class AdapterError extends Error {}
 export class ProtocolError extends AdapterError {
   static message = '协议出现错误'
 
-  constructor(public response: ActionResponse, message?: string) {
+  constructor(
+    public response: ActionResponse,
+    message?: string
+  ) {
     super(message || ProtocolError.message)
   }
 }

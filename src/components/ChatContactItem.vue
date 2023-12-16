@@ -74,7 +74,7 @@ watch(
     <Avatar :type="chatType" :aid="chatPerson?.id" size="3rem"></Avatar>
     <div class="flex flex-grow flex-col gap-1 lt-xl:hidden">
       <div class="flex flex-row items-center justify-between">
-        <span class="max-w-32 truncate text-base font-550 text-gray-700" dark="text-gray-400">{{
+        <span class="max-w-32 truncate text-base text-gray-700 font-550" dark="text-gray-400">{{
           chatPerson?.name ?? '未指定 Bot 用户'
         }}</span>
         <span class="text-xs text-zinc-400">{{ lastTime }}</span>
@@ -83,7 +83,7 @@ watch(
         <span class="max-w-34 truncate text-xs text-zinc-400">{{ previewMessage }}</span>
         <span
           v-show="unreadMessage"
-          class="h-22px w-22px flex items-center justify-center rounded-full bg-blue-100 text-xs font-medium text-blue-500"
+          class="h-22px w-22px flex items-center justify-center rounded-full bg-blue-100 text-xs text-blue-500 font-medium"
           >{{ unreadMessage }}</span
         >
       </div>

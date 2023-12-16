@@ -67,8 +67,8 @@ async function getRequestInfo(scene: Request['scene']): Promise<RequestInfo> {
     detail_type === 'add_friend'
       ? async (approve: boolean) => await behav.approveAddFriend(id, status.assignUser, approve)
       : detail_type === 'join_group'
-      ? async (approve: boolean) => await behav.approveJoinGroup(id, status.assignUser, approve)
-      : async (approve: boolean) => approve && (await behav.requestJoinGroup(group_id, receiver_id))
+        ? async (approve: boolean) => await behav.approveJoinGroup(id, status.assignUser, approve)
+        : async (approve: boolean) => approve && (await behav.requestJoinGroup(group_id, receiver_id))
 
   return {
     title,

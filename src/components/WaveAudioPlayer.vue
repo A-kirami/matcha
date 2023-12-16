@@ -358,9 +358,9 @@ input[type='range'] {
   /* height: v-bind('`${waveHeight}px`'); */
   padding: 0;
   margin: 0;
+  appearance: none;
   background: transparent;
   border: 0;
-  appearance: none;
 }
 
 input[type='range']::-webkit-slider-thumb {
@@ -369,11 +369,11 @@ input[type='range']::-webkit-slider-thumb {
 
   /* top: -1.5px; */
   height: 12.5px;
+  appearance: none;
   cursor: pointer;
   background: v-bind(waveSlider);
   border-radius: 50%;
   box-shadow: none;
-  appearance: none;
   transition: transform 0.3s;
 }
 
