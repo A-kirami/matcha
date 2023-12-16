@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@formkit/auto-animate':
-    specifier: 1.0.0-beta.6
-    version: 1.0.0-beta.6
+    specifier: 1.0.0-pre-alpha.3
+    version: 1.0.0-pre-alpha.3(vue@3.2.47)
   '@highlightjs/vue-plugin':
     specifier: ^2.1.0
     version: 2.1.0(highlight.js@11.7.0)(vue@3.2.47)
@@ -919,8 +919,18 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@formkit/auto-animate@1.0.0-beta.6:
-    resolution: {integrity: sha512-PVDhLAlr+B4Xb7e+1wozBUWmXa6BFU8xUPR/W/E+TsQhPS1qkAdAsJ25keEnFrcePSnXHrOsh3tiFbEToOzV9w==}
+  /@formkit/auto-animate@1.0.0-pre-alpha.3(vue@3.2.47):
+    resolution: {integrity: sha512-lMVZ3LFUIu0RIxCEwmV8nUUJQ46M2bv2NDU3hrhZivViuR1EheC8Mj5sx/ACqK5QLK8XB8z7GDIZBUGdU/9OZQ==}
+    peerDependencies:
+      react: ^16.8.0
+      vue: ^3.0.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+      vue:
+        optional: true
+    dependencies:
+      vue: 3.2.47
     dev: false
 
   /@highlightjs/vue-plugin@2.1.0(highlight.js@11.7.0)(vue@3.2.47):
