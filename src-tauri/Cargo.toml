@@ -26,7 +26,7 @@ futures-util = "0.3"
 log = { version = "0.4", features = ["kv_unstable"] }
 thiserror = "1"
 infer = { version = "0.15", default-features = false }
-warp = "0.3.5"
+warp = "0.3.6"
 reqwest = "0.11.18"
 regex = "1.9.1"
 base64 = "0.21.2"
