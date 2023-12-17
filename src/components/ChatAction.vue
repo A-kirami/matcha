@@ -1,6 +1,5 @@
 <script setup lang="ts">
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const { chatType, chatId } = defineProps<{
+defineProps<{
   chatType: 'private' | 'group'
   chatId: string
 }>()
