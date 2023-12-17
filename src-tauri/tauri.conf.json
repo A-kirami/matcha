@@ -84,7 +84,9 @@
         }
       }
     },
-    "security": {},
+    "security": {
+      "csp": null
+    },
     "updater": {
       "active": false
     }
