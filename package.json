@@ -48,7 +48,7 @@
   },
   "devDependencies": {
     "@iconify-json/carbon": "^1.1.26",
-    "@tauri-apps/cli": "^1.5.8",
+    "@tauri-apps/cli": "1.5.7",
     "@types/node": "^20.10.4",
     "@typescript-eslint/eslint-plugin": "^6.14.0",
     "@typescript-eslint/parser": "^6.14.0",
