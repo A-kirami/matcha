@@ -164,8 +164,8 @@ devDependencies:
     specifier: ^9.19.2
     version: 9.22.0(eslint@8.57.0)
   happy-dom:
-    specifier: ^12.10.3
-    version: 12.10.3
+    specifier: ^13.0.0
+    version: 13.6.2
   husky:
     specifier: ^8.0.3
     version: 8.0.3
@@ -234,7 +234,7 @@ devDependencies:
     version: 4.0.0
   vitest:
     specifier: ^1.0.4
-    version: 1.3.1(@types/node@20.11.20)(@vitest/ui@1.3.1)(happy-dom@12.10.3)
+    version: 1.3.1(@types/node@20.11.20)(@vitest/ui@1.3.1)(happy-dom@13.6.2)
   vue-eslint-parser:
     specifier: ^9.3.2
     version: 9.4.2(eslint@8.57.0)
@@ -2180,7 +2180,7 @@ packages:
       std-env: 3.7.0
       test-exclude: 6.0.0
       v8-to-istanbul: 9.2.0
-      vitest: 1.3.1(@types/node@20.11.20)(@vitest/ui@1.3.1)(happy-dom@12.10.3)
+      vitest: 1.3.1(@types/node@20.11.20)(@vitest/ui@1.3.1)(happy-dom@13.6.2)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -2227,7 +2227,7 @@ packages:
       pathe: 1.1.2
       picocolors: 1.0.0
       sirv: 2.0.4
-      vitest: 1.3.1(@types/node@20.11.20)(@vitest/ui@1.3.1)(happy-dom@12.10.3)
+      vitest: 1.3.1(@types/node@20.11.20)(@vitest/ui@1.3.1)(happy-dom@13.6.2)
     dev: true
 
   /@vitest/utils@1.3.1:
@@ -3127,10 +3127,6 @@ packages:
   /css-what@6.1.0:
     resolution: {integrity: sha512-HTUrgRJ7r4dsZKU6GjmpfRK1O76h97Z8MfS1G0FozR+oF2kG6Vfe8JE6zwrkbxigziPHinCJ+gCPjA9EaBDtRw==}
     engines: {node: '>= 6'}
-    dev: true
-
-  /css.escape@1.5.1:
-    resolution: {integrity: sha512-YUifsXXuknHlUsmlgyY0PKzgPOr7/FjCePfHNt0jxm83wHZi44VDMQ7/fGNkjY3/jV1MC+1CmZbaHzugyeRtpg==}
     dev: true
 
   /cssdb@7.11.1:
@@ -4227,14 +4223,12 @@ packages:
       duplexer: 0.1.2
     dev: true
 
-  /happy-dom@12.10.3:
-    resolution: {integrity: sha512-JzUXOh0wdNGY54oKng5hliuBkq/+aT1V3YpTM+lrN/GoLQTANZsMaIvmHiHe612rauHvPJnDZkZ+5GZR++1Abg==}
+  /happy-dom@13.6.2:
+    resolution: {integrity: sha512-Ku+wDqcF/KwFA0dI+xIMZd9Jn020RXjuSil/Vz7gu2yhDC3FsDYZ55qqV9k+SGC4opwb4acisXqVSRxUJMlPbQ==}
+    engines: {node: '>=16.0.0'}
     dependencies:
-      css.escape: 1.5.1
       entities: 4.5.0
-      iconv-lite: 0.6.3
       webidl-conversions: 7.0.0
-      whatwg-encoding: 2.0.0
       whatwg-mimetype: 3.0.0
     dev: true
 
@@ -4359,13 +4353,6 @@ packages:
     dependencies:
       safer-buffer: 2.1.2
     dev: false
-
-  /iconv-lite@0.6.3:
-    resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
-    engines: {node: '>=0.10.0'}
-    dependencies:
-      safer-buffer: 2.1.2
-    dev: true
 
   /ignore@5.3.1:
     resolution: {integrity: sha512-5Fytz/IraMjqpwfd34ke28PTVMjZjJG2MPn5t7OE4eUCUNf8BAa7b5WUS9/Qvr6mwOQS7Mk6vdsMno5he+T8Xw==}
@@ -6091,6 +6078,7 @@ packages:
 
   /safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
+    dev: false
 
   /scroll-into-view-if-needed@2.2.31:
     resolution: {integrity: sha512-dGCXy99wZQivjmjIqihaBQNjryrz5rueJY7eHfTdyWEiR4ttYpsajb14rn9s5d4DY4EcY6+4+U/maARBXJedkA==}
@@ -7132,7 +7120,7 @@ packages:
       fsevents: 2.3.3
     dev: true
 
-  /vitest@1.3.1(@types/node@20.11.20)(@vitest/ui@1.3.1)(happy-dom@12.10.3):
+  /vitest@1.3.1(@types/node@20.11.20)(@vitest/ui@1.3.1)(happy-dom@13.6.2):
     resolution: {integrity: sha512-/1QJqXs8YbCrfv/GPQ05wAZf2eakUPLPa18vkJAKE7RXOKfVHqMZZ1WlTjiwl6Gcn65M5vpNUB6EFLnEdRdEXQ==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -7168,7 +7156,7 @@ packages:
       chai: 4.4.1
       debug: 4.3.4
       execa: 8.0.1
-      happy-dom: 12.10.3
+      happy-dom: 13.6.2
       local-pkg: 0.5.0
       magic-string: 0.30.7
       pathe: 1.1.2
@@ -7352,13 +7340,6 @@ packages:
 
   /webpack-virtual-modules@0.6.1:
     resolution: {integrity: sha512-poXpCylU7ExuvZK8z+On3kX+S8o/2dQ/SVYueKA0D4WEMXROXgY8Ez50/bQEUmvoSMMrWcrJqCHuhAbsiwg7Dg==}
-    dev: true
-
-  /whatwg-encoding@2.0.0:
-    resolution: {integrity: sha512-p41ogyeMUrw3jWclHWTQg1k05DSVXPLcVxRTYsXUk+ZooOCZLcoYgPZ/HL/D/N+uQPOtcp1me1WhBEaX02mhWg==}
-    engines: {node: '>=12'}
-    dependencies:
-      iconv-lite: 0.6.3
     dev: true
 
   /whatwg-mimetype@3.0.0:

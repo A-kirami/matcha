@@ -71,7 +71,7 @@
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-vue": "^9.19.2",
-    "happy-dom": "^12.10.3",
+    "happy-dom": "^13.0.0",
     "husky": "^8.0.3",
     "internal-ip": "^8.0.0",
     "lint-staged": "^15.2.0",
