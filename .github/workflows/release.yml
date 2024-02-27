@@ -7,7 +7,22 @@ on:
   workflow_dispatch:
 
 jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    outputs:
+      changelog: ${{ steps.release-drafter.outputs.body }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Release changelog
+        uses: release-drafter/release-drafter@v6
+        id: release-drafter
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   release:
+    needs: changelog
     strategy:
       fail-fast: false
       matrix:
@@ -68,7 +83,6 @@ jobs:
         with:
           tagName: 'v__VERSION__'
           releaseName: 'Matcha v__VERSION__'
-          releaseBody: 'See the assets to download and install this version.'
+          releaseBody: ${{ needs.changelog.outputs.changelog }}
           releaseDraft: true
-          prerelease: false
           args: -t ${{ matrix.target }}
