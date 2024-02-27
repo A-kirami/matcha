@@ -88,7 +88,7 @@
     "stylelint-declaration-block-no-ignored-properties": "^2.7.0",
     "typescript": "^5.3.3",
     "unocss": "^0.58.0",
-    "unocss-preset-scrollbar": "^0.2.1",
+    "unocss-preset-scrollbar": "^0.3.0",
     "unplugin-vue-components": "^0.26.0",
     "vite": "^5.0.10",
     "vite-plugin-eslint": "^1.8.1",
