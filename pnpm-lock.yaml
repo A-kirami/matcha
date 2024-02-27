@@ -131,8 +131,8 @@ devDependencies:
     specifier: ^0.58.0
     version: 0.58.5
   '@vitejs/plugin-vue':
-    specifier: ^4.5.2
-    version: 4.6.2(vite@5.1.4)(vue@3.3.12)
+    specifier: ^5.0.0
+    version: 5.0.4(vite@5.1.4)(vue@3.3.12)
   '@vitest/coverage-v8':
     specifier: ^1.0.4
     version: 1.3.1(vitest@1.3.1)
@@ -230,8 +230,8 @@ devDependencies:
     specifier: ^5.3.0
     version: 5.3.1(postcss@8.4.35)(stylelint@16.2.1)(vite@5.1.4)
   vite-svg-loader:
-    specifier: ^4.0.0
-    version: 4.0.0
+    specifier: ^5.0.0
+    version: 5.1.0(vue@3.3.12)
   vitest:
     specifier: ^1.0.4
     version: 1.3.1(@types/node@20.11.20)(@vitest/ui@1.3.1)(happy-dom@12.10.3)
@@ -2151,11 +2151,11 @@ packages:
       - rollup
     dev: true
 
-  /@vitejs/plugin-vue@4.6.2(vite@5.1.4)(vue@3.3.12):
-    resolution: {integrity: sha512-kqf7SGFoG+80aZG6Pf+gsZIVvGSCKE98JbiWqcCV9cThtg91Jav0yvYFC9Zb+jKetNGF6ZKeoaxgZfND21fWKw==}
-    engines: {node: ^14.18.0 || >=16.0.0}
+  /@vitejs/plugin-vue@5.0.4(vite@5.1.4)(vue@3.3.12):
+    resolution: {integrity: sha512-WS3hevEszI6CEVEx28F8RjTX97k3KsrcY6kvTg7+Whm5y3oYvcqzVeGCU3hxSAn4uY2CLCkeokkGKpoctccilQ==}
+    engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
-      vite: ^4.0.0 || ^5.0.0
+      vite: ^5.0.0
       vue: ^3.2.25
     dependencies:
       vite: 5.1.4(@types/node@20.11.20)
@@ -2303,32 +2303,11 @@ packages:
       postcss: 8.4.35
       source-map-js: 1.0.2
 
-  /@vue/compiler-sfc@3.4.20:
-    resolution: {integrity: sha512-nPuTZz0yxTPzjyYe+9nQQsFYImcz/57UX8N3jyhl5oIUUs2jqqAMaULsAlJwve3qNYfjQzq0bwy3pqJrN9ecZw==}
-    dependencies:
-      '@babel/parser': 7.23.9
-      '@vue/compiler-core': 3.4.20
-      '@vue/compiler-dom': 3.4.20
-      '@vue/compiler-ssr': 3.4.20
-      '@vue/shared': 3.4.20
-      estree-walker: 2.0.2
-      magic-string: 0.30.7
-      postcss: 8.4.35
-      source-map-js: 1.0.2
-    dev: true
-
   /@vue/compiler-ssr@3.3.12:
     resolution: {integrity: sha512-adCiMJPznfWcQyk/9HSuXGja859IaMV+b8UNSVzDatqv7h0PvT9BEeS22+gjkWofDiSg5d78/ZLls3sLA+cn3A==}
     dependencies:
       '@vue/compiler-dom': 3.3.12
       '@vue/shared': 3.3.12
-
-  /@vue/compiler-ssr@3.4.20:
-    resolution: {integrity: sha512-b3gFQPiHLvI12C56otzBPpQhZ5kgkJ5RMv/zpLjLC2BIFwX5GktDqYQ7xg0Q2grP6uFI8al3beVKvAVxFtXmIg==}
-    dependencies:
-      '@vue/compiler-dom': 3.4.20
-      '@vue/shared': 3.4.20
-    dev: true
 
   /@vue/devtools-api@6.6.1:
     resolution: {integrity: sha512-LgPscpE3Vs0x96PzSSB4IGVSZXZBZHpfxs+ZA1d+VEPwHdOXowy/Y2CsvCAIFrf+ssVU1pD1jidj505EpUnfbA==}
@@ -7089,11 +7068,13 @@ packages:
       - supports-color
     dev: true
 
-  /vite-svg-loader@4.0.0:
-    resolution: {integrity: sha512-0MMf1yzzSYlV4MGePsLVAOqXsbF5IVxbn4EEzqRnWxTQl8BJg/cfwIzfQNmNQxZp5XXwd4kyRKF1LytuHZTnqA==}
+  /vite-svg-loader@5.1.0(vue@3.3.12):
+    resolution: {integrity: sha512-M/wqwtOEjgb956/+m5ZrYT/Iq6Hax0OakWbokj8+9PXOnB7b/4AxESHieEtnNEy7ZpjsjYW1/5nK8fATQMmRxw==}
+    peerDependencies:
+      vue: '>=3.2.13'
     dependencies:
-      '@vue/compiler-sfc': 3.4.20
       svgo: 3.2.0
+      vue: 3.3.12(typescript@5.3.3)
     dev: true
 
   /vite@5.1.4(@types/node@20.11.20):
