@@ -1,0 +1,21 @@
+name: Dependency Review
+
+on:
+  pull_request_target:
+    branches:
+      - main
+    paths:
+      - package.json
+      - src-tauri/Cargo.toml
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
