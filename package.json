@@ -72,7 +72,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-vue": "^9.19.2",
     "happy-dom": "^12.10.3",
-    "husky": "^8.0.3",
+    "husky": "^9.0.0",
     "internal-ip": "^8.0.0",
     "lint-staged": "^15.2.0",
     "postcss-html": "^1.5.0",
