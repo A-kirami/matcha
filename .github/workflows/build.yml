@@ -1,8 +1,5 @@
 name: Build
 
-permissions:
-  contents: write
-
 on:
   push:
     branches:
@@ -23,7 +20,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-binaries:
+  build:
     strategy:
       fail-fast: false
       matrix:
@@ -77,15 +74,18 @@ jobs:
       - name: Rustup add target
         run: rustup target add ${{ matrix.target }}
 
-      - uses: JonasKruckenberg/tauri-build@v1.4
-        id: tauri_build
+      - name: Build the app
+        uses: tauri-apps/tauri-action@v0
+        id: tauri-build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          target: ${{ matrix.target }}
+          args: -t ${{ matrix.target }}
 
-      - uses: benjlevesque/short-sha@v2.2
+      - uses: benjlevesque/short-sha@v3.0
         id: short-sha
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
-          name: 'matcha-${{ matrix.label }}-${{ steps.short-sha.outputs.sha }}'
-          path: "${{ join(fromJSON(steps.tauri_build.outputs.artifacts), '\n') }}"
+          name: 'matcha_${{steps.tauri-build.outputs.appVersion}}_${{ matrix.label }}_${{ steps.short-sha.outputs.sha }}'
+          path: "${{ join(fromJSON(steps.tauri-build.outputs.artifactPaths), '\n') }}"
