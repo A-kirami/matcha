@@ -1,11 +1,11 @@
 /* eslint-disable camelcase */
 import { getVersion } from '@tauri-apps/api/app'
+import * as logger from '@tauri-apps/plugin-log'
 
 import { AdapterActionHandler } from '@/adapter/action'
 import { Behav } from '@/adapter/behav'
 import { UnsupportedActionError, InternalHandlerError, ProtocolError } from '@/adapter/errors'
 import { db } from '@/database'
-import { logger } from '@/plugins'
 import { useStatusStore, useChatStore } from '@/stores'
 import { asyncWrapper, getUserAge } from '@/utils'
 

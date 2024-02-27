@@ -136,9 +136,6 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 
-# Tauri
-src-tauri/target
-
 # Unplugin Vue Components
 components.d.ts
 

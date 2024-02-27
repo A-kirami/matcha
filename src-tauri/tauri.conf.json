@@ -1,94 +1,52 @@
 {
+  "productName": "matcha",
+  "version": "../package.json",
+  "identifier": "com.akirami.matcha",
   "build": {
     "beforeDevCommand": "pnpm dev",
+    "devUrl": "http://localhost:1420",
     "beforeBuildCommand": "pnpm build",
-    "devPath": "http://localhost:1420",
-    "distDir": "../dist",
-    "withGlobalTauri": false
+    "frontendDist": "../dist"
   },
-  "package": {
-    "productName": "matcha",
-    "version": "0.2.5"
-  },
-  "tauri": {
+  "app": {
     "macOSPrivateApi": true,
     "windows": [
       {
         "title": "Matcha",
-        "fullscreen": false,
         "height": 800,
         "width": 1280,
         "minHeight": 640,
         "minWidth": 798,
-        "resizable": true,
         "center": true,
         "decorations": false,
         "transparent": true
       }
     ],
-    "allowlist": {
-      "app": {
-        "all": true
-      },
-      "os": {
-        "all": true
-      },
-      "path": {
-        "all": true
-      },
-      "fs": {
-        "all": true,
-        "scope": ["$APPCACHE/*", "$APPCACHE/*/**"]
-      },
-      "shell": {
-        "all": false,
-        "open": true
-      },
-      "window": {
-        "all": true
-      }
-    },
-    "bundle": {
-      "active": true,
-      "category": "DeveloperTool",
-      "copyright": "",
-      "externalBin": [],
-      "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
-      "identifier": "com.akirami.matcha",
-      "longDescription": "",
-      "resources": [],
-      "shortDescription": "",
-      "targets": "all",
-      "deb": {
-        "depends": []
-      },
-      "macOS": {
-        "exceptionDomain": "",
-        "frameworks": []
-      },
-      "windows": {
-        "digestAlgorithm": "sha256",
-        "timestampUrl": "",
-        "webviewInstallMode": {
-          "type": "embedBootstrapper"
-        },
-        "wix": {
-          "language": "zh-CN"
-        },
-        "nsis": {
-          "license": "../LICENSE",
-          "headerImage": "images/installer_header.bmp",
-          "sidebarImage": "images/installer_sidebar.bmp",
-          "installerIcon": "icons/icon.ico",
-          "languages": ["SimpChinese"]
-        }
-      }
-    },
     "security": {
       "csp": null
-    },
-    "updater": {
-      "active": false
+    }
+  },
+  "bundle": {
+    "active": true,
+    "category": "DeveloperTool",
+    "copyright": "Copyright © 2023 Akirami",
+    "shortDescription": "模拟聊天交互的辅助开发工具",
+    "longDescription": "Matcha 是一个专为 KiramiBot 设计的辅助开发工具，能够与 KiramiBot 进行模拟聊天交互，同时提供一系列的开发辅助功能",
+    "targets": "all",
+    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
+    "licenseFile": "../LICENSE",
+    "windows": {
+      "wix": {
+        "language": "zh-CN",
+        "bannerPath": "images/wix_banner.png",
+        "dialogImagePath": "images/wix_dialog.png"
+      },
+      "nsis": {
+        "headerImage": "images/nsis_header.bmp",
+        "sidebarImage": "images/nsis_sidebar.bmp",
+        "installerIcon": "icons/icon.ico",
+        "languages": ["SimpChinese"]
+      }
     }
   }
 }

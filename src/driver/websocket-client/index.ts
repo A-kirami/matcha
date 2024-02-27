@@ -1,15 +1,15 @@
 import { decode, encode } from '@msgpack/msgpack'
+import * as logger from '@tauri-apps/plugin-log'
+import WebSocket from '@tauri-apps/plugin-websocket'
 
 import { Adapter } from '@/adapter/adapter'
-import { logger } from '@/plugins'
-import WebSocket from '@/plugins/websocket'
 import { getUUID } from '@/utils'
 
 import { Driver } from '../driver'
 
 import type { ActionRequest } from '@/adapter/action'
 import type { Event } from '@/adapter/event'
-import type { Message, ConnectionConfig } from '@/plugins/websocket'
+import type { Message, ConnectionConfig } from '@tauri-apps/plugin-websocket'
 
 export class websocketClient implements Driver {
   ws: WebSocket | null = null
@@ -101,9 +101,9 @@ export class websocketClient implements Driver {
   }
 
   async getConnectConfig(): Promise<ConnectionConfig> {
-    const connectConfig = { extraHeaders: await this.adapter.getConnectHeaders() }
+    const connectConfig = { headers: await this.adapter.getConnectHeaders() }
     if (this.adapter.config.accessToken !== null) {
-      connectConfig.extraHeaders.Authorization = 'Bearer' + this.adapter.config.accessToken
+      connectConfig.headers.Authorization = 'Bearer' + this.adapter.config.accessToken
     }
     return connectConfig
   }

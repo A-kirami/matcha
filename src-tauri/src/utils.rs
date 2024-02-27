@@ -9,6 +9,7 @@ use std::net::TcpListener;
 use std::path::PathBuf;
 use std::str;
 use tauri::AppHandle;
+use tauri::Manager;
 
 const HTTP_URL_REGEX: &str = r#"^(https?://)[^\s]+"#;
 const FILE_URL_REGEX: &str = r#"^file://"#;
@@ -34,7 +35,7 @@ impl FileType {
 }
 
 pub fn get_cache_file_path(app_handle: AppHandle) -> PathBuf {
-    let mut cache_dir = app_handle.path_resolver().app_cache_dir().unwrap();
+    let mut cache_dir = app_handle.path().app_cache_dir().unwrap();
     cache_dir.push("cache");
     fs::create_dir_all(&cache_dir).unwrap();
     cache_dir

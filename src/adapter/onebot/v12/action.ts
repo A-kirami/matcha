@@ -1,12 +1,12 @@
 /* eslint-disable camelcase */
 import { getVersion } from '@tauri-apps/api/app'
-import { invoke } from '@tauri-apps/api/tauri'
+import { invoke } from '@tauri-apps/api/core'
+import * as logger from '@tauri-apps/plugin-log'
 
 import { AdapterActionHandler } from '@/adapter/action'
 import { Behav } from '@/adapter/behav'
 import { UnsupportedActionError, InternalHandlerError, ProtocolError } from '@/adapter/errors'
 import { db } from '@/database'
-import { logger } from '@/plugins'
 import { useStatusStore } from '@/stores'
 import { asyncWrapper, getFile, GetType, getUUID } from '@/utils'
 

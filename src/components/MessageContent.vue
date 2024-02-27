@@ -1,6 +1,6 @@
 <!-- eslint-disable no-await-in-loop -->
 <script setup lang="ts">
-import { WebviewWindow } from '@tauri-apps/api/window'
+import { WebviewWindow } from '@tauri-apps/api/webviewWindow'
 import ClipboardJS from 'clipboard'
 import linkifyStr from 'linkify-string'
 import { onBeforeMount, onUnmounted } from 'vue'

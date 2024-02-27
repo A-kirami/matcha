@@ -9,41 +9,34 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[lib]
+name = "matcha_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
 [build-dependencies]
-tauri-build = { version = "1.5", features = [] }
+tauri-build = { version = "2.0.0-beta", features = [] }
 
 [dependencies]
-tauri = { version = "1.5", features = ["app-all", "devtools", "fs-all", "macos-private-api", "os-all", "path-all", "shell-open", "window-all"] }
-serde_json = "1.0"
+tauri = { version = "2.0.0-beta", features = ["macos-private-api", "devtools"] }
+tauri-plugin-os = "2.0.0-beta"
+tauri-plugin-log = "2.0.0-beta"
+tauri-plugin-websocket = "2.0.0-beta"
 serde = { version = "1.0", features = ["derive"] }
-window-shadows = "0.2.1"
-tokio = { version = "1.29", features = ["full"] }
-tokio-tungstenite = { version = "0.19", features = ["native-tls"] }
+serde_json = "1.0"
 anyhow = "1.0"
-rand = "0.8"
-futures-util = "0.3"
-log = { version = "0.4", features = ["kv_unstable"] }
-thiserror = "1"
+tokio = "1.36"
+log = "0.4"
 infer = { version = "0.15", default-features = false }
 warp = "0.3"
 reqwest = "0.11"
 regex = "1.9"
 base64 = "0.21"
-serde_repr = "0.1"
-byte-unit = "4.0"
-fern = "0.6"
-time = { version = "0.3", features = ["formatting", "local-offset"] }
 sha2 = "0.10"
 url = "2.4"
 
 [features]
-# by default Tauri runs in production mode
-# when `tauri dev` runs it is executed with `cargo run --no-default-features` if `devPath` is an URL
-default = ["custom-protocol"]
-# this feature is used used for production builds where `devPath` points to the filesystem
-# DO NOT remove this
+# This feature is used for production builds or when a dev server is not specified, DO NOT REMOVE!!
 custom-protocol = ["tauri/custom-protocol"]
-colored = ["fern/colored"]
 
 [profile.release]
 panic = "abort" # Strip expensive panic clean-up logic
