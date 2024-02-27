@@ -30,7 +30,7 @@ reqwest = "0.11"
 regex = "1.9"
 base64 = "0.21"
 serde_repr = "0.1"
-byte-unit = "4.0"
+byte-unit = "5.1"
 fern = "0.6"
 time = { version = "0.3", features = ["formatting", "local-offset"] }
 sha2 = "0.10"
