@@ -1,20 +1,19 @@
 <script setup lang="ts">
+import { attachConsole } from '@tauri-apps/plugin-log'
 import { message } from 'ant-design-vue'
 import { locale as dayjsLocale } from 'dayjs'
 import { onBeforeMount } from 'vue'
 
-import { logger } from '@/plugins'
-
 import 'dayjs/locale/zh-cn'
 
+dayjsLocale('zh-cn')
+
+message.config({
+  maxCount: 7,
+})
+
 onBeforeMount(async () => {
-  dayjsLocale('zh-cn')
-
-  message.config({
-    maxCount: 7,
-  })
-
-  await logger.attachConsole()
+  await attachConsole()
 })
 
 document.addEventListener('contextmenu', (e) => {

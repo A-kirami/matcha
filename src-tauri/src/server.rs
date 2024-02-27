@@ -13,7 +13,7 @@ pub fn start_static_file_server(cache_path: PathBuf, port: u16) {
         .and(warp::path("cache"))
         .and(warp::path::param::<String>())
         .and_then(move |file: String| {
-            let file_path = cache_path.join("cache").join(&file);
+            let file_path = cache_path.join("cache").join(file);
             async move {
                 if file_path.exists() {
                     let content = std::fs::read(file_path).unwrap();

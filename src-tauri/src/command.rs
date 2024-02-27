@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fs::{self, File};
 use std::io::{Read, Seek, SeekFrom, Write};
-use tauri::{AppHandle, Window};
+use tauri::{AppHandle, WebviewWindow};
 
 #[tauri::command(async)]
 pub fn read_file(
@@ -49,7 +49,7 @@ pub fn get_file_type(file: Vec<u8>) -> Result<String, String> {
 }
 
 #[tauri::command]
-pub fn open_devtools(window: Window) {
+pub fn open_devtools(window: WebviewWindow) {
     window.open_devtools();
 }
 

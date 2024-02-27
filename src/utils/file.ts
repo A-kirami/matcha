@@ -1,5 +1,5 @@
+import { invoke } from '@tauri-apps/api/core'
 import { appCacheDir, join } from '@tauri-apps/api/path'
-import { invoke } from '@tauri-apps/api/tauri'
 
 import { db } from '@/database'
 

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
+import * as logger from '@tauri-apps/plugin-log'
+
 import * as CommDriver from '@/driver'
-import { logger } from '@/plugins'
 import { useChatStore, useStatusStore } from '@/stores'
 
 import { ProtocolError } from './errors'

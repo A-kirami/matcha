@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { getTauriVersion, getVersion } from '@tauri-apps/api/app'
-import { arch, platform, type, version } from '@tauri-apps/api/os'
+import { arch, platform, type, version } from '@tauri-apps/plugin-os'
 import { Base64 } from 'js-base64'
 
 import { Adapter } from '@/adapter/adapter'
