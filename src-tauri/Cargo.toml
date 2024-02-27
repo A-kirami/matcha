@@ -17,7 +17,7 @@ tauri = { version = "1.5", features = ["app-all", "devtools", "fs-all", "macos-p
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 window-shadows = "0.2.1"
-tokio = { version = "1.29", features = ["full"] }
+tokio = { version = "1.36", features = ["full"] }
 tokio-tungstenite = { version = "0.19", features = ["native-tls"] }
 anyhow = "1.0"
 rand = "0.8"
