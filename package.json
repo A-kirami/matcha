@@ -46,7 +46,7 @@
     "vue-inline-svg": "^3.1.2",
     "vue-router": "^4.3.0",
     "vue-virtual-scroller": "2.0.0-beta.8",
-    "vue3-video-play": "1.3.1-beta.6",
+    "vue3-video-play": "1.3.2",
     "waveform-path": "^0.0.1"
   },
   "devDependencies": {

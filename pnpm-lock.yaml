@@ -93,8 +93,8 @@ dependencies:
     specifier: 2.0.0-beta.8
     version: 2.0.0-beta.8(vue@3.4.20)
   vue3-video-play:
-    specifier: 1.3.1-beta.6
-    version: 1.3.1-beta.6(typescript@5.3.3)
+    specifier: 1.3.2
+    version: 1.3.2(typescript@5.3.3)
   waveform-path:
     specifier: ^0.0.1
     version: 0.0.1
@@ -7727,8 +7727,8 @@ packages:
       vue-resize: 2.0.0-alpha.1(vue@3.4.20)
     dev: false
 
-  /vue3-video-play@1.3.1-beta.6(typescript@5.3.3):
-    resolution: {integrity: sha512-Olrx2/LNAds7fuor/yX9ZKT9sOcwcfTt2g2YbbCrEaAmZ5Tb0hwBr5z+/CoLwELzzRzXCHPmWWoT0Wm5W/Nwpw==}
+  /vue3-video-play@1.3.2(typescript@5.3.3):
+    resolution: {integrity: sha512-eEwCJ0NIkfVQgTj0I3Kf9b1E/04Qne8mQQiE8r77BocblHsZ2T6af3q8l8Zzs/OvjlpQAQvkN/ACVUOJC3RSXg==}
     dependencies:
       hls.js: 1.5.6
       throttle-debounce: 3.0.1
