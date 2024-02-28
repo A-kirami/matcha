@@ -1,7 +1,7 @@
 {
   "env": {
     "browser": true,
-    "es2021": true,
+    "es2022": true,
     "node": true
   },
   "extends": [
@@ -22,21 +22,8 @@
   },
   "plugins": ["vue", "@typescript-eslint"],
   "parser": "vue-eslint-parser",
-  "globals": {
-    "defineProps": "readonly",
-    "defineEmits": "readonly",
-    "defineExpose": "readonly",
-    "withDefaults": "readonly",
-    "$ref": "readonly",
-    "$computed": "readonly",
-    "$shallowRef": "readonly",
-    "$customRef": "readonly",
-    "$toRef": "readonly",
-    "$": "readonly",
-    "$$": "readonly"
-  },
   "rules": {
-    "linebreak-style": 0,
+    "linebreak-style": "off",
     "quotes": ["warn", "single"],
     "semi": ["warn", "never"],
     "object-shorthand": ["warn", "always"],
@@ -100,6 +87,7 @@
     "no-empty": "warn",
     "no-constant-condition": "error",
     "no-var": "error",
+    "no-undef": "off",
     "spaced-comment": ["warn", "always", { "markers": ["/"] }],
     "no-console": "warn",
     "accessor-pairs": "error",

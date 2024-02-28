@@ -9,10 +9,8 @@ import { router } from '@/router'
 
 import App from './App.vue'
 
-// eslint-disable-next-line import/no-unresolved
-import 'uno.css'
 import '@unocss/reset/tailwind.css'
-import 'virtual:unocss-devtools'
+import 'virtual:uno.css'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import 'overlayscrollbars/overlayscrollbars.css'
 import 'ant-design-vue/es/message/style/css'

@@ -28,7 +28,10 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "types": ["vitest/globals"]
+    "types": ["vite/client", "vitest/globals", "unplugin-vue-macros/macros-global"]
+  },
+  "vueCompilerOptions": {
+    "plugins": ["@vue-macros/volar/define-slots", "@vue-macros/volar/define-models", "@vue-macros/volar/define-props"]
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "tests/**/*.test.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]

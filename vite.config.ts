@@ -1,16 +1,16 @@
 /* eslint-disable new-cap */
 import { join } from 'path'
 
-import vue from '@vitejs/plugin-vue'
+import Vue from '@vitejs/plugin-vue'
 import { internalIpV4 } from 'internal-ip'
 import postcssPresetEnv from 'postcss-preset-env'
 import UnoCSS from 'unocss/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
+import VueMacros from 'unplugin-vue-macros/vite'
 import { defineConfig } from 'vite'
-import eslint from 'vite-plugin-eslint'
-import stylelint from 'vite-plugin-stylelint'
-import SvgLoader from 'vite-svg-loader'
+import Eslint from 'vite-plugin-eslint'
+import Stylelint from 'vite-plugin-stylelint'
 
 const mobile = !!/android|ios/.exec(process.env.TAURI_ENV_PLATFORM)
 
@@ -19,18 +19,19 @@ export default defineConfig(async ({ mode }) => {
   const isDev = mode === 'development'
 
   const plugins = [
-    vue({
-      reactivityTransform: true,
+    VueMacros({
+      plugins: {
+        vue: Vue(),
+      },
     }),
-    UnoCSS(),
-    SvgLoader(),
     Components({
       resolvers: [AntDesignVueResolver()],
     }),
+    UnoCSS(),
   ]
 
   if (!isDev) {
-    plugins.push(eslint(), stylelint())
+    plugins.push(Eslint(), Stylelint())
   }
 
   return {

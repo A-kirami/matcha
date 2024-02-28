@@ -136,7 +136,7 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 
-# Unplugin Vue Components
+# Auto-generated type file
 components.d.ts
 
 # VisualStudioCode
