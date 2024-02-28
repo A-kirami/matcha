@@ -29,7 +29,7 @@ log = "0.4"
 infer = { version = "0.15", default-features = false }
 warp = "0.3"
 reqwest = "0.11"
-regex = "1.9"
+regex = "1.10"
 base64 = "0.21"
 sha2 = "0.10"
 url = "2.4"
