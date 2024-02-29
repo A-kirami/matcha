@@ -18,15 +18,3 @@ declare module 'vue-virtual-scroller' {
 
   export default plugin
 }
-
-declare module 'vue3-video-play' {
-  import type { DefineComponent } from 'vue'
-
-  const component: DefineComponent<unknown, unknown, unknown>
-  export default component
-}
-
-declare module 'waveform-path' {
-  export function getAudioData(url: string): Promise<AudioBuffer>
-  export function linearPath(audioBuffer: AudioBuffer, options: object): string
-}

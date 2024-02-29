@@ -1,5 +1,3 @@
-import { nonNullable, asyncWrapper } from '@/utils'
-
 import type { Contents } from './content'
 import type { StrKeyObject } from './typed'
 
@@ -25,16 +23,14 @@ export abstract class AdapterMessageHandler<M extends Message> {
     const collect = contents.map(async (content) => {
       return await this.handle(content, this.buildStrategy)
     })
-    const messages = (await Promise.all(collect)).filter(nonNullable)
-    return messages
+    return (await Promise.all(collect)).filter(nonNullable)
   }
 
   async parse(messages: M[]): Promise<Contents[]> {
     const collect = messages.map(async (message) => {
       return await this.handle(message, this.parseStrategy)
     })
-    const contents = (await Promise.all(collect)).filter(nonNullable)
-    return contents
+    return (await Promise.all(collect)).filter(nonNullable)
   }
 
   private async handle(context: Contents, strategy: MessageBuildStrategy<unknown>): Promise<M | undefined>
@@ -43,7 +39,7 @@ export abstract class AdapterMessageHandler<M extends Message> {
     context: Contents | M,
     strategy: MessageBuildStrategy<unknown> | MessageParseStrategy<unknown>
   ): Promise<M | Contents | undefined> {
-    const type = context.type
+    const { type } = context
     const func = (strategy as Strategy<M | Contents>)[type]
     if (func) {
       const asyncFn = asyncWrapper<M | Contents>(func)

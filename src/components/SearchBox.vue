@@ -38,7 +38,7 @@
   </form>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
 .form {
   --input-text-color: hsl(0deg 0% 100%);
   --input-bg-color: hsl(210deg 25% 21%);

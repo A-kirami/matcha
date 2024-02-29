@@ -1,9 +1,4 @@
 <script setup lang="ts">
-import { watch } from 'vue'
-
-import { useStatusStore } from '@/stores'
-import { getUserNickname } from '@/utils'
-
 import type {
   NoticeScenes,
   OfflineFileNoticeScene,
@@ -19,8 +14,8 @@ import type {
   GroupEssenceNoticeScene,
   GroupHongbaoLuckyNoticeScene,
   GroupWholeBanNoticeScene,
-} from '@/adapter/scene'
-import type { Notice } from '@/stores/chat'
+} from '~/adapter/scene'
+import type { Notice } from '~/stores/chat'
 
 const { notice } = defineProps<{
   notice: Notice

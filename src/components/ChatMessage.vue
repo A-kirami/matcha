@@ -1,22 +1,15 @@
 <script setup lang="ts">
-import { useElementVisibility } from '@vueuse/core'
 import { unix } from 'dayjs'
-import { watch } from 'vue'
 import InlineSvg from 'vue-inline-svg'
 
-import { Behav } from '@/adapter/behav'
-import ChangeIcon from '@/assets/change.svg?url'
-import FailIcon from '@/assets/fail.svg?url'
-import TickIcon from '@/assets/tick.svg?url'
-import Avatar from '@/components/Avatar.vue'
-import HighlightCode from '@/components/HighlightCode.vue'
-import MessageContent from '@/components/MessageContent.vue'
-import { useStatusStore, useChatStore } from '@/stores'
-import { getUUID, getTimestamp, getMessageId } from '@/utils'
+import { Behav } from '~/adapter/behav'
+import ChangeIcon from '~/assets/change.svg?url'
+import FailIcon from '~/assets/fail.svg?url'
+import TickIcon from '~/assets/tick.svg?url'
 
-import type { ContentMapping } from '@/adapter/content'
-import type { MessageScenes } from '@/adapter/scene'
-import type { Message } from '@/stores/chat'
+import type { ContentMapping } from '~/adapter/content'
+import type { MessageScenes } from '~/adapter/scene'
+import type { Message } from '~/stores/chat'
 
 const { message } = defineProps<{
   message: Message
@@ -188,7 +181,7 @@ async function pokeUser(): Promise<void> {
   </div>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
 .bot-message {
   @apply bg-white rounded-r-xl;
 }

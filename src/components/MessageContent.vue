@@ -3,15 +3,11 @@
 import { WebviewWindow } from '@tauri-apps/api/webviewWindow'
 import ClipboardJS from 'clipboard'
 import linkifyStr from 'linkify-string'
-import { onBeforeMount, onUnmounted } from 'vue'
 
-import { Behav } from '@/adapter/behav'
-import WaveAudioPlayer from '@/components/WaveAudioPlayer.vue'
-import { useChatStore, useSessionStore } from '@/stores'
-import { getMentionString, getUserNickname } from '@/utils'
+import { Behav } from '~/adapter/behav'
 
-import type { Contents } from '@/adapter/content'
-import type { ReplyMessageInfo } from '@/stores/session'
+import type { Contents } from '~/adapter/content'
+import type { ReplyMessageInfo } from '~/stores/session'
 
 const { messageId, messages, onlyImage } = defineProps<{
   messageId: string
@@ -277,7 +273,7 @@ function openContextmenu(e: MouseEvent): void {
   </div>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
 .video-cover svg {
   @apply transition-transform;
 }

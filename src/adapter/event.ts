@@ -1,5 +1,3 @@
-import { asyncWrapper } from '@/utils'
-
 import type { Scenes } from './scene'
 import type { StrKeyObject } from './typed'
 

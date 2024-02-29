@@ -11,7 +11,7 @@ import { UseDark } from '@vueuse/components'
   </UseDark>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
 .switch {
   position: relative;
   display: inline-block;

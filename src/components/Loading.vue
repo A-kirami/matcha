@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
 .spinner {
   display: grid;
   width: 56px;

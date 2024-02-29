@@ -1,25 +1,13 @@
 <script setup lang="ts">
-import { useDebounceFn } from '@vueuse/core'
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-vue'
-import { watchEffect } from 'vue'
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 
-import { Behav } from '@/adapter/behav'
-import { checkMatchaCommand, runMatchaCommand } from '@/command'
-import ChatBoxTopbar from '@/components/ChatBoxTopbar.vue'
-import ChatInput from '@/components/ChatInput.vue'
-import ChatMessage from '@/components/ChatMessage.vue'
-import ChatNotice from '@/components/ChatNotice.vue'
-import ChatRequest from '@/components/ChatRequest.vue'
-import SendButton from '@/components/SendButton.vue'
-import TimeSeparator from '@/components/TimeSeparator.vue'
-import { db } from '@/database'
-import { useChatStore, useStatusStore, useSessionStore } from '@/stores'
+import { Behav } from '~/adapter/behav'
+import { checkMatchaCommand, runMatchaCommand } from '~/command'
 
-import type { User, Group } from '@/database'
-import type { State } from '@/stores/session'
 import type { PartialOptions, OverlayScrollbars } from 'overlayscrollbars'
+import type ChatInput from '~/components/ChatInput.vue'
+import type { State } from '~/stores/session'
 
 const { chatType, chatId } = defineProps<{
   chatType: 'private' | 'group'

@@ -1,13 +1,9 @@
 /* eslint-disable camelcase */
 import { getVersion } from '@tauri-apps/api/app'
-import * as logger from '@tauri-apps/plugin-log'
 
-import { AdapterActionHandler } from '@/adapter/action'
-import { Behav } from '@/adapter/behav'
-import { UnsupportedActionError, InternalHandlerError, ProtocolError } from '@/adapter/errors'
-import { db } from '@/database'
-import { useStatusStore, useChatStore } from '@/stores'
-import { asyncWrapper, getUserAge } from '@/utils'
+import { AdapterActionHandler } from '~/adapter/action'
+import { Behav } from '~/adapter/behav'
+import { UnsupportedActionError, InternalHandlerError, ProtocolError } from '~/adapter/errors'
 
 import { MessageHandler, createMessage } from './message'
 import { response } from './utils'
@@ -21,9 +17,8 @@ import type {
   GroupRequestEvent,
 } from './event'
 import type { Messages, PokeMessage } from './message'
-import type { ActionResponse, ActionRequest, ActionStrategy } from '@/adapter/action'
-import type { StrKeyObject } from '@/adapter/typed'
-import type { Group, Member, User } from '@/database'
+import type { ActionResponse, ActionRequest, ActionStrategy } from '~/adapter/action'
+import type { StrKeyObject } from '~/adapter/typed'
 
 const messageHandler = new MessageHandler()
 
@@ -599,7 +594,7 @@ function getGroupInfo(group: Group): GroupInfo {
 async function getMemberInfo(member: Member, role: 'owner' | 'admin' | 'member'): Promise<MemberInfo> {
   const chat = useChatStore()
   const lastSentTime = chat.chatLogs.filter((chat) => chat.type === 'message').at(-1)?.scene.time
-  const cardChangeable = role === 'owner' ? true : role === 'admin' && member.role !== 'owner' ? true : false
+  const cardChangeable = role === 'owner' ? true : !!(role === 'admin' && member.role !== 'owner')
   const user = (await db.users.get(member.userId)) as User
   return {
     group_id: Number(member.groupId),

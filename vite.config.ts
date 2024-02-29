@@ -1,81 +1,86 @@
 /* eslint-disable new-cap */
-import { join } from 'path'
+import { resolve } from 'node:path'
 
 import Vue from '@vitejs/plugin-vue'
 import { internalIpV4 } from 'internal-ip'
-import postcssPresetEnv from 'postcss-preset-env'
+import postcssNesting from 'postcss-nesting'
 import UnoCSS from 'unocss/vite'
+import AutoImport from 'unplugin-auto-import/vite'
+import TurboConsole from 'unplugin-turbo-console/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import VueMacros from 'unplugin-vue-macros/vite'
 import { defineConfig } from 'vite'
-import Eslint from 'vite-plugin-eslint'
-import Stylelint from 'vite-plugin-stylelint'
+import VueDevTools from 'vite-plugin-vue-devtools'
 
 const mobile = !!/android|ios/.exec(process.env.TAURI_ENV_PLATFORM)
 
 // https://vitejs.dev/config/
-export default defineConfig(async ({ mode }) => {
-  const isDev = mode === 'development'
-
-  const plugins = [
+export default defineConfig(async () => ({
+  plugins: [
     VueMacros({
       plugins: {
         vue: Vue(),
       },
     }),
+    AutoImport({
+      imports: [
+        'vue',
+        'vue-router',
+        '@vueuse/core',
+        {
+          '@tauri-apps/plugin-log': [['*', 'logger']],
+        },
+        {
+          from: 'src/database',
+          imports: ['User', 'Friend', 'Group', 'Member'],
+          type: true,
+        },
+      ],
+      dirs: ['src/database', 'src/stores', 'src/utils'],
+      dts: 'src/auto-imports.d.ts',
+      vueTemplate: true,
+    }),
     Components({
       resolvers: [AntDesignVueResolver()],
+      dts: 'src/components.d.ts',
     }),
     UnoCSS(),
-  ]
+    TurboConsole(),
+    VueDevTools(),
+  ],
 
-  if (!isDev) {
-    plugins.push(Eslint(), Stylelint())
-  }
-
-  return {
-    plugins,
-
-    resolve: {
-      alias: {
-        '@': join(__dirname, 'src'),
-      },
+  resolve: {
+    alias: {
+      '~': resolve(__dirname, 'src'),
     },
+  },
 
-    css: {
-      postcss: {
-        plugins: [
-          postcssPresetEnv({
-            stage: 3,
-            features: {
-              'nesting-rules': true,
-            },
-          }),
-        ],
-      },
+  css: {
+    postcss: {
+      plugins: [postcssNesting()],
     },
+  },
 
-    // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
-    //
-    // 1. prevent vite from obscuring rust errors
-    clearScreen: false,
-    // 2. tauri expects a fixed port, fail if that port is not available
-    server: {
-      port: 1420,
-      strictPort: true,
-      host: mobile ? '0.0.0.0' : false,
-      hmr: mobile
-        ? {
-            protocol: 'ws',
-            host: await internalIpV4(),
-            port: 1421,
-          }
-        : undefined,
-      watch: {
-        // 3. tell vite to ignore watching `src-tauri`
-        ignored: ['**/src-tauri/**'],
-      },
+  // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
+  //
+  // 1. prevent vite from obscuring rust errors
+  clearScreen: false,
+  // 2. tauri expects a fixed port, fail if that port is not available
+  server: {
+    port: 1420,
+    strictPort: true,
+    host: mobile ? '0.0.0.0' : false,
+    hmr: mobile
+      ? {
+          protocol: 'ws',
+          host: await internalIpV4(),
+          port: 1421,
+        }
+      : undefined,
+    watch: {
+      // 3. tell vite to ignore watching `src-tauri`
+      ignored: ['**/src-tauri/**'],
     },
-  }
-})
+  },
+}))

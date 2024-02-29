@@ -1,22 +1,18 @@
 <script setup lang="ts">
 import InlineSvg from 'vue-inline-svg'
 
-import ChatActiveIcon from '@/assets/chat-active.svg?url'
-import ChatIcon from '@/assets/chat.svg?url'
-import CodeActiveIcon from '@/assets/code-active.svg?url'
-import CodeIcon from '@/assets/code.svg?url'
-import ServiceActiveIcon from '@/assets/service-active.svg?url'
-import ServiceIcon from '@/assets/service.svg?url'
-import SettingActiveIcon from '@/assets/setting-active.svg?url'
-import SettingIcon from '@/assets/setting.svg?url'
-import TestActiveIcon from '@/assets/test-active.svg?url'
-import TestIcon from '@/assets/test.svg?url'
-import ToolActiveIcon from '@/assets/tool-active.svg?url'
-import ToolIcon from '@/assets/tool.svg?url'
-import Avatar from '@/components/Avatar.vue'
-import SelectUserList from '@/components/SelectUserList.vue'
-import ThemeSwitch from '@/components/ThemeSwitch.vue'
-import { useStatusStore } from '@/stores'
+import ChatActiveIcon from '~/assets/chat-active.svg?url'
+import ChatIcon from '~/assets/chat.svg?url'
+import CodeActiveIcon from '~/assets/code-active.svg?url'
+import CodeIcon from '~/assets/code.svg?url'
+import ServiceActiveIcon from '~/assets/service-active.svg?url'
+import ServiceIcon from '~/assets/service.svg?url'
+import SettingActiveIcon from '~/assets/setting-active.svg?url'
+import SettingIcon from '~/assets/setting.svg?url'
+import TestActiveIcon from '~/assets/test-active.svg?url'
+import TestIcon from '~/assets/test.svg?url'
+import ToolActiveIcon from '~/assets/tool-active.svg?url'
+import ToolIcon from '~/assets/tool.svg?url'
 
 const status = useStatusStore()
 
@@ -113,7 +109,7 @@ function openUserForm() {
   </aside>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
 .active {
   @apply text-[#70aeff] scale-110;
 }

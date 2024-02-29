@@ -136,9 +136,6 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 
-# Auto-generated type file
-components.d.ts
-
 # VisualStudioCode
 .vscode/*
 # !.vscode/settings.json

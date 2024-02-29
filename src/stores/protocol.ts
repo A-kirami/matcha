@@ -1,9 +1,6 @@
 import { defineStore } from 'pinia'
-import { watch, computed } from 'vue'
 
-import { adapters } from '@/adapter'
-
-import { useConfigStore } from './config'
+import { adapters } from '~/adapter'
 
 export const useAdapterStore = defineStore('adapter', () => {
   const config = useConfigStore()

@@ -1,8 +1,7 @@
 /* eslint-disable camelcase */
 
-import { createContent } from '@/adapter/content'
-import { AdapterMessageHandler } from '@/adapter/message'
-import { randomInt, createFileCache } from '@/utils'
+import { createContent } from '~/adapter/content'
+import { AdapterMessageHandler } from '~/adapter/message'
 
 import type {
   TextContent,
@@ -24,9 +23,9 @@ import type {
   ForwardContent,
   ForwardContentNode,
   ContentMapping,
-} from '@/adapter/content'
-import type { Message as AdapterMessage, MessageBuildStrategy, MessageParseStrategy } from '@/adapter/message'
-import type { StrKeyObject, ValueOf } from '@/adapter/typed'
+} from '~/adapter/content'
+import type { Message as AdapterMessage, MessageBuildStrategy, MessageParseStrategy } from '~/adapter/message'
+import type { StrKeyObject, ValueOf } from '~/adapter/typed'
 
 interface Message<T extends string = string, D extends StrKeyObject = StrKeyObject> extends AdapterMessage {
   type: T

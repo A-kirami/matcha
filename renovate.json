@@ -1,11 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:base"
-  ],
-  "labels": [
-    "dependencies"
-  ],
+  "extends": ["config:base"],
+  "labels": ["dependencies"],
   "dependencyDashboard": false,
   "minimumReleaseAge": "3 days",
   "commitMessagePrefix": "⬆️",
@@ -33,12 +29,13 @@
       "matchPackagePatterns": ["unocss"]
     },
     {
+      "groupName": "unplugin packages",
+      "matchPackagePrefixes": ["unplugin"]
+    },
+    {
       "groupName": "test packages",
       "matchPackagePatterns": ["vitest"],
-      "matchPackageNames": [
-        "happy-dom",
-        "@vue/test-utils"
-      ]
+      "matchPackageNames": ["happy-dom", "@vue/test-utils"]
     },
     {
       "groupName": "lint packages",

@@ -2,10 +2,9 @@ import { autoAnimatePlugin } from '@formkit/auto-animate/vue'
 import ContextMenu from '@imengyu/vue3-context-menu'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
-import { createApp } from 'vue'
 import VueVirtualScroller from 'vue-virtual-scroller'
 
-import { router } from '@/router'
+import { router } from '~/router'
 
 import App from './App.vue'
 
@@ -16,7 +15,7 @@ import 'overlayscrollbars/overlayscrollbars.css'
 import 'ant-design-vue/es/message/style/css'
 import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css'
 
-import './style.css'
+import './styles/main.css'
 
 createApp(App)
   .use(createPinia().use(piniaPluginPersistedstate))

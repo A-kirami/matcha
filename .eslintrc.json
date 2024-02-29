@@ -95,7 +95,6 @@
     "no-eval": "error",
     "no-trailing-spaces": "warn",
     "no-inline-comments": "warn",
-    // "lines-around-comment": ["warn", {"allowBlockStart": true, "allowObjectStart": true, "allowArrayStart": true, "allowClassStart": true}],
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
     "vue/no-multiple-template-root": "off",
@@ -104,7 +103,7 @@
     "vue/script-setup-uses-vars": "error",
     "vue/multi-word-component-names": "off",
     "vue/no-setup-props-destructure": "off",
-    "import/no-unresolved": ["error", { "ignore": ["^virtual:", "\\.png$"] }],
+    "import/no-unresolved": ["error", { "ignore": ["^virtual:"] }],
     "import/order": [
       "warn",
       {

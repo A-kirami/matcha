@@ -1,21 +1,17 @@
 /* eslint-disable camelcase */
 import { getVersion } from '@tauri-apps/api/app'
 import { invoke } from '@tauri-apps/api/core'
-import * as logger from '@tauri-apps/plugin-log'
 
-import { AdapterActionHandler } from '@/adapter/action'
-import { Behav } from '@/adapter/behav'
-import { UnsupportedActionError, InternalHandlerError, ProtocolError } from '@/adapter/errors'
-import { db } from '@/database'
-import { useStatusStore } from '@/stores'
-import { asyncWrapper, getFile, GetType, getUUID } from '@/utils'
+import { AdapterActionHandler } from '~/adapter/action'
+import { Behav } from '~/adapter/behav'
+import { UnsupportedActionError, InternalHandlerError, ProtocolError } from '~/adapter/errors'
 
 import { MessageHandler } from './message'
 import { response } from './utils'
 
 import type { Messages } from './message'
 import type { ActionResponse, ActionRequest, Status, Version, UserInfo, GroupInfo } from './typed'
-import type { ActionStrategy } from '@/adapter/action'
+import type { ActionStrategy } from '~/adapter/action'
 
 const messageHandler = new MessageHandler()
 

@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import InlineSvg from 'vue-inline-svg'
 
-import Akkarin from '@/assets/akkarin.svg?url'
-import { getUserAvatar, getGroupAvatar } from '@/utils'
+import Akkarin from '~/assets/akkarin.svg?url'
 
 const {
   type,
@@ -65,7 +63,7 @@ const avatarSize = computed(() => {
   </div>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
 .admin::before {
   @apply content-empty bg-green-300;
 }

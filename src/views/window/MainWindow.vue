@@ -1,12 +1,5 @@
 <script setup lang="ts">
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
-import { watch } from 'vue'
-
-import Loading from '@/components/Loading.vue'
-import Sidebar from '@/components/Sidebar.vue'
-import Titlebar from '@/components/Titlebar.vue'
-import { db } from '@/database'
-import { useStatusStore, useAdapterStore } from '@/stores'
 
 const status = useStatusStore()
 const adapter = useAdapterStore()
@@ -55,7 +48,7 @@ watch(
   </a-config-provider>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
 .stage {
   height: calc(100vh - 2.5rem);
 }

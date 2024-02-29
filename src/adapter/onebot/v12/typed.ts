@@ -1,4 +1,4 @@
-import type { ActionRequest as BaseActionRequest, ActionResponse as BaseActionResponse } from '@/adapter/action'
+import type { ActionRequest as BaseActionRequest, ActionResponse as BaseActionResponse } from '~/adapter/action'
 
 export type ActionRequest = BaseActionRequest & { self?: Self }
 

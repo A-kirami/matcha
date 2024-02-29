@@ -1,10 +1,10 @@
 /* eslint-disable camelcase */
-import { AdapterEventHandler } from '@/adapter/event'
+import { AdapterEventHandler } from '~/adapter/event'
 
 import { MessageHandler } from './message'
 
 import type { Messages } from './message'
-import type { Event as BaseEvent, EventStrategy } from '@/adapter/event'
+import type { Event as BaseEvent, EventStrategy } from '~/adapter/event'
 import type {
   SceneMapping,
   PrivateMessageScene,
@@ -23,7 +23,7 @@ import type {
   AddFriendRequestScene,
   JoinGroupRequestScene,
   GroupInviteRequestScene,
-} from '@/adapter/scene'
+} from '~/adapter/scene'
 
 /** 事件 */
 interface Event extends BaseEvent {

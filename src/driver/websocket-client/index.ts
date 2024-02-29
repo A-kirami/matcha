@@ -1,15 +1,13 @@
 import { decode, encode } from '@msgpack/msgpack'
-import * as logger from '@tauri-apps/plugin-log'
 import WebSocket from '@tauri-apps/plugin-websocket'
 
-import { Adapter } from '@/adapter/adapter'
-import { getUUID } from '@/utils'
+import { Adapter } from '~/adapter/adapter'
 
 import { Driver } from '../driver'
 
-import type { ActionRequest } from '@/adapter/action'
-import type { Event } from '@/adapter/event'
 import type { Message, ConnectionConfig } from '@tauri-apps/plugin-websocket'
+import type { ActionRequest } from '~/adapter/action'
+import type { Event } from '~/adapter/event'
 
 export class websocketClient implements Driver {
   ws: WebSocket | null = null

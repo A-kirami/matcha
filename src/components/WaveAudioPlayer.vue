@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useElementHover } from '@vueuse/core'
-import { onBeforeMount, onMounted } from 'vue'
 import { getAudioData, linearPath } from 'waveform-path'
 
 const {
@@ -261,7 +259,7 @@ const hoverPlayer = useElementHover($$(playerRef), { delayLeave: 1500 })
   </div>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
 /* stylelint-disable value-keyword-case */
 *,
 ::after,

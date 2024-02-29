@@ -20,7 +20,7 @@ defineEmits<{ (e: 'send'): void }>()
   </button>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
 button {
   display: flex;
   align-items: center;

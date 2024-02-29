@@ -1,14 +1,8 @@
 <!-- eslint-disable camelcase -->
 <script setup lang="ts">
-import { watch } from 'vue'
+import { Behav } from '~/adapter/behav'
 
-import { Behav } from '@/adapter/behav'
-import Avatar from '@/components/Avatar.vue'
-import { db } from '@/database'
-import { useStatusStore } from '@/stores'
-import { roleCheck } from '@/utils'
-
-import type { Request } from '@/stores/chat'
+import type { Request } from '~/stores/chat'
 
 const { request } = defineProps<{
   request: Request
@@ -138,7 +132,7 @@ watch(
   </div>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
 .comment {
   @apply overflow-hidden text-ellipsis;
   display: -webkit-box;

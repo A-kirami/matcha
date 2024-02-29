@@ -2,13 +2,7 @@
 import { useObservable, from } from '@vueuse/rxjs'
 import { liveQuery } from 'dexie'
 
-import { Behav } from '@/adapter/behav'
-import Avatar from '@/components/Avatar.vue'
-import CreateMemberForm from '@/components/CreateMemberForm.vue'
-import { db } from '@/database'
-import { useStatusStore } from '@/stores'
-
-import type { User, Group } from '@/database'
+import { Behav } from '~/adapter/behav'
 
 const { chatType, chatPerson } = defineProps<{
   chatType: 'private' | 'group'
@@ -120,7 +114,7 @@ async function quickAction(): Promise<void> {
   </header>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
 button {
   position: relative;
   z-index: 1;

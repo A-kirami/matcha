@@ -1,11 +1,9 @@
 import Dexie from 'dexie'
 
-import { getTimestamp } from '@/utils'
-
 import type { User, Friend, Group, Member, CacheFile } from './model'
 import type { Table } from 'dexie'
 
-export class MatchaDB extends Dexie {
+class MatchaDB extends Dexie {
   users!: Table<User, string>
   friends!: Table<Friend, [string, string]>
   groups!: Table<Group, string>

@@ -1,9 +1,6 @@
 import { invoke } from '@tauri-apps/api/core'
 
-import { useChatStore, useStatusStore } from '@/stores'
-import { asyncWrapper } from '@/utils'
-
-import type { Contents, TextContent } from '@/adapter/content'
+import type { Contents, TextContent } from '~/adapter/content'
 
 const chat = useChatStore()
 
@@ -34,7 +31,7 @@ export async function runMatchaCommand(
 }
 
 function extractCommand(contents: Contents[]): string {
-  const text = (contents[0] as TextContent).data.text
+  const { text } = (contents[0] as TextContent).data
   return text.replace(/^matcha:>/i, '').trim()
 }
 

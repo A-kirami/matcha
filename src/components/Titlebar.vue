@@ -2,9 +2,9 @@
 import { getCurrent } from '@tauri-apps/api/webviewWindow'
 import InlineSvg from 'vue-inline-svg'
 
-import windowCloseIcon from '@/assets/window-close.svg?url'
-import windowMaximizeIcon from '@/assets/window-maximize.svg?url'
-import windowMinimizeIcon from '@/assets/window-minimize.svg?url'
+import windowCloseIcon from '~/assets/window-close.svg?url'
+import windowMaximizeIcon from '~/assets/window-maximize.svg?url'
+import windowMinimizeIcon from '~/assets/window-minimize.svg?url'
 
 const appWindow = getCurrent()
 

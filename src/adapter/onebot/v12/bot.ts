@@ -3,13 +3,12 @@ import { getTauriVersion, getVersion } from '@tauri-apps/api/app'
 import { arch, platform, type, version } from '@tauri-apps/plugin-os'
 import { Base64 } from 'js-base64'
 
-import { Adapter } from '@/adapter/adapter'
-import { getTimestamp, getUUID } from '@/utils'
+import { Adapter } from '~/adapter/adapter'
 
 import { ActionHandler } from './action'
 import { EventHandler, ConnectMetaEvent, HeartbeatMetaEvent, StatusUpdateMetaEvent } from './event'
 
-import type { OneBotHeaders } from '@/adapter/adapter'
+import type { OneBotHeaders } from '~/adapter/adapter'
 
 interface OneBotV12Headers extends OneBotHeaders {
   'User-Agent': string

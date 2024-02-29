@@ -9,9 +9,8 @@ mod utils;
 pub fn run() {
     tauri::Builder::default()
         .setup(|app| {
-            let main_window = app.get_webview_window("main").unwrap();
-
             #[cfg(dev)]
+            let main_window = app.get_webview_window("main").unwrap();
             main_window.open_devtools();
 
             let cache_path = app.handle().path().app_cache_dir().unwrap();

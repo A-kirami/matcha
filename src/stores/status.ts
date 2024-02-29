@@ -1,7 +1,4 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
-
-import type { User } from '@/database'
 
 export const useStatusStore = defineStore(
   'status',

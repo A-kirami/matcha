@@ -2,16 +2,11 @@
 <script setup lang="ts">
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-vue'
 import Tribute from 'tributejs'
-import { watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
-import { useRoute } from 'vue-router'
 
-import AudioIcon from '@/assets/audio_file.svg?url'
-import VideoIcon from '@/assets/video_file.svg?url'
-import { db } from '@/database'
-import { useStatusStore, useSessionStore } from '@/stores'
-import { createFileCache, getUserAvatar, getGroupAvatar, nonNullable, getUserNickname } from '@/utils'
+import AudioIcon from '~/assets/audio_file.svg?url'
+import VideoIcon from '~/assets/video_file.svg?url'
 
-import type { Contents } from '@/adapter/content'
+import type { Contents } from '~/adapter/content'
 
 // eslint-disable-next-line func-call-spacing
 defineEmits<{ (e: 'send'): void }>()
@@ -274,22 +269,3 @@ function onBackspace(): void {
     ></div>
   </OverlayScrollbarsComponent>
 </template>
-
-<style lang="postcss">
-.tribute-container {
-  @apply z-10 mb-2 h-auto overflow-y-auto rounded shadow-md max-h-50 scrollbar scrollbar-rounded;
-}
-
-.tribute-container ul {
-  @apply list-none overflow-hidden rounded p-0 mb-0;
-}
-
-.tribute-container li {
-  @apply cursor-pointer bg-white p-2 text-sm text-gray-800 dark:bg-gray-700 dark:text-gray-100 flex items-center gap-2;
-}
-
-.tribute-container li.highlight,
-.tribute-container li:hover {
-  @apply bg-blue-50 text-blue-400 dark:bg-blue-900 dark:text-blue-300;
-}
-</style>

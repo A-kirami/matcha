@@ -1,11 +1,7 @@
 import { defineStore } from 'pinia'
 
-import { useConfigStore } from './config'
-import { useAdapterStore } from './protocol'
-import { useStatusStore } from './status'
-
-import type { Event } from '@/adapter/event'
-import type { Scenes, MessageScenes, NoticeScenes, RequestScenes } from '@/adapter/scene'
+import type { Event } from '~/adapter/event'
+import type { Scenes, MessageScenes, NoticeScenes, RequestScenes } from '~/adapter/scene'
 
 interface Chat<T extends Scenes['type'], S extends Scenes> {
   id: string

@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import { useThrottleFn } from '@vueuse/core'
-
-import { useConfigStore, useAdapterStore } from '@/stores'
-
-import type { Config } from '@/stores/config'
+import type { Config } from '~/stores/config'
 
 const configStore = useConfigStore()
 

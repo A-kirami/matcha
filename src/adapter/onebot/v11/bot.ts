@@ -1,12 +1,10 @@
 /* eslint-disable camelcase */
-import { Adapter } from '@/adapter/adapter'
-import { useStatusStore } from '@/stores'
-import { getTimestamp } from '@/utils'
+import { Adapter } from '~/adapter/adapter'
 
 import { ActionHandler } from './action'
 import { EventHandler, LifeCycleMetaEvent, HeartbeatMetaEvent } from './event'
 
-import type { OneBotHeaders } from '@/adapter/adapter'
+import type { OneBotHeaders } from '~/adapter/adapter'
 
 interface OneBotV11Headers extends OneBotHeaders {
   'X-Self-ID': string

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
 import VideoPlay from 'vue3-video-play'
 
 import 'vue3-video-play/dist/style.css'
@@ -24,7 +23,7 @@ const videoPlayOptions = $ref({
   </main>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
 :deep(.d-player-contextmenu) {
   display: none;
 }

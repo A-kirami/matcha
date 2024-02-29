@@ -26,7 +26,7 @@
     "removeComments": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "~/*": ["src/*"]
     },
     "types": ["vite/client", "vitest/globals", "unplugin-vue-macros/macros-global"]
   },

@@ -1,0 +1,15 @@
+@import './contextmenu.css';
+@import './highlight.css';
+@import './tribute.css';
+
+html, body {
+  @apply m-0 select-none bg-transparent p-0 font-sans antialiased;
+}
+
+::selection {
+  @apply bg-blue-200;
+}
+
+.os-viewport {
+  @apply scroll-smooth;
+}

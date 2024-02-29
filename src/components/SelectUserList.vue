@@ -2,10 +2,6 @@
 import { useObservable, from } from '@vueuse/rxjs'
 import { liveQuery } from 'dexie'
 
-import { db } from '@/database'
-import { useStatusStore } from '@/stores'
-import { getUserAvatar } from '@/utils'
-
 const status = useStatusStore()
 
 const userList = useObservable(
@@ -73,7 +69,7 @@ const visible = $computed({
   </a-modal>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
 :deep(.ant-list-item-action) {
   @apply ml-0;
 }

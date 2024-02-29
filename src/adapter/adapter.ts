@@ -1,14 +1,11 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import * as logger from '@tauri-apps/plugin-log'
-
-import * as CommDriver from '@/driver'
-import { useChatStore, useStatusStore } from '@/stores'
+import * as CommDriver from '~/driver'
 
 import { ProtocolError } from './errors'
 
 import type { ActionRequest, ActionResponse, AdapterActionHandler } from './action'
 import type { AdapterEventHandler, Event } from './event'
-import type { Config } from '@/stores/config'
+import type { Config } from '~/stores/config'
 
 export type OneBotHeaders = Record<string, string>
 

@@ -1,13 +1,6 @@
 <!-- eslint-disable camelcase -->
 <script setup lang="ts">
 import { unix } from 'dayjs'
-import { watch } from 'vue'
-
-import Avatar from '@/components/Avatar.vue'
-import { useChatStore, useStatusStore } from '@/stores'
-import { getPlainScene, getUserNickname } from '@/utils'
-
-import type { User, Group } from '@/database'
 
 const { chatType, chatPerson } = defineProps<{
   chatType: 'private' | 'group'

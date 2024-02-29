@@ -2,7 +2,6 @@
 import { attachConsole } from '@tauri-apps/plugin-log'
 import { message } from 'ant-design-vue'
 import { locale as dayjsLocale } from 'dayjs'
-import { onBeforeMount } from 'vue'
 
 import 'dayjs/locale/zh-cn'
 

@@ -3,13 +3,7 @@ import { useObservable, from } from '@vueuse/rxjs'
 import { liveQuery } from 'dexie'
 import InlineSvg from 'vue-inline-svg'
 
-import AddChatIcon from '@/assets/add-chat.svg?url'
-import ChatContactItem from '@/components/ChatContactItem.vue'
-import CreateGroupForm from '@/components/CreateGroupForm.vue'
-import CreateUserForm from '@/components/CreateUserForm.vue'
-import SearchBox from '@/components/SearchBox.vue'
-import { db } from '@/database'
-import { useStatusStore } from '@/stores'
+import AddChatIcon from '~/assets/add-chat.svg?url'
 
 const status = useStatusStore()
 
@@ -71,7 +65,7 @@ function openGroupForm() {
   </section>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
 .active {
   @apply shadow-xl shadow-gray-500/10;
 }

@@ -1,10 +1,6 @@
 /* eslint-disable camelcase */
 import { message } from 'ant-design-vue'
 
-import { db } from '@/database'
-import { useStatusStore, useChatStore } from '@/stores'
-import { getTimestamp, getUUID, getPlainMessage, getMessageId, roleCheck } from '@/utils'
-
 import type { Contents } from './content'
 import type {
   GroupMessageScene,
@@ -27,7 +23,6 @@ import type {
   GroupPokeNoticeScene,
   FriendPokeNoticeScene,
 } from './scene'
-import type { User, Group } from '@/database'
 
 export class Behav {
   readonly status = useStatusStore()
@@ -148,7 +143,7 @@ export class Behav {
       throw new Error('消息不存在')
     }
     messageChat.recall = true
-    const scene = messageChat.scene
+    const { scene } = messageChat
     if (scene.detail_type === 'private') {
       return await this.chat.appendScene(
         {

@@ -1,9 +1,5 @@
 import { defineStore } from 'pinia'
 
-import { db } from '@/database'
-
-import type { User, Group } from '@/database'
-
 export interface ReplyMessageInfo {
   id: string
   nickname: string

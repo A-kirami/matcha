@@ -1,10 +1,5 @@
 import { unix } from 'dayjs'
 
-import { db } from '@/database'
-import { asyncWrapper } from '@/utils'
-
-import { nonNullable } from './utils'
-
 import type {
   Contents,
   TextContent,
@@ -13,9 +8,9 @@ import type {
   LinkShareContent,
   MusicShareContent,
   ContentMapping,
-} from '@/adapter/content'
-import type { Scenes } from '@/adapter/scene'
-import type { Context } from '@/adapter/typed'
+} from '~/adapter/content'
+import type { Scenes } from '~/adapter/scene'
+import type { Context } from '~/adapter/typed'
 
 /**
  * 获取用户头像

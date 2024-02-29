@@ -1,0 +1,15 @@
+pre {
+  @apply whitespace-pre-wrap break-all !mb-0;
+
+    & code.hljs {
+      @apply !p-0;
+    }
+}
+
+.hljs {
+  @apply !bg-transparent;
+}
+
+.hljs-string.line-fold {
+  @apply restrict-rows-3;
+}

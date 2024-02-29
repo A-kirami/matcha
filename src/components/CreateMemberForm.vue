@@ -3,15 +3,9 @@
 <script setup lang="ts">
 // TODO: 标记为💩山，需要重构
 import { UseDraggable } from '@vueuse/components'
-import { useFocus } from '@vueuse/core'
 import dayjs from 'dayjs'
-import { watch } from 'vue'
-import { useRoute } from 'vue-router'
 
-import { Behav } from '@/adapter/behav'
-import Avatar from '@/components/Avatar.vue'
-import { db } from '@/database'
-import { useStatusStore, useChatStore } from '@/stores'
+import { Behav } from '~/adapter/behav'
 
 import type { Dayjs } from 'dayjs'
 
@@ -186,7 +180,7 @@ let visible = $computed({
   </UseDraggable>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
 .decorate {
   @apply relative h-2 w-40 bg-blue-300 transition-colors;
 
