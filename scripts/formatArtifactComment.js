@@ -9,11 +9,12 @@
  */
 function createMarkdownTableRow({ name, size_in_bytes, url }) {
   const platform = name.split('_')[2]
-  return `| ${platform} | [${name}](${url}) | ${size_in_bytes / 1024 ** 2} MB |`
+  const fileSize = (size_in_bytes / 1024 ** 2).toFixed(2)
+  return `| ${platform} | [${name}](${url}) | ${fileSize} MB |`
 }
 
 function createMarkdownTableHeader() {
-  return ['| 平台 | 文件名 | 大小 |', '| --- | --- | --- |']
+  return ['| 平台 | 文件 | 大小 |', '| --- | --- | --- |']
 }
 
 /**
@@ -21,7 +22,9 @@ function createMarkdownTableHeader() {
  */
 function createArtifactComment(artifacts) {
   const tableHeader = createMarkdownTableHeader()
-  const tableBody = artifacts.map((artifact) => createMarkdownTableRow(artifact))
+  const tableBody = artifacts
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map((artifact) => createMarkdownTableRow(artifact))
   const comment = ['### 📦️ 此 PR 构建的应用已经准备就绪', '', ...tableHeader, ...tableBody, '']
   return comment.join('\n')
 }
