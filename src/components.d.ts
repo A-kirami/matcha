@@ -29,6 +29,7 @@ declare module 'vue' {
     ASkeleton: (typeof import('ant-design-vue/es'))['Skeleton']
     ASwitch: (typeof import('ant-design-vue/es'))['Switch']
     ATextarea: (typeof import('ant-design-vue/es'))['Textarea']
+    Audio: (typeof import('./components/chat/multimedia/Audio.vue'))['default']
     Avatar: (typeof import('./components/Avatar.vue'))['default']
     ChatAction: (typeof import('./components/ChatAction.vue'))['default']
     ChatBox: (typeof import('./components/ChatBox.vue'))['default']
@@ -43,8 +44,11 @@ declare module 'vue' {
     CreateMemberForm: (typeof import('./components/CreateMemberForm.vue'))['default']
     CreateUserForm: (typeof import('./components/CreateUserForm.vue'))['default']
     HighlightCode: (typeof import('./components/HighlightCode.vue'))['default']
+    Image: (typeof import('./components/chat/multimedia/Image.vue'))['default']
     JumbotronDev: (typeof import('./components/JumbotronDev.vue'))['default']
+    Link: (typeof import('./components/chat/multimedia/Link.vue'))['default']
     Loading: (typeof import('./components/Loading.vue'))['default']
+    Mention: (typeof import('./components/chat/multimedia/Mention.vue'))['default']
     MessageContent: (typeof import('./components/MessageContent.vue'))['default']
     RouterLink: (typeof import('vue-router'))['RouterLink']
     RouterView: (typeof import('vue-router'))['RouterView']
@@ -55,6 +59,7 @@ declare module 'vue' {
     ThemeSwitch: (typeof import('./components/ThemeSwitch.vue'))['default']
     TimeSeparator: (typeof import('./components/TimeSeparator.vue'))['default']
     Titlebar: (typeof import('./components/Titlebar.vue'))['default']
+    Video: (typeof import('./components/chat/multimedia/Video.vue'))['default']
     WaveAudioPlayer: (typeof import('./components/WaveAudioPlayer.vue'))['default']
   }
 }

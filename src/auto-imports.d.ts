@@ -50,6 +50,7 @@ declare global {
   const getUserAge: (typeof import('./utils/chat'))['getUserAge']
   const getUserAvatar: (typeof import('./utils/chat'))['getUserAvatar']
   const getUserNickname: (typeof import('./utils/chat'))['getUserNickname']
+  const getVersion: (typeof import('./utils/metadata'))['getVersion']
   const h: (typeof import('vue'))['h']
   const ignorableWatch: (typeof import('@vueuse/core'))['ignorableWatch']
   const inject: (typeof import('vue'))['inject']
@@ -249,11 +250,13 @@ declare global {
   const useScrollLock: (typeof import('@vueuse/core'))['useScrollLock']
   const useSessionStorage: (typeof import('@vueuse/core'))['useSessionStorage']
   const useSessionStore: (typeof import('./stores/session'))['useSessionStore']
+  const useSettingStore: (typeof import('./stores/setting'))['useSettingStore']
   const useShare: (typeof import('@vueuse/core'))['useShare']
   const useSlots: (typeof import('vue'))['useSlots']
   const useSorted: (typeof import('@vueuse/core'))['useSorted']
   const useSpeechRecognition: (typeof import('@vueuse/core'))['useSpeechRecognition']
   const useSpeechSynthesis: (typeof import('@vueuse/core'))['useSpeechSynthesis']
+  const useStateStore: (typeof import('./stores/state'))['useStateStore']
   const useStatusStore: (typeof import('./stores/status'))['useStatusStore']
   const useStepper: (typeof import('@vueuse/core'))['useStepper']
   const useStorage: (typeof import('@vueuse/core'))['useStorage']
@@ -380,6 +383,7 @@ declare module 'vue' {
     readonly getUserAge: UnwrapRef<(typeof import('./utils/chat'))['getUserAge']>
     readonly getUserAvatar: UnwrapRef<(typeof import('./utils/chat'))['getUserAvatar']>
     readonly getUserNickname: UnwrapRef<(typeof import('./utils/chat'))['getUserNickname']>
+    readonly getVersion: UnwrapRef<(typeof import('./utils/metadata'))['getVersion']>
     readonly h: UnwrapRef<(typeof import('vue'))['h']>
     readonly ignorableWatch: UnwrapRef<(typeof import('@vueuse/core'))['ignorableWatch']>
     readonly inject: UnwrapRef<(typeof import('vue'))['inject']>
@@ -579,11 +583,13 @@ declare module 'vue' {
     readonly useScrollLock: UnwrapRef<(typeof import('@vueuse/core'))['useScrollLock']>
     readonly useSessionStorage: UnwrapRef<(typeof import('@vueuse/core'))['useSessionStorage']>
     readonly useSessionStore: UnwrapRef<(typeof import('./stores/session'))['useSessionStore']>
+    readonly useSettingStore: UnwrapRef<(typeof import('./stores/setting'))['useSettingStore']>
     readonly useShare: UnwrapRef<(typeof import('@vueuse/core'))['useShare']>
     readonly useSlots: UnwrapRef<(typeof import('vue'))['useSlots']>
     readonly useSorted: UnwrapRef<(typeof import('@vueuse/core'))['useSorted']>
     readonly useSpeechRecognition: UnwrapRef<(typeof import('@vueuse/core'))['useSpeechRecognition']>
     readonly useSpeechSynthesis: UnwrapRef<(typeof import('@vueuse/core'))['useSpeechSynthesis']>
+    readonly useStateStore: UnwrapRef<(typeof import('./stores/state'))['useStateStore']>
     readonly useStatusStore: UnwrapRef<(typeof import('./stores/status'))['useStatusStore']>
     readonly useStepper: UnwrapRef<(typeof import('@vueuse/core'))['useStepper']>
     readonly useStorage: UnwrapRef<(typeof import('@vueuse/core'))['useStorage']>
@@ -688,6 +694,7 @@ declare module '@vue/runtime-core' {
     readonly getUserAge: UnwrapRef<(typeof import('./utils/chat'))['getUserAge']>
     readonly getUserAvatar: UnwrapRef<(typeof import('./utils/chat'))['getUserAvatar']>
     readonly getUserNickname: UnwrapRef<(typeof import('./utils/chat'))['getUserNickname']>
+    readonly getVersion: UnwrapRef<(typeof import('./utils/metadata'))['getVersion']>
     readonly h: UnwrapRef<(typeof import('vue'))['h']>
     readonly ignorableWatch: UnwrapRef<(typeof import('@vueuse/core'))['ignorableWatch']>
     readonly inject: UnwrapRef<(typeof import('vue'))['inject']>
@@ -887,11 +894,13 @@ declare module '@vue/runtime-core' {
     readonly useScrollLock: UnwrapRef<(typeof import('@vueuse/core'))['useScrollLock']>
     readonly useSessionStorage: UnwrapRef<(typeof import('@vueuse/core'))['useSessionStorage']>
     readonly useSessionStore: UnwrapRef<(typeof import('./stores/session'))['useSessionStore']>
+    readonly useSettingStore: UnwrapRef<(typeof import('./stores/setting'))['useSettingStore']>
     readonly useShare: UnwrapRef<(typeof import('@vueuse/core'))['useShare']>
     readonly useSlots: UnwrapRef<(typeof import('vue'))['useSlots']>
     readonly useSorted: UnwrapRef<(typeof import('@vueuse/core'))['useSorted']>
     readonly useSpeechRecognition: UnwrapRef<(typeof import('@vueuse/core'))['useSpeechRecognition']>
     readonly useSpeechSynthesis: UnwrapRef<(typeof import('@vueuse/core'))['useSpeechSynthesis']>
+    readonly useStateStore: UnwrapRef<(typeof import('./stores/state'))['useStateStore']>
     readonly useStatusStore: UnwrapRef<(typeof import('./stores/status'))['useStatusStore']>
     readonly useStepper: UnwrapRef<(typeof import('@vueuse/core'))['useStepper']>
     readonly useStorage: UnwrapRef<(typeof import('@vueuse/core'))['useStorage']>

@@ -1,5 +1,8 @@
 import { invoke } from '@tauri-apps/api/core'
 import { appCacheDir, join } from '@tauri-apps/api/path'
+import { exists, BaseDirectory } from '@tauri-apps/plugin-fs'
+
+import { CacheFile } from '~/database/model'
 
 interface FileSource {
   str?: string
@@ -23,30 +26,42 @@ export async function createFileCache(
   file: string | File,
   validateType: string | null = null
 ): Promise<{ id: string; url: string }> {
+  const cacheFile = await getCacheFile(file)
+  if (cacheFile) {
+    return {
+      id: cacheFile.id,
+      url: await getFile(GetType.URL, cacheFile.id),
+    }
+  }
   const fileSource: FileSource = {}
   if (file instanceof File) {
     const buffer = await file.arrayBuffer()
-    const fileSHA256 = await getSHA256(buffer)
-    const cacheFile = await db.files.where({ sha256: fileSHA256 }).first()
-    if (cacheFile) {
-      return {
-        id: cacheFile.id,
-        url: await getFile(GetType.URL, cacheFile.id),
-      }
-    }
     fileSource.binary = Array.from(new Uint8Array(buffer))
   } else {
     fileSource.str = file
   }
-  const fileId = getUUID()
   const { size, sha256 } = await invoke<{ size: number; sha256: string }>('create_cache_file', {
     fileSource,
     validateType,
   })
+  const fileId = getUUID()
   await db.files.add({ id: fileId, name: file instanceof File ? file.name : sha256, size, sha256 })
   return {
     id: fileId,
     url: await getFile(GetType.URL, fileId),
+  }
+}
+
+async function getCacheFile(file: string | File): Promise<CacheFile | undefined> {
+  if (file instanceof File) {
+    const buffer = await file.arrayBuffer()
+    const fileSHA256 = await getSHA256(buffer)
+    return await db.files.where({ sha256: fileSHA256 }).first()
+  } else {
+    const cacheFile = await db.files.where({ id: file }).first()
+    if (cacheFile && (await exists(`cache/${cacheFile.sha256}`, { baseDir: BaseDirectory.AppCache }))) {
+      return cacheFile
+    }
   }
 }
 
