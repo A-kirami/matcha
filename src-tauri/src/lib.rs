@@ -10,8 +10,7 @@ pub fn run() {
     tauri::Builder::default()
         .setup(|app| {
             #[cfg(dev)]
-            let main_window = app.get_webview_window("main").unwrap();
-            main_window.open_devtools();
+            app.get_webview_window("main").unwrap().open_devtools();
 
             let cache_path = app.handle().path().app_cache_dir().unwrap();
             let port: u16 = 8720;
