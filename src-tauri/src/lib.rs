@@ -29,12 +29,7 @@ pub fn run() {
                     Target::new(TargetKind::Webview),
                 ])
                 .timezone_strategy(TimezoneStrategy::UseLocal)
-                .level(log::LevelFilter::Info)
-                .filter(|metadata| {
-                    !metadata
-                        .target()
-                        .contains("tao::platform_impl::platform::event_loop::runner")
-                })
+                .level(log::LevelFilter::Debug)
                 .build(),
         )
         .invoke_handler(tauri::generate_handler![
