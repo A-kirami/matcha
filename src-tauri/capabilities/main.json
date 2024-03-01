@@ -21,6 +21,10 @@
     "os:allow-arch",
     "os:allow-platform",
     "os:allow-os-type",
-    "os:allow-version"
+    "os:allow-version",
+    {
+      "identifier": "fs:allow-exists",
+      "allow": [{ "path": "$APPCACHE/**" }]
+    }
   ]
 }
