@@ -1,16 +1,26 @@
 // @ts-check
 /* eslint-disable camelcase */
 
+/** @type {Record<string, string>} */
+const platformIcon = {
+  windows: '🪟',
+  macos: '🍎',
+  linux: '🐧',
+  unknown: '❔',
+}
+
 /**
  * @param {Object} param0
+ * @param {number} param0.id
  * @param {string} param0.name
  * @param {number} param0.size_in_bytes
- * @param {string} param0.url
  */
-function createMarkdownTableRow({ name, size_in_bytes, url }) {
+function createMarkdownTableRow({ id, name, size_in_bytes }) {
+  const icon = platformIcon[process.env.RUNNER_OS?.toLowerCase() || 'unknown']
   const platform = name.split('_')[2]
+  const url = `https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}/artifacts/${id}`
   const fileSize = parseFloat((size_in_bytes / 1024 ** 2).toFixed(2))
-  return `| ${platform} | [${name}](${url}) | ${fileSize} MB |`
+  return `| ${icon} ${platform} | [${name}](${url}) | ${fileSize} MB |`
 }
 
 function createMarkdownTableHeader() {
@@ -18,14 +28,22 @@ function createMarkdownTableHeader() {
 }
 
 /**
- * @param {{name: string, size_in_bytes: number, url: string}[]} artifacts
+ * @param {{id:number, name: string, size_in_bytes: number}[]} artifacts
+ * @param {string} sha
  */
-function createArtifactComment(artifacts) {
+function createArtifactComment(artifacts, sha) {
   const tableHeader = createMarkdownTableHeader()
   const tableBody = artifacts
     .sort((a, b) => a.name.localeCompare(b.name))
     .map((artifact) => createMarkdownTableRow(artifact))
-  const comment = ['### 📦️ 此 PR 构建的应用已经准备就绪', '', ...tableHeader, ...tableBody, '']
+  const comment = [
+    '### 📦️ 此 PR 构建的应用已经准备就绪',
+    '',
+    ...tableHeader,
+    ...tableBody,
+    '',
+    `\\**从提交 ${sha} 构建*`,
+  ]
   return comment.join('\n')
 }
 
