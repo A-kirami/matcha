@@ -100,8 +100,8 @@ export class websocketClient implements Driver {
 
   async getConnectConfig(): Promise<ConnectionConfig> {
     const connectConfig = { headers: await this.adapter.getConnectHeaders() }
-    if (this.adapter.config.accessToken !== null) {
-      connectConfig.headers.Authorization = 'Bearer' + this.adapter.config.accessToken
+    if (this.adapter.config.accessToken) {
+      connectConfig.headers.Authorization = `Bearer ${this.adapter.config.accessToken}`
     }
     return connectConfig
   }
