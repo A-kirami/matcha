@@ -9,7 +9,7 @@
  */
 function createMarkdownTableRow({ name, size_in_bytes, url }) {
   const platform = name.split('_')[2]
-  const fileSize = (size_in_bytes / 1024 ** 2).toFixed(2)
+  const fileSize = parseFloat((size_in_bytes / 1024 ** 2).toFixed(2))
   return `| ${platform} | [${name}](${url}) | ${fileSize} MB |`
 }
 
