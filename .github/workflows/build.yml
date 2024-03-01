@@ -82,12 +82,9 @@ jobs:
         with:
           args: -t ${{ matrix.target }}
 
-      - uses: benjlevesque/short-sha@v3.0
-        id: short-sha
-
       - uses: actions/upload-artifact@v4
         with:
-          name: 'matcha_${{steps.tauri-build.outputs.appVersion}}_${{ matrix.label }}_${{ steps.short-sha.outputs.sha }}'
+          name: 'matcha_${{steps.tauri-build.outputs.appVersion}}_${{ matrix.label }}'
           path: "${{ join(fromJSON(steps.tauri-build.outputs.artifactPaths), '\n') }}"
 
   comment:
