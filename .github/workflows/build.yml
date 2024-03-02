@@ -109,7 +109,7 @@ jobs:
               run_id: context.runId
             });
             const createArtifactComment = (await import(`${{github.workspace}}/scripts/formatArtifactComment.js`)).default;
-            return createArtifactComment(artifacts.data.artifacts, ${{github.event.pull_request.head.sha}});
+            return createArtifactComment(artifacts.data.artifacts, '${{github.event.pull_request.head.sha}}');
 
       - name: Add artifact comment
         uses: marocchino/sticky-pull-request-comment@v2
