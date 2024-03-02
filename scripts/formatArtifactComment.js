@@ -16,8 +16,8 @@ const platformIcon = {
  * @param {number} param0.size_in_bytes
  */
 function createMarkdownTableRow({ id, name, size_in_bytes }) {
-  const icon = platformIcon[process.env.RUNNER_OS?.toLowerCase() || 'unknown']
   const platform = name.split('_')[2]
+  const icon = platformIcon[platform.split('-')[0]] || platformIcon.unknown
   const url = `https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}/artifacts/${id}`
   const fileSize = parseFloat((size_in_bytes / 1024 ** 2).toFixed(2))
   return `| ${icon} ${platform} | [${name}](${url}) | ${fileSize} MB |`
