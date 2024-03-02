@@ -6,7 +6,7 @@ import 'dayjs/locale/zh-cn'
 dayjs.extend(calendar)
 dayjs.locale('zh-cn')
 
-const { time } = defineProps<{ time: number }>()
+const { time } = $defineProps<{ time: number }>()
 
 const calendarTime = dayjs.unix(time).calendar(null, {
   sameDay: 'A h:mm ',

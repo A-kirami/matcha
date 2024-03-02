@@ -9,7 +9,7 @@ const {
   role = null,
   border = false,
   size = null,
-} = defineProps<{
+} = $defineProps<{
   type: string
   aid?: number | string
   role?: string | null

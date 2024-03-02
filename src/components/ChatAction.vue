@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineProps<{
+$defineProps<{
   chatType: 'private' | 'group'
   chatId: string
 }>()

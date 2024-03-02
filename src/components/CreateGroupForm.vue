@@ -106,7 +106,7 @@ function onCompositionEnd(e: Event, editType: 'name' | 'id'): void {
   onInput(e, editType)
 }
 
-const props = defineProps<{ modelValue: boolean }>()
+const props = $defineProps<{ modelValue: boolean }>()
 
 const emit = defineEmits<{ (e: 'update:modelValue', value: boolean): void }>()
 

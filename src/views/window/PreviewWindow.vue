@@ -3,7 +3,7 @@ import VideoPlay from 'vue3-video-play'
 
 import 'vue3-video-play/dist/style.css'
 
-const { type } = defineProps<{ type: 'image' | 'video' }>()
+const { type } = $defineProps<{ type: 'image' | 'video' }>()
 
 const route = useRoute()
 

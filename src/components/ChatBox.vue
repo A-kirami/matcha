@@ -9,7 +9,7 @@ import type { PartialOptions, OverlayScrollbars } from 'overlayscrollbars'
 import type ChatInput from '~/components/ChatInput.vue'
 import type { State } from '~/stores/session'
 
-const { chatType, chatId } = defineProps<{
+const { chatType, chatId } = $defineProps<{
   chatType: 'private' | 'group'
   chatId: string
 }>()

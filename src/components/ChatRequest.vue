@@ -4,7 +4,7 @@ import { Behav } from '~/adapter/behav'
 
 import type { Request } from '~/stores/chat'
 
-const { request } = defineProps<{
+const { request } = $defineProps<{
   request: Request
 }>()
 
