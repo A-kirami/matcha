@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { unix } from 'dayjs'
 
-const { chatType, chatPerson } = defineProps<{
+const { chatType, chatPerson } = $defineProps<{
   chatType: 'private' | 'group'
   chatPerson: User | Group | null
 }>()

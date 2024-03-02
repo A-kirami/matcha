@@ -10,7 +10,7 @@ const {
   waveSlider = '#4fc3f7',
   waveProgessColor = '#4fc3f7',
   waveType = 'mirror',
-} = defineProps<{
+} = $defineProps<{
   src: string
   waveWidth?: number
   waveHeight?: number

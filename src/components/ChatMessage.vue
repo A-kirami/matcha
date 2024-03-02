@@ -11,7 +11,7 @@ import type { ContentMapping } from '~/adapter/content'
 import type { MessageScenes } from '~/adapter/scene'
 import type { Message } from '~/stores/chat'
 
-const { message } = defineProps<{
+const { message } = $defineProps<{
   message: Message
 }>()
 

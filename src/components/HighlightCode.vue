@@ -7,7 +7,7 @@ import 'highlight.js/styles/stackoverflow-light.css'
 
 hljs.registerLanguage('json', json)
 
-const { language, code } = defineProps<{
+const { language, code } = $defineProps<{
   language: string
   code: string
 }>()

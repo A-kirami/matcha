@@ -17,7 +17,7 @@ import type {
 } from '~/adapter/scene'
 import type { Notice } from '~/stores/chat'
 
-const { notice } = defineProps<{
+const { notice } = $defineProps<{
   notice: Notice
 }>()
 

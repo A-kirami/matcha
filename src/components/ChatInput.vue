@@ -11,7 +11,7 @@ import type { Contents } from '~/adapter/content'
 // eslint-disable-next-line func-call-spacing
 defineEmits<{ (e: 'send'): void }>()
 
-const { chatType, chatId } = defineProps<{
+const { chatType, chatId } = $defineProps<{
   chatType: 'private' | 'group'
   chatId: string
 }>()

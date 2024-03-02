@@ -9,7 +9,7 @@ import { Behav } from '~/adapter/behav'
 import type { Contents } from '~/adapter/content'
 import type { ReplyMessageInfo } from '~/stores/session'
 
-const { messageId, messages, onlyImage } = defineProps<{
+const { messageId, messages, onlyImage } = $defineProps<{
   messageId: string
   messages: Contents[]
   onlyImage: boolean

@@ -4,7 +4,7 @@ import { liveQuery } from 'dexie'
 
 import { Behav } from '~/adapter/behav'
 
-const { chatType, chatPerson } = defineProps<{
+const { chatType, chatPerson } = $defineProps<{
   chatType: 'private' | 'group'
   chatPerson: User | Group | null
 }>()

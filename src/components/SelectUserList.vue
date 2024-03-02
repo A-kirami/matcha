@@ -22,7 +22,7 @@ function specifyUser(type: 'bot' | 'persona', uid: string) {
   }
 }
 
-const props = defineProps<{ modelValue: boolean }>()
+const props = $defineProps<{ modelValue: boolean }>()
 
 const emit = defineEmits<{ (e: 'update:modelValue', value: boolean): void }>()
 
