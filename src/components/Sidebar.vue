@@ -68,16 +68,9 @@ const navbar: NavItem[] = [
     },
   },
 ]
-
-let listVisible = $ref<boolean>(false)
-
-function openUserForm() {
-  listVisible = true
-}
 </script>
 
 <template>
-  <SelectUserList v-model="listVisible" />
   <aside class="h-screen w-16 flex flex-col items-center border-r border-light-700 px-2 py-6" dark="border-dark-400">
     <div class="mb-5">
       <img src="/matcha.webp" alt="matcha logo" class="h-10 w-10" />
@@ -103,7 +96,7 @@ function openUserForm() {
         :border="true"
         size="2.8rem"
         class="cursor-pointer"
-        @click="openUserForm"
+        @click="() => {}"
       />
     </div>
   </aside>

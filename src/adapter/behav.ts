@@ -1,6 +1,4 @@
 /* eslint-disable camelcase */
-import { message } from 'ant-design-vue'
-
 import type { Contents } from './content'
 import type {
   GroupMessageScene,
@@ -92,7 +90,7 @@ export class Behav {
   async sendGroupMessage(sender: User, receiver: Group, contents: Contents[]): Promise<GroupMessageScene> {
     const member = await db.members.get({ userId: sender.id, groupId: receiver.id })
     if (!member) {
-      message.error('只有群成员才能发送消息')
+      // message.error('只有群成员才能发送消息')
       throw new Error('不是本群成员')
     }
     const lastContent = contents.at(-1)

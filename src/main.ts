@@ -12,7 +12,6 @@ import '@unocss/reset/tailwind.css'
 import 'virtual:uno.css'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import 'overlayscrollbars/overlayscrollbars.css'
-import 'ant-design-vue/es/message/style/css'
 import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css'
 
 import './styles/main.css'

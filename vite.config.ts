@@ -7,7 +7,6 @@ import postcssNesting from 'postcss-nesting'
 import UnoCSS from 'unocss/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import TurboConsole from 'unplugin-turbo-console/vite'
-import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import VueMacros from 'unplugin-vue-macros/vite'
 import { defineConfig } from 'vite'
@@ -22,6 +21,7 @@ export default defineConfig(async () => ({
       plugins: {
         vue: Vue(),
       },
+      betterDefine: false,
     }),
     AutoImport({
       imports: [
@@ -42,7 +42,6 @@ export default defineConfig(async () => ({
       vueTemplate: true,
     }),
     Components({
-      resolvers: [AntDesignVueResolver()],
       dts: 'src/components.d.ts',
     }),
     UnoCSS(),

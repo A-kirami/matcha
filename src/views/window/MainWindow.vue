@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import zhCN from 'ant-design-vue/es/locale/zh_CN'
-
 const status = useStatusStore()
 const adapter = useAdapterStore()
 
@@ -28,24 +26,22 @@ watch(
 
 <template>
   <Loading v-if="status.isLoading" />
-  <a-config-provider :locale="zhCN">
-    <main
-      class="h-screen flex flex-row bg-light-50 text-gray-700 transition-colors duration-500"
-      dark="text-gray-400 bg-dark-800"
-    >
-      <Sidebar />
-      <div class="w-full flex flex-col justify-self-stretch">
-        <Titlebar />
-        <div class="stage">
-          <RouterView v-slot="{ Component }">
-            <KeepAlive>
-              <component :is="Component" />
-            </KeepAlive>
-          </RouterView>
-        </div>
+  <main
+    class="h-screen flex flex-row bg-light-50 text-gray-700 transition-colors duration-500"
+    dark="text-gray-400 bg-dark-800"
+  >
+    <Sidebar />
+    <div class="w-full flex flex-col justify-self-stretch">
+      <Titlebar />
+      <div class="stage">
+        <RouterView v-slot="{ Component }">
+          <KeepAlive>
+            <component :is="Component" />
+          </KeepAlive>
+        </RouterView>
       </div>
-    </main>
-  </a-config-provider>
+    </div>
+  </main>
 </template>
 
 <style scoped>

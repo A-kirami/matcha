@@ -22,6 +22,7 @@
   },
   "plugins": ["vue", "@typescript-eslint"],
   "parser": "vue-eslint-parser",
+  "ignorePatterns": ["**/components/ui/**"],
   "rules": {
     "linebreak-style": "off",
     "quotes": ["warn", "single"],
@@ -88,6 +89,7 @@
     "no-constant-condition": "error",
     "no-var": "error",
     "no-undef": "off",
+    "no-unused-vars": "off",
     "spaced-comment": ["warn", "always", { "markers": ["/"] }],
     "no-console": "warn",
     "accessor-pairs": "error",
@@ -97,6 +99,18 @@
     "no-inline-comments": "warn",
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "args": "all",
+        "argsIgnorePattern": "^_",
+        "caughtErrors": "all",
+        "caughtErrorsIgnorePattern": "^_",
+        "destructuredArrayIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "ignoreRestSiblings": true
+      }
+    ],
     "vue/no-multiple-template-root": "off",
     "vue/no-v-model-argument": "off",
     "vue/no-v-for-template-key": "off",

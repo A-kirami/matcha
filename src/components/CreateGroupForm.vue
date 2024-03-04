@@ -2,7 +2,6 @@
 <script setup lang="ts">
 // TODO: 标记为💩山，需要重构
 import { UseDraggable } from '@vueuse/components'
-import { message } from 'ant-design-vue'
 import dayjs from 'dayjs'
 import InlineSvg from 'vue-inline-svg'
 

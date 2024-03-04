@@ -14,24 +14,11 @@ const groupList = useObservable(
     })
   )
 )
-
-let userFormVisible = $ref<boolean>(false)
-let groupFormVisible = $ref<boolean>(false)
-
-function openUserForm() {
-  userFormVisible = true
-}
-
-function openGroupForm() {
-  groupFormVisible = true
-}
 </script>
 
 <template>
-  <CreateUserForm v-model="userFormVisible" />
-  <CreateGroupForm v-model="groupFormVisible" />
   <section
-    class="w-72 flex flex-shrink-0 flex-col items-center justify-start border-r py-3 lt-lg:w-18 lt-xl:w-52"
+    class="w-68 flex flex-shrink-0 flex-col items-center justify-start border-r py-3 lt-lg:w-18 lt-xl:w-52"
     dark="border-dark-400"
   >
     <div class="w-full flex items-center justify-around px-2">
@@ -41,10 +28,10 @@ function openGroupForm() {
         <template #overlay>
           <a-menu>
             <a-menu-item>
-              <a @click="openUserForm">创建用户</a>
+              <a @click="() => {}">创建用户</a>
             </a-menu-item>
             <a-menu-item>
-              <a @click="openGroupForm">创建群组</a>
+              <a @click="() => {}">创建群组</a>
             </a-menu-item>
           </a-menu>
         </template>
