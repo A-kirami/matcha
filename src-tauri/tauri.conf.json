@@ -13,10 +13,10 @@
     "windows": [
       {
         "title": "Matcha",
-        "height": 800,
-        "width": 1280,
-        "minHeight": 640,
-        "minWidth": 798,
+        "height": 720,
+        "width": 1080,
+        "minHeight": 540,
+        "minWidth": 620,
         "center": true,
         "decorations": false,
         "transparent": true,
