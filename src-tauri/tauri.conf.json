@@ -19,7 +19,11 @@
         "minWidth": 798,
         "center": true,
         "decorations": false,
-        "transparent": true
+        "transparent": true,
+        "windowEffects": {
+          "effects": ["acrylic", "blur", "hudWindow"],
+          "state": "active"
+        }
       }
     ],
     "security": {
