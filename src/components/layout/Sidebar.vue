@@ -68,33 +68,41 @@ const navbar: NavItem[] = [
     },
   },
 ]
+
+const focused = useWindowFocus()
 </script>
 
 <template>
-  <aside class="h-screen w-16 flex flex-col items-center border-r border-light-700 px-2 py-6" dark="border-dark-400">
-    <div class="mb-5">
-      <img src="/matcha.webp" alt="matcha logo" class="h-10 w-10" />
+  <aside
+    class="w-15 flex flex-col items-center justify-between bg-white"
+    :class="[focused ? 'bg-opacity-40' : 'bg-opacity-60']"
+  >
+    <div class="mt-6">
+      <img src="/matcha.webp" alt="matcha logo" class="mx-auto mb-4 h-9 w-9" />
+      <nav>
+        <ul class="flex flex-col">
+          <li v-for="navitem in navbar" :key="navitem.name" class="navitem my-1 h-10 w-10 cursor-pointer">
+            <RouterLink
+              v-slot="{ isActive }"
+              :to="`/${navitem.name}`"
+              class="block h-full flex items-center justify-center rounded-lg"
+            >
+              <InlineSvg
+                :src="isActive ? navitem.icon.active : navitem.icon.normal"
+                class="h-6 w-6 text-zinc-400 transition-transform"
+                :class="{ 'active': isActive }"
+              />
+            </RouterLink>
+          </li>
+        </ul>
+      </nav>
     </div>
-    <nav>
-      <ul class="flex flex-col">
-        <li v-for="navitem in navbar" :key="navitem.name" class="navitem my-3 cursor-pointer">
-          <RouterLink v-slot="{ isActive }" :to="`/${navitem.name}`" class="block h-full px-1 py-2">
-            <InlineSvg
-              :src="isActive ? navitem.icon.active : navitem.icon.normal"
-              class="text-zinc-400 transition-transform"
-              :class="{ 'active': isActive }"
-            />
-          </RouterLink>
-        </li>
-      </ul>
-    </nav>
-    <div class="mt-auto flex flex-col items-center">
-      <ThemeSwitch />
+    <div class="mb-4">
       <Avatar
         type="user"
         :aid="status.user?.id"
         :border="true"
-        size="2.8rem"
+        size="2.5rem"
         class="cursor-pointer"
         @click="() => {}"
       />
@@ -104,10 +112,16 @@ const navbar: NavItem[] = [
 
 <style scoped>
 .active {
-  @apply text-[#70aeff] scale-110;
+  @apply text-[#70aeff];
 }
 
-.navitem:hover svg:not(.active) {
-  @apply text-[#70aeff] scale-110;
+.navitem {
+  & a.router-link-active {
+    @apply bg-blue-200 bg-opacity-30;
+  }
+
+  &:hover svg:not(.active) {
+    @apply text-[#70aeff];
+  }
 }
 </style>

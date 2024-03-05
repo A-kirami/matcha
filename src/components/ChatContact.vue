@@ -37,7 +37,7 @@ const groupList = useObservable(
         </template>
       </a-dropdown>
     </div>
-    <ul v-auto-animate class="mt-4 w-64">
+    <ul v-auto-animate class="mt-4 max-w-64 w-full">
       <li>
         <RouterLink v-slot="{ isActive }" :to="`/chat/private/${status.bot?.id ?? 0}`" active-class="active">
           <ChatContactItem chat-type="private" :chat-person="status.bot" :class="{ 'active': isActive }" />

@@ -19,12 +19,15 @@ async function maximizeWindow() {
 async function closeWindow() {
   await appWindow.close()
 }
+
+const focused = useWindowFocus()
 </script>
 
 <template>
   <header
     data-tauri-drag-region
-    class="h-10 flex items-center justify-end border-b text-gray-500"
+    class="h-7 flex items-center justify-end bg-white text-gray-500"
+    :class="{ 'bg-opacity-80': focused }"
     dark="border-dark-400"
   >
     <div
