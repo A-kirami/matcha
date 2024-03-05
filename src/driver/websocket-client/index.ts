@@ -30,7 +30,7 @@ export class websocketClient implements Driver {
     try {
       await this.ws.send(JSON.stringify(event))
       return true
-    } catch (error) {
+    } catch (_) {
       return false
     }
   }
