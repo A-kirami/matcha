@@ -52,7 +52,7 @@
     "font-family-name-quotes": "always-unless-keyword",
     "function-name-case": "lower",
     "function-url-quotes": "always",
-    "value-keyword-case": "lower",
+    "value-keyword-case": ["lower", { "ignoreFunctions": ["/^v-bind$/"] }],
     "declaration-empty-line-before": "never",
     "selector-attribute-quotes": "always",
     "selector-pseudo-element-colon-notation": "double",

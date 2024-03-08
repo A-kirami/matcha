@@ -37,11 +37,12 @@ export default defineConfig(async () => ({
           type: true,
         },
       ],
-      dirs: ['src/database', 'src/stores', 'src/utils'],
+      dirs: ['src/composables', 'src/database', 'src/stores', 'src/utils'],
       dts: 'src/auto-imports.d.ts',
       vueTemplate: true,
     }),
     Components({
+      dirs: ['src/components', 'src/views', 'src/layouts'],
       dts: 'src/components.d.ts',
     }),
     UnoCSS(),

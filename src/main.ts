@@ -14,7 +14,7 @@ import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import 'overlayscrollbars/overlayscrollbars.css'
 import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css'
 
-import './styles/main.css'
+import '~/styles/main.css'
 
 createApp(App)
   .use(createPinia().use(piniaPluginPersistedstate))
