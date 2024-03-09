@@ -30,6 +30,11 @@ pub fn run() {
                 ])
                 .timezone_strategy(TimezoneStrategy::UseLocal)
                 .level(log::LevelFilter::Debug)
+                .filter(|metadata| {
+                    !metadata
+                        .target()
+                        .contains("tao::platform_impl::platform::event_loop::runner")
+                })
                 .build(),
         )
         .invoke_handler(tauri::generate_handler![
