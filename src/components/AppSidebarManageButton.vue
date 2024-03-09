@@ -16,7 +16,7 @@ import { SlidersHorizontal, Info, Bolt, Terminal, RefreshCw } from 'lucide-vue-n
       <DropdownMenuSeparator />
       <DropdownMenuItem>
         <Bolt class="mr-2 size-4" :stroke-width="1.5" />
-        <span>设置</span>
+        <RouterLink to="/settings" class="w-full">设置</RouterLink>
       </DropdownMenuItem>
       <DropdownMenuItem>
         <Info class="mr-2 size-4" :stroke-width="1.5" />

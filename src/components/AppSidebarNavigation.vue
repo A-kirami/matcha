@@ -1,62 +1,32 @@
 <script setup lang="ts">
 import InlineSvg from 'vue-inline-svg'
 
-import ChatActiveIcon from '~/assets/chat-active.svg?url'
-import ChatIcon from '~/assets/chat.svg?url'
-import CodeActiveIcon from '~/assets/code-active.svg?url'
-import CodeIcon from '~/assets/code.svg?url'
-import ServiceActiveIcon from '~/assets/service-active.svg?url'
-import ServiceIcon from '~/assets/service.svg?url'
-import TestActiveIcon from '~/assets/test-active.svg?url'
-import TestIcon from '~/assets/test.svg?url'
-import ToolActiveIcon from '~/assets/tool-active.svg?url'
-import ToolIcon from '~/assets/tool.svg?url'
-
 interface NavItem {
-  name: string
+  path: string
+  position: number
   icon: {
     normal: string
     active: string
   }
 }
 
-const navbar: NavItem[] = [
-  {
-    name: 'chat',
-    icon: {
-      normal: ChatIcon,
-      active: ChatActiveIcon,
-    },
-  },
-  {
-    name: 'code',
-    icon: {
-      normal: CodeIcon,
-      active: CodeActiveIcon,
-    },
-  },
-  {
-    name: 'service',
-    icon: {
-      normal: ServiceIcon,
-      active: ServiceActiveIcon,
-    },
-  },
-  {
-    name: 'test',
-    icon: {
-      normal: TestIcon,
-      active: TestActiveIcon,
-    },
-  },
-  {
-    name: 'tool',
-    icon: {
-      normal: ToolIcon,
-      active: ToolActiveIcon,
-    },
-  },
-]
+const router = useRouter()
+
+const routes = router.getRoutes()
+
+const navItems: NavItem[] = routes
+  .filter((route) => route.meta.navDisplay)
+  .map((route) => {
+    return {
+      path: route.path,
+      position: (route.meta.position as number) ?? 0,
+      icon: {
+        normal: getAssetsUrl(route.meta.icon as string),
+        active: getAssetsUrl(route.meta.activeIcon as string),
+      },
+    }
+  })
+  .sort((a, b) => a.position - b.position)
 
 let activeSliderTop = $ref('')
 
@@ -89,20 +59,16 @@ onMounted(() => {
   <nav>
     <ul class="navbar">
       <li
-        v-for="navitem in navbar"
-        :key="navitem.name"
+        v-for="navItem in navItems"
+        :key="navItem.path"
         class="mb-2 size-10"
         @click="handleSlider"
         @mouseenter="handleSlider"
         @mouseleave="handleSlider"
       >
-        <RouterLink
-          v-slot="{ isActive }"
-          :to="`/${navitem.name}`"
-          class="h-full flex items-center justify-center rounded-lg"
-        >
+        <RouterLink v-slot="{ isActive }" :to="navItem.path" class="h-full flex items-center justify-center rounded-lg">
           <InlineSvg
-            :src="isActive ? navitem.icon.active : navitem.icon.normal"
+            :src="isActive ? navItem.icon.active : navItem.icon.normal"
             class="size-6 text-gray-500 transition-transform"
             :class="{ 'active': isActive }"
           />

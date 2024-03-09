@@ -28,7 +28,13 @@
     "paths": {
       "~/*": ["src/*"]
     },
-    "types": ["vite/client", "vitest/globals", "unplugin-vue-macros/macros-global"]
+    "types": [
+      "vite/client",
+      "vitest/globals",
+      "unplugin-vue-macros/macros-global",
+      "unplugin-vue-router/client",
+      "vite-plugin-vue-layouts/client"
+    ]
   },
   "vueCompilerOptions": {
     "plugins": ["@vue-macros/volar/define-slots", "@vue-macros/volar/define-models", "@vue-macros/volar/define-props"]

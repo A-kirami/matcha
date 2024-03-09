@@ -75,3 +75,7 @@ export class DefaultMap<K, V> extends Map<K, V> {
     return super.get(key)!
   }
 }
+
+export function getAssetsUrl(name: string): string {
+  return new URL(`../assets/${name}`, import.meta.url).href
+}

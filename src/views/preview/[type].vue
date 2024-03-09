@@ -1,3 +1,8 @@
+<route lang="yaml">
+meta:
+  layout: false
+</route>
+
 <script setup lang="ts">
 import VideoPlay from 'vue3-video-play'
 

@@ -9,8 +9,11 @@ import AutoImport from 'unplugin-auto-import/vite'
 import TurboConsole from 'unplugin-turbo-console/vite'
 import Components from 'unplugin-vue-components/vite'
 import VueMacros from 'unplugin-vue-macros/vite'
+import { VueRouterAutoImports } from 'unplugin-vue-router'
+import VueRouter from 'unplugin-vue-router/vite'
 import { defineConfig } from 'vite'
 import VueDevTools from 'vite-plugin-vue-devtools'
+import Layouts from 'vite-plugin-vue-layouts'
 
 const mobile = !!/android|ios/.exec(process.env.TAURI_ENV_PLATFORM)
 
@@ -23,11 +26,18 @@ export default defineConfig(async () => ({
       },
       betterDefine: false,
     }),
+    VueRouter({
+      routesFolder: 'src/views',
+      dts: 'src/typed-router.d.ts',
+    }),
+    Layouts({
+      pagesDirs: 'src/views',
+    }),
     AutoImport({
       imports: [
         'vue',
-        'vue-router',
         '@vueuse/core',
+        VueRouterAutoImports,
         {
           '@tauri-apps/plugin-log': [['*', 'logger']],
         },
@@ -42,7 +52,6 @@ export default defineConfig(async () => ({
       vueTemplate: true,
     }),
     Components({
-      dirs: ['src/components', 'src/views', 'src/layouts'],
       dts: 'src/components.d.ts',
     }),
     UnoCSS(),
