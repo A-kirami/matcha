@@ -16,6 +16,10 @@ pub fn run() {
             let port: u16 = 8720;
             server::start_static_file_server(cache_path, port);
 
+            #[cfg(desktop)]
+            app.handle()
+                .plugin(tauri_plugin_updater::Builder::new().build())?;
+
             Ok(())
         })
         .plugin(tauri_plugin_os::init())
@@ -24,6 +28,7 @@ pub fn run() {
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_process::init())
         .plugin(
             tauri_plugin_log::Builder::new()
                 .targets([

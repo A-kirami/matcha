@@ -26,7 +26,11 @@
     "os:allow-version",
     {
       "identifier": "fs:allow-exists",
-      "allow": [{ "path": "$APPCACHE/**/*" }]
+      "allow": [
+        {
+          "path": "$APPCACHE/**/*"
+        }
+      ]
     },
     {
       "identifier": "http:default",
@@ -41,6 +45,9 @@
     },
     "dialog:allow-open",
     "dialog:allow-save",
-    "fs:allow-stat"
+    "fs:allow-stat",
+    "updater:default",
+    "process:allow-restart",
+    "shell:allow-open"
   ]
 }

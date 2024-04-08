@@ -43,10 +43,9 @@ pub fn read_file(
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub enum FileInput {
-    #[serde(rename = "content")]
     Content(Vec<u8>),
-    #[serde(rename = "path")]
     Path(String),
 }
 
@@ -81,10 +80,9 @@ pub fn open_devtools(window: WebviewWindow) {
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub enum OBFile {
-    #[serde(rename = "str")]
     Str(String),
-    #[serde(rename = "binary")]
     Binary(Vec<u8>),
 }
 
@@ -120,13 +118,10 @@ pub async fn create_cache_file(
 }
 
 #[derive(Serialize, Deserialize)]
-#[serde(tag = "type")]
+#[serde(tag = "type", rename_all = "camelCase")]
 enum FileType {
-    #[serde(rename = "url")]
     Url(FileUrl),
-    #[serde(rename = "path")]
     Path(FilePath),
-    #[serde(rename = "data")]
     Data(FileData),
 }
 

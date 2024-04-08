@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { type as getOsType } from '@tauri-apps/plugin-os'
+import { relaunch } from '@tauri-apps/plugin-process'
 import { configure } from 'vee-validate'
 
 import type { OsType } from '@tauri-apps/plugin-os'
+
+import { isRelease } from '~build/meta'
 
 configure({
   validateOnBlur: false,
@@ -14,11 +17,20 @@ provide('osType', $$(osType))
 
 onMounted(async () => {
   osType = await getOsType()
+
+  const general = useGeneralSettingsStore()
+
+  if (isRelease && general.autoUpdate) {
+    const update = await checkUpdate()
+    if (update?.available) {
+      await update.downloadAndInstall()
+      await relaunch()
+    }
+  }
 })
 </script>
 
 <template>
-  <Toaster />
   <div :class="$style.defaultLayout" class="grid h-screen">
     <AppSidebar style="grid-area: sidebar" />
     <AppTitlebar style="grid-area: titlebar" />
@@ -28,6 +40,7 @@ onMounted(async () => {
       </Suspense>
     </RouterView>
   </div>
+  <Toaster />
 </template>
 
 <style module>

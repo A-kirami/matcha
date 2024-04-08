@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { WebviewWindow } from '@tauri-apps/api/webviewWindow'
 import { SlidersHorizontal, Info, Bolt, Terminal, RefreshCw } from 'lucide-vue-next'
+import { toast } from 'vue-sonner'
+
+import type { Update } from '@tauri-apps/plugin-updater'
+
+import { isRelease } from '~build/meta'
 
 const router = useRouter()
 
@@ -26,7 +31,23 @@ async function openAbout() {
   })
 }
 
-let open = $ref(false)
+let commandOpen = $ref(false)
+
+let updateOpen = $ref(false)
+
+let updateInfo = $ref<Update>()
+
+async function manualCheckUpdate() {
+  const update = await checkUpdate()
+  if (update) {
+    if (update.available) {
+      updateInfo = update
+      updateOpen = true
+    } else {
+      toast.success('', { description: '当前已是最新版本，无需更新' })
+    }
+  }
+}
 </script>
 
 <template>
@@ -35,7 +56,7 @@ let open = $ref(false)
       <SlidersHorizontal class="size-7 cursor-pointer stroke-1.5 text-gray-500" dark="text-gray-400" />
     </DropdownMenuTrigger>
     <DropdownMenuContent class="ml-15 w-46 -mb-10">
-      <DropdownMenuItem class="cursor-pointer" @click="open = true">
+      <DropdownMenuItem class="cursor-pointer" @click="commandOpen = true">
         <Terminal class="mr-2 size-4 stroke-1.5" />
         <span>命令面板</span>
         <DropdownMenuShortcut>Ctrl+J</DropdownMenuShortcut>
@@ -44,18 +65,19 @@ let open = $ref(false)
       <RouterLink :to="settingsPath">
         <DropdownMenuItem class="cursor-pointer">
           <Bolt class="mr-2 size-4 stroke-1.5" />
-          设置
+          <span>设置</span>
         </DropdownMenuItem>
       </RouterLink>
       <DropdownMenuItem class="cursor-pointer" @click="openAbout">
         <Info class="mr-2 size-4 stroke-1.5" />
         <span>关于</span>
       </DropdownMenuItem>
-      <DropdownMenuItem class="cursor-pointer">
+      <DropdownMenuItem v-if="isRelease" class="cursor-pointer" @click="manualCheckUpdate">
         <RefreshCw class="mr-2 size-4 stroke-1.5" />
         <span>检查更新</span>
       </DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
-  <AppCommand v-model:open="open" />
+  <AppCommand v-model:open="commandOpen" />
+  <CheckUpdateDialog v-if="updateInfo" v-model:open="updateOpen" :update-info="updateInfo" />
 </template>

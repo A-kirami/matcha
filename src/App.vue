@@ -6,10 +6,6 @@ import 'dayjs/locale/zh-cn'
 
 dayjsLocale('zh-cn')
 
-onBeforeMount(async () => {
-  await attachConsole()
-})
-
 document.addEventListener('contextmenu', (e) => {
   if (import.meta.env.PROD) {
     e.preventDefault()
@@ -26,6 +22,10 @@ const themeMode = useColorMode({
 })
 
 provide('themeMode', themeMode)
+
+onBeforeMount(async () => {
+  await attachConsole()
+})
 </script>
 
 <template>

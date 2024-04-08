@@ -13,6 +13,8 @@ import * as z from 'zod'
 
 import { FormField } from '~/components/ui/form'
 
+import { isRelease } from '~build/meta'
+
 const general = useGeneralSettingsStore()
 
 const generalSettingsSchema = toTypedSchema(
@@ -93,7 +95,7 @@ defineExpose({ resetForm })
         <FormMessage />
       </FormItem>
     </FormField>
-    <FormField v-slot="{ value, handleChange }" name="autoUpdate">
+    <FormField v-if="isRelease" v-slot="{ value, handleChange }" name="autoUpdate">
       <FormItem class="max-w-120 flex flex-row items-center justify-between rounded-lg">
         <div class="space-y-0.5">
           <FormLabel>自动更新</FormLabel>
