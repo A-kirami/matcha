@@ -20,9 +20,8 @@ export class OneBotV11 extends Adapter {
   readonly eventHandler = new EventHandler()
 
   getConnectHeaders(): OneBotV11Headers {
-    const status = useStatusStore()
     return {
-      'X-Self-ID': status.assignBot.toString(),
+      'X-Self-ID': this.state.bot!.id,
       'X-Client-Role': 'Universal',
     }
   }
@@ -33,7 +32,7 @@ export class OneBotV11 extends Adapter {
       meta_event_type: 'lifecycle',
       sub_type: 'connect',
       time: getTimestamp(),
-      self_id: Number(this.status.assignBot),
+      self_id: Number(this.state.bot!.id),
     }
     await this.send(connectEvent)
   }
@@ -44,7 +43,7 @@ export class OneBotV11 extends Adapter {
       meta_event_type: 'heartbeat',
       time: getTimestamp(),
       interval: this.config.heartbeatInterval,
-      self_id: Number(this.status.assignBot),
+      self_id: Number(this.state.bot!.id),
       status: {
         online: true,
         good: true,

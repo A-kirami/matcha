@@ -15,6 +15,17 @@ document.addEventListener('contextmenu', (e) => {
     e.preventDefault()
   }
 })
+
+const general = useGeneralSettingsStore()
+
+const { theme } = storeToRefs(general)
+
+const themeMode = useColorMode({
+  emitAuto: true,
+  storageRef: theme,
+})
+
+provide('themeMode', themeMode)
 </script>
 
 <template>

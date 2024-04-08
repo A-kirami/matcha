@@ -1,12 +1,12 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="graph-paper h-full flex flex-col items-center justify-center gap-5">
-    <div i="carbon-tool-kit" class="text-5xl text-gray-400"></div>
-    <div class="text-5xl font-extrabold">功能开发中</div>
-    <div class="text-2xl text-gray-400">如果你对此有兴趣，可以查看应用的路线图</div>
+  <div class="graph-paper h-full flex flex-col items-center justify-center gap-3">
+    <div i="carbon-tool-kit" class="text-4xl text-gray-400"></div>
+    <div class="text-3xl font-bold">功能开发中</div>
+    <div class="text-lg text-gray-400">如果你对此有兴趣，可以查看应用的路线图</div>
     <a href="https://github.com/users/A-kirami/projects/8" target="_blank">
-      <button class="rounded-lg bg-blue-400 px-4 py-2 text-xl text-light">路线图</button>
+      <button class="rounded-lg bg-blue-400 px-3 py-1.5 text-light">路线图</button>
     </a>
   </div>
 </template>

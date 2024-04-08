@@ -11,5 +11,5 @@ pre {
 }
 
 .hljs-string.line-fold {
-  @apply restrict-rows-3;
+  @apply line-clamp-3;
 }

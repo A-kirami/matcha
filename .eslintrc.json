@@ -18,7 +18,10 @@
   "parserOptions": {
     "ecmaVersion": 13,
     "parser": "@typescript-eslint/parser",
-    "sourceType": "module"
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
   "plugins": ["vue", "@typescript-eslint"],
   "parser": "vue-eslint-parser",
@@ -42,7 +45,7 @@
     "block-scoped-var": "error",
     "block-spacing": "warn",
     "brace-style": ["error", "1tbs"],
-    "camelcase": "error",
+    "camelcase": "warn",
     "comma-spacing": [
       "error",
       {
@@ -96,7 +99,7 @@
     "no-alert": "warn",
     "no-eval": "error",
     "no-trailing-spaces": "warn",
-    "no-inline-comments": "warn",
+    "no-inline-comments": ["warn", { "ignorePattern": "@ts-expect-error:\\s.+" }],
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-unused-vars": [
@@ -117,7 +120,7 @@
     "vue/script-setup-uses-vars": "error",
     "vue/multi-word-component-names": "off",
     "vue/no-setup-props-destructure": "off",
-    "import/no-unresolved": ["error", { "ignore": ["^virtual:"] }],
+    "import/no-unresolved": ["error", { "ignore": ["^virtual:", "^~(?!/).*"] }],
     "import/order": [
       "warn",
       {

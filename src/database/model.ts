@@ -19,6 +19,8 @@ export interface User {
   level: number
   /** 连续登陆天数 */
   loginDays: number
+  /** 上次使用时间 */
+  lastUseTime: number
 }
 
 export interface Friend {
@@ -47,6 +49,8 @@ export interface Group {
   maxMemberCount: number
   /** 是否启用全体禁言 */
   wholeBanned: boolean
+  /** 最后一条消息的时间 */
+  lastMessageTime: number
 }
 
 export interface Member {

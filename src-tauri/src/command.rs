@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fs::{self, File};
 use std::io::{Read, Seek, SeekFrom, Write};
+use std::path::PathBuf;
 use tauri::{AppHandle, WebviewWindow};
 
 #[tauri::command(async)]
@@ -41,11 +42,37 @@ pub fn read_file(
     Ok(buffer)
 }
 
+#[derive(Serialize, Deserialize)]
+pub enum FileInput {
+    #[serde(rename = "content")]
+    Content(Vec<u8>),
+    #[serde(rename = "path")]
+    Path(String),
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct FileTypeInfo {
+    #[serde(rename = "mimeType")]
+    mime_type: String,
+    extension: String,
+}
+
 #[tauri::command(async)]
-pub fn get_file_type(file: Vec<u8>) -> Result<String, String> {
-    infer::get(&file)
-        .map(|file_type| file_type.to_string())
-        .ok_or_else(|| "未知的文件类型".into())
+pub fn get_file_type(file: FileInput) -> Result<FileTypeInfo, String> {
+    let kind: infer::Type = match file {
+        FileInput::Content(content) => match infer::get(&content) {
+            Some(file_type) => file_type,
+            None => return Err("无法识别文件类型".into()),
+        },
+        FileInput::Path(path) => match infer::get_from_path(path) {
+            Ok(file_type) => file_type.expect("无法识别文件类型"),
+            Err(err) => return Err(err.to_string()),
+        },
+    };
+    Ok(FileTypeInfo {
+        mime_type: kind.mime_type().to_string(),
+        extension: kind.extension().to_string(),
+    })
 }
 
 #[tauri::command]
@@ -232,5 +259,25 @@ pub fn merge_file_fragment(
     } else {
         fs::remove_file(temp_file_path).map_err(|err| format!("删除临时文件时出错: {}", err))?;
     }
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn write_file(contents: Vec<u8>, path: PathBuf, overwrite: bool) -> Result<(), String> {
+    if overwrite || !path.exists() {
+        tokio::fs::write(path, contents)
+            .await
+            .map_err(|err| format!("写入文件失败: {}", err))?;
+        Ok(())
+    } else {
+        Err("文件已存在".into())
+    }
+}
+
+#[tauri::command]
+pub async fn copy_file(source: PathBuf, target: PathBuf) -> Result<(), String> {
+    tokio::fs::copy(&source, &target)
+        .await
+        .map_err(|err| format!("复制文件失败: {}", err))?;
     Ok(())
 }

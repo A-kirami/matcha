@@ -11,20 +11,24 @@ import { presetScrollbar } from 'unocss-preset-scrollbar'
 import { presetShadcn } from 'unocss-preset-shadcn'
 
 export default defineConfig({
-  presets: [presetUno(), presetAttributify(), presetIcons(), presetScrollbar(), presetAnimations(), presetShadcn()],
-  transformers: [transformerDirectives(), transformerVariantGroup()],
-  rules: [
-    [
-      /^restrict-rows-(\d+)$/,
-      ([, d]) => ({
-        overflow: 'hidden',
-        'text-overflow': 'ellipsis',
-        display: '-webkit-box',
-        '-webkit-box-orient': 'vertical',
-        '-webkit-line-clamp': d,
-      }),
-    ],
+  presets: [
+    presetUno(),
+    presetAttributify(),
+    presetIcons(),
+    presetScrollbar(),
+    presetAnimations(),
+    presetShadcn({
+      color: {
+        base: 'blue',
+        color: {
+          name: 'matcha',
+          light: { primary: '213 94% 68%', ring: '213 94% 68%' },
+          dark: { background: '222 22% 15%', primary: '210 100% 75%', ring: '210 100% 75%', popover: '222 22% 15%' },
+        },
+      },
+    }),
   ],
+  transformers: [transformerDirectives(), transformerVariantGroup()],
   content: {
     pipeline: {
       include: ['src/**/*.{vue,svelte,[jt]s,[jt]sx,md?(x),astro,elm,php,phtml,html}'],

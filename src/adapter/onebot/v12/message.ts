@@ -10,7 +10,7 @@ import type {
   FileContent,
   LocationContent,
   ImageContent,
-  VoiceContent,
+  AudioContent,
   VideoContent,
   ContentMapping,
 } from '~/adapter/content'
@@ -128,7 +128,7 @@ const messageBuildStrategy: MessageBuildStrategy<ContentMapping> = {
     return createMessage('image', { file_id: content.data.id })
   },
 
-  'voice': (content: VoiceContent): VoiceMessage => {
+  'audio': (content: AudioContent): VoiceMessage => {
     return createMessage('voice', { file_id: content.data.id })
   },
 
@@ -162,15 +162,15 @@ const messageParseStrategy: MessageParseStrategy<MessageMapping> = {
     })
   },
 
-  'voice': async (message: VoiceMessage): Promise<VoiceContent> => {
-    return createContent('voice', {
+  'voice': async (message: VoiceMessage): Promise<AudioContent> => {
+    return createContent('audio', {
       id: message.data.file_id,
       url: await getFile(GetType.URL, message.data.file_id),
     })
   },
 
-  'audio': async (message: AudioMessage): Promise<VoiceContent> => {
-    return createContent('voice', {
+  'audio': async (message: AudioMessage): Promise<AudioContent> => {
+    return createContent('audio', {
       id: message.data.file_id,
       url: await getFile(GetType.URL, message.data.file_id),
     })

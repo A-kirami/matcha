@@ -3,3 +3,7 @@ definePage({
   redirect: '/chat',
 })
 </script>
+
+<template>
+  <div></div>
+</template>

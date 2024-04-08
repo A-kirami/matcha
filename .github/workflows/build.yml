@@ -39,6 +39,8 @@ jobs:
             target: x86_64-pc-windows-msvc
     name: ${{ matrix.label }}
     runs-on: ${{ matrix.os }}
+    env:
+      GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -91,7 +93,7 @@ jobs:
     needs: build
     permissions:
       pull-requests: write
-    if: github.event.pull_request
+    if: github.event.pull_request && github.event.sender.type != 'Bot'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

@@ -46,14 +46,14 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
   },
 
   'get_status': (): ActionResponse<Status> => {
-    const status = useStatusStore()
+    const state = useStateStore()
     return response(0, {
       good: true,
       bots: [
         {
           self: {
             platform: 'qq',
-            user_id: status.assignBot,
+            user_id: state.bot!.id,
           },
           online: true,
         },
@@ -82,35 +82,32 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
   }): Promise<ActionResponse<{ message_id: string; time: number }>> => {
     let receiver
     if (detail_type === 'private') {
-      receiver = await db.users.get(user_id!)
-      if (!receiver) {
-        return response(1404, null, '用户不存在')
-      }
+      receiver = await getContact('user', user_id!)
     } else if (detail_type === 'group') {
-      receiver = await db.groups.get(group_id!)
-      if (!receiver) {
-        return response(1404, null, '群组不存在')
-      }
+      receiver = await getContact('group', group_id!)
     } else {
       return response(1404, null, '不支持发送')
     }
+    if (!receiver) {
+      return response(1404, null, '发送的目标不存在')
+    }
     const contents = await messageHandler.parse(message)
     const behav = new Behav()
-    const scene = await behav.sendMessage(detail_type, behav.status.bot!, receiver, contents)
+    const scene = await behav.sendMessage(behav.state.bot!, receiver, contents)
     return response(0, { message_id: scene.message_id, time: scene.time })
   },
 
   'delete_message': async ({ message_id }: { message_id: string }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
-    await behav.recallMessage(message_id.toString(), behav.status.assignBot)
+    await behav.recallMessage(message_id.toString(), behav.state.bot!.id)
     return response(0)
   },
 
   'get_self_info': (): ActionResponse<UserInfo> => {
-    const status = useStatusStore()
+    const state = useStateStore()
     return response(0, {
-      user_id: status.assignBot,
-      user_name: status.bot!.name,
+      user_id: state.bot!.id,
+      user_name: state.bot!.name,
       user_displayname: '',
     })
   },
@@ -124,8 +121,8 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
     if (!user) {
       return response(1404, null, '用户不存在')
     }
-    const status = useStatusStore()
-    const friend = await db.friends.get({ userId: status.assignBot, friendId: user.id })
+    const state = useStateStore()
+    const friend = await db.friends.get({ userId: state.bot!.id, friendId: user.id })
     return response(0, {
       user_id: user.id,
       user_name: user.name,
@@ -135,8 +132,8 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
   },
 
   'get_friend_list': async (): Promise<ActionResponse<Array<UserInfo & { user_remark: string }>>> => {
-    const status = useStatusStore()
-    const friends = await db.friends.where({ userId: status.assignBot }).toArray()
+    const state = useStateStore()
+    const friends = await db.friends.where({ userId: state.bot!.id }).toArray()
     return response(
       0,
       await Promise.all(
@@ -165,8 +162,8 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
   },
 
   'get_group_list': async (): Promise<ActionResponse<GroupInfo[]>> => {
-    const status = useStatusStore()
-    const members = await db.members.where({ userId: status.assignBot }).toArray()
+    const state = useStateStore()
+    const members = await db.members.where({ userId: state.bot!.id }).toArray()
     return response(
       0,
       await Promise.all(
@@ -225,13 +222,13 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
     group_name: string
   }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
-    await behav.editGroupName(group_id, behav.status.assignBot, group_name)
+    await behav.editGroupName(group_id, behav.state.bot!.id, group_name)
     return response(0)
   },
 
   'leave_group': async ({ group_id }: { group_id: string }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
-    await behav.removeGroupMember(group_id, behav.status.assignBot, behav.status.assignBot)
+    await behav.removeGroupMember(group_id, behav.state.bot!.id, behav.state.bot!.id)
     return response(0)
   },
 
@@ -324,8 +321,13 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
       }
       case 'transfer': {
         const { file_id, offset, size } = fileInfo
+        const contents = await invoke<number[]>('read_file', {
+          path: await getFile(GetType.PATH, file_id),
+          offset,
+          size,
+        })
         return response(0, {
-          data: await invoke<Uint8Array>('read_file', { path: await getFile(GetType.PATH, file_id), offset, size }),
+          data: new Uint8Array(contents),
         })
       }
       default:

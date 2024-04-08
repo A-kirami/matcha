@@ -3,7 +3,6 @@
     "stylelint-config-standard",
     "stylelint-config-recess-order",
     "stylelint-config-css-modules",
-    "stylelint-config-standard-scss",
     "stylelint-config-standard-vue"
   ],
   "plugins": ["stylelint-color-format", "stylelint-declaration-block-no-ignored-properties"],
@@ -35,9 +34,9 @@
     "no-duplicate-at-import-rules": true,
     "no-duplicate-selectors": true,
     "no-invalid-double-slash-comments": true,
-    "color-named": "never",
+    "color-named": ["never", { "ignore": ["inside-function"] }],
     "function-url-no-scheme-relative": true,
-    "number-max-precision": 2,
+    "number-max-precision": 3,
     "time-min-milliseconds": 100,
     "shorthand-property-no-redundant-values": true,
     "property-no-vendor-prefix": true,
@@ -66,6 +65,7 @@
     "declaration-property-value-no-unknown": [
       true,
       { "ignoreProperties": { "/.+/": ["/^v-bind\\(\\s*[^)]*\\s*\\)$/"] } }
-    ]
+    ],
+    "import-notation": "string"
   }
 }

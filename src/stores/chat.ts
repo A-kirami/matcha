@@ -8,12 +8,13 @@ interface Chat<T extends Scenes['type'], S extends Scenes> {
   type: T
   scene: S
   event?: Event
-  push: boolean
-  read: boolean
+  isSent?: boolean
+  isRead?: boolean
+  preview?: string
 }
 
 export interface Message extends Chat<'message', MessageScenes> {
-  recall: boolean
+  isRecall: boolean
 }
 
 export type Notice = Chat<'notice', NoticeScenes>
@@ -31,8 +32,8 @@ function newChat(scene: Scenes, event?: Event) {
     type: scene.type,
     scene,
     event,
-    push: false,
-    read: false,
+    isSent: false,
+    isRead: false,
   }
 }
 
@@ -41,16 +42,35 @@ export const useChatStore = defineStore('chat', () => {
 
   const adapter = useAdapterStore()
 
-  const config = useConfigStore()
+  const connect = useConnectSettingsStore()
 
-  const status = useStatusStore()
+  const state = useStateStore()
+
+  function getChatLogs(chatType?: 'group' | 'private', chatId?: string) {
+    if (!chatType || !chatId) {
+      return []
+    }
+
+    const sessionSet = new Set([state.bot?.id, state.user?.id])
+
+    return chatLogs.filter((chat) => {
+      if (chat.scene.chat_type !== chatType) {
+        return false
+      }
+      if (chatType === 'group') {
+        return chat.scene.receiver_id === chatId
+      } else {
+        return sessionSet.has(chat.scene.sender_id) && sessionSet.has(chat.scene.receiver_id)
+      }
+    })
+  }
 
   async function appendScene<S extends Scenes>(scene: S, insert?: string): Promise<S> {
     const event = await adapter.bot.eventHandler.handle(scene)
     let chat: Chats
     switch (scene.type) {
       case 'message': {
-        chat = { ...newChat(scene, event), recall: false } as Message
+        chat = { ...newChat(scene, event), isRecall: false } as Message
         break
       }
       case 'notice': {
@@ -64,13 +84,11 @@ export const useChatStore = defineStore('chat', () => {
       default:
         throw new Error('unknown scene type')
     }
-    if (event) {
-      if (config.postSelfEvents || scene.sender_id !== status.assignBot) {
-        chat.push = await adapter.bot.send(event)
-      } else {
-        chat.push = true
-      }
+    const sendEvent = connect.postSelfEvents || scene.sender_id !== state.bot?.id
+    if (event && sendEvent) {
+      chat.isSent = await adapter.bot.send(event)
     }
+    chat.preview = await getPreviewMessage(scene, state.user?.id)
     if (insert) {
       const index = chatLogs.findIndex((chat) => chat.id === insert)
       if (index !== -1) {
@@ -83,7 +101,7 @@ export const useChatStore = defineStore('chat', () => {
   }
 
   function getChat<T extends Chats['type']>(chatId: string, type?: T): Extract<Chats, { type: T }> {
-    const chat = type ? chatLogs.find((c) => c.type === type && c.id === chatId) : chatLogs.find((c) => c.id === chatId)
+    const chat = chatLogs.find((c) => (type ? c.type === type : true) && c.id === chatId)
     return chat as Extract<Chats, { type: T }>
   }
 
@@ -95,10 +113,11 @@ export const useChatStore = defineStore('chat', () => {
     )
   }
 
-  return {
+  return $$({
     chatLogs,
+    getChatLogs,
     appendScene,
     getChat,
     getMessage,
-  }
+  })
 })

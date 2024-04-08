@@ -1,19 +1,40 @@
+<script setup lang="ts">
+import { type as getOsType } from '@tauri-apps/plugin-os'
+import { configure } from 'vee-validate'
+
+import type { OsType } from '@tauri-apps/plugin-os'
+
+configure({
+  validateOnBlur: false,
+})
+
+let osType = $ref<OsType>()
+
+provide('osType', $$(osType))
+
+onMounted(async () => {
+  osType = await getOsType()
+})
+</script>
+
 <template>
-  <div class="default-layout">
+  <Toaster />
+  <div :class="$style.defaultLayout" class="grid h-screen">
     <AppSidebar style="grid-area: sidebar" />
     <AppTitlebar style="grid-area: titlebar" />
-    <RouterView v-slot="{ Component }" style="grid-area: main">
-      <component :is="Component" class="bg-white" :class="{ 'bg-opacity-80': focused }" />
+    <RouterView v-slot="{ Component }" style="grid-area: main; height: calc(100vh - 1.75rem)">
+      <Suspense>
+        <component :is="Component" class="bg-background" :class="{ 'bg-opacity-80 dark:bg-opacity-90': focused }" />
+      </Suspense>
     </RouterView>
   </div>
 </template>
 
-<style scoped>
+<style module>
 .default-layout {
-  @apply h-screen grid;
   grid:
     'sidebar titlebar' auto
-    'sidebar main' 1fr
-    / auto 1fr;
+    'sidebar main' minmax(0, 1fr)
+    / auto minmax(0, 1fr);
 }
 </style>

@@ -1,0 +1,9 @@
+@import 'overlayscrollbars/overlayscrollbars.css' layer(overlayscrollbars);
+
+@layer overlayscrollbars {
+  .os-theme-light {
+    --os-handle-bg: rgb(0 0 0 / 14%);
+    --os-handle-bg-hover: rgb(0 0 0 / 25%);
+    --os-handle-bg-active: rgb(0 0 0 / 36%);
+  }
+}

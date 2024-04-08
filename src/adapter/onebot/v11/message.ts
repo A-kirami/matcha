@@ -18,7 +18,7 @@ import type {
   ContactContent,
   LocationContent,
   ImageContent,
-  VoiceContent,
+  AudioContent,
   VideoContent,
   ForwardContent,
   ForwardContentNode,
@@ -321,7 +321,7 @@ const messageBuildStrategy: MessageBuildStrategy<ContentMapping> = {
   },
 
   'image': (content: ImageContent): ImageMessage => {
-    const { id, url, sub_type } = content.data
+    const { id, url, sub_type = 'normal' } = content.data
     return createMessage('image', {
       file: id,
       url,
@@ -329,7 +329,7 @@ const messageBuildStrategy: MessageBuildStrategy<ContentMapping> = {
     })
   },
 
-  'voice': (content: VoiceContent): RecordMessage => {
+  'audio': (content: AudioContent): RecordMessage => {
     const { id, url } = content.data
     return createMessage('record', {
       file: id,
@@ -446,9 +446,9 @@ const messageParseStrategy: MessageParseStrategy<MessageMapping> = {
     })
   },
 
-  'record': async (message: RecordMessage): Promise<VoiceContent> => {
+  'record': async (message: RecordMessage): Promise<AudioContent> => {
     const { id, url } = await createFileCache(message.data.file, 'audio')
-    return createContent('voice', {
+    return createContent('audio', {
       id,
       url,
     })

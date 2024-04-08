@@ -20,11 +20,17 @@ declare module 'vue-router/auto-routes' {
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
     '/[...all]': RouteRecordInfo<'/[...all]', '/:all(.*)', { all: ParamValue<true> }, { all: ParamValue<false> }>,
+    '/about': RouteRecordInfo<'/about', '/about', Record<never, never>, Record<never, never>>,
     '/chat': RouteRecordInfo<'/chat', '/chat', Record<never, never>, Record<never, never>>,
+    '/chat/[chatType].[chatId]': RouteRecordInfo<'/chat/[chatType].[chatId]', '/chat/:chatType/:chatId', { chatType: ParamValue<true>, chatId: ParamValue<true> }, { chatType: ParamValue<false>, chatId: ParamValue<false> }>,
     '/code': RouteRecordInfo<'/code', '/code', Record<never, never>, Record<never, never>>,
-    '/preview/[type]': RouteRecordInfo<'/preview/[type]', '/preview/:type', { type: ParamValue<true> }, { type: ParamValue<false> }>,
+    '/preview': RouteRecordInfo<'/preview', '/preview', Record<never, never>, Record<never, never>>,
+    '/preview/image': RouteRecordInfo<'/preview/image', '/preview/image', Record<never, never>, Record<never, never>>,
+    '/preview/video': RouteRecordInfo<'/preview/video', '/preview/video', Record<never, never>, Record<never, never>>,
     '/service': RouteRecordInfo<'/service', '/service', Record<never, never>, Record<never, never>>,
     '/settings': RouteRecordInfo<'/settings', '/settings', Record<never, never>, Record<never, never>>,
+    '/settings/connect': RouteRecordInfo<'/settings/connect', '/settings/connect', Record<never, never>, Record<never, never>>,
+    '/settings/general': RouteRecordInfo<'/settings/general', '/settings/general', Record<never, never>, Record<never, never>>,
     '/test': RouteRecordInfo<'/test', '/test', Record<never, never>, Record<never, never>>,
     '/tool': RouteRecordInfo<'/tool', '/tool', Record<never, never>, Record<never, never>>,
   }

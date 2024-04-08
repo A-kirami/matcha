@@ -68,6 +68,17 @@ class MatchaDB extends Dexie {
         })
       })
     this.version(3).stores({ files: 'id, sha256' })
+    this.version(4).upgrade(async (trans) => {
+      const users = trans.table('users').toCollection()
+      await users.modify((user) => {
+        user.lastUseTime ??= 0
+      })
+
+      const groups = trans.table('groups').toCollection()
+      await groups.modify((group) => {
+        group.lastMessageTime ??= 0
+      })
+    })
   }
 }
 

@@ -5,7 +5,7 @@ import { ProtocolError } from './errors'
 
 import type { ActionRequest, ActionResponse, AdapterActionHandler } from './action'
 import type { AdapterEventHandler, Event } from './event'
-import type { Config } from '~/stores/config'
+import type { Config } from '~/stores/connect-settings'
 
 export type OneBotHeaders = Record<string, string>
 
@@ -33,12 +33,12 @@ export abstract class Adapter {
 
   chat = useChatStore()
 
-  status = useStatusStore()
+  state = useStateStore()
 
   constructor(public config: Config) {}
 
   async startup(): Promise<void> {
-    if (!this.status.assignBot || this.driver) {
+    if (!this.state.bot || this.driver) {
       return
     }
     const DriverCls: new (adapter: this) => CommDriver.Driver = Reflect.get(CommDriver, this.config.comm)
@@ -67,13 +67,11 @@ export abstract class Adapter {
   async actionHandle(request: ActionRequest): Promise<ActionResponse> {
     try {
       logger.info(
-        `[${this.protocolName}] 收到 ${this.status.assignBot} 的请求 ${request.action}: ${JSON.stringify(
-          request.params
-        )}`
+        `[${this.protocolName}] 收到 ${this.state.bot!.id} 的请求 ${request.action}: ${JSON.stringify(request.params)}`
       )
       const response = await this.actionHandler.handle(request)
       logger.info(
-        `[${this.protocolName}] 响应 ${this.status.assignBot} 的请求 ${request.action}: ${JSON.stringify(response)}`
+        `[${this.protocolName}] 响应 ${this.state.bot!.id} 的请求 ${request.action}: ${JSON.stringify(response)}`
       )
       return response
     } catch (error) {

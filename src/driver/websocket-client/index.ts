@@ -1,5 +1,6 @@
 import { decode, encode } from '@msgpack/msgpack'
 import WebSocket from '@tauri-apps/plugin-websocket'
+import { toast } from 'vue-sonner'
 
 import { Adapter } from '~/adapter/adapter'
 
@@ -36,6 +37,7 @@ export class websocketClient implements Driver {
   }
 
   async connect(): Promise<void> {
+    const state = useStateStore()
     websocketClient.id = getUUID()
     const connectID = websocketClient.id
     const connectUrl = this.adapter.getConnectUrl()
@@ -72,17 +74,23 @@ export class websocketClient implements Driver {
             case 'Pong':
               break
             default:
+              state.isConnected = false
+              toast.error('连接错误', { description: 'WebSocket 服务器的连接被关闭' })
               logger.error(`[WebSocket] 反向 WebSocket 服务器 ${connectUrl} 的连接被关闭: ${message.data?.reason}`)
               if (this.adapter.config.reconnectInterval) {
                 setTimeout(autoConnect, this.adapter.config.reconnectInterval * 1000)
               }
           }
         })
+        state.isConnected = true
         logger.info(`已连接到反向 WebSocket 服务器 ${connectUrl}`)
+        toast.success('连接成功', { description: '已连接到反向 WebSocket 服务器' })
         await this.adapter.onConnect()
         await this.startHeartbeat()
       } catch (error) {
+        state.isConnected = false
         logger.error(`[WebSocket] 连接到反向 WebSocket 服务器 ${connectUrl} 时出现错误: ${error}`)
+        toast.error('连接错误', { description: `连接到反向 WebSocket 服务器时出现错误: ${error}` })
         if (this.adapter.config.reconnectInterval) {
           setTimeout(autoConnect, this.adapter.config.reconnectInterval * 1000)
         }

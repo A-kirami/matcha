@@ -1,18 +1,17 @@
 <template>
-  <div class="chat-box-layout">
+  <div :class="$style.chatBoxLayout" class="grid">
     <ChatBoxHeader style="grid-area: header" />
-    <ChatBoxMessageArea style="grid-area: message-area" />
+    <ChatBoxFlow style="grid-area: flow" />
     <ChatBoxInput style="grid-area: input" />
   </div>
 </template>
 
-<style scoped>
+<style module>
 .chat-box-layout {
-  @apply grid;
   grid:
     'header' auto
-    'message-area' 1fr
+    'flow' minmax(0, 1fr)
     'input' auto
-    / 1fr;
+    / minmax(0, 1fr);
 }
 </style>

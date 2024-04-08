@@ -21,6 +21,9 @@ pub fn run() {
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_websocket::init())
+        .plugin(tauri_plugin_http::init())
+        .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_shell::init())
         .plugin(
             tauri_plugin_log::Builder::new()
                 .targets([
@@ -45,6 +48,8 @@ pub fn run() {
             command::upload_file,
             command::create_file_fragment,
             command::merge_file_fragment,
+            command::write_file,
+            command::copy_file,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

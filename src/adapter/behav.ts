@@ -1,4 +1,6 @@
 /* eslint-disable camelcase */
+import { toast } from 'vue-sonner'
+
 import type { Contents } from './content'
 import type {
   GroupMessageScene,
@@ -21,9 +23,10 @@ import type {
   GroupPokeNoticeScene,
   FriendPokeNoticeScene,
 } from './scene'
+import type { Contact } from '~/types'
 
 export class Behav {
-  readonly status = useStatusStore()
+  readonly state = useStateStore()
 
   readonly chat = useChatStore()
 
@@ -47,20 +50,20 @@ export class Behav {
     return {
       id: getUUID(),
       time: getTimestamp(),
-      self_id: this.status.assignBot,
+      self_id: this.state.bot!.id,
       type,
     }
   }
 
   /** 发送私聊消息 */
-  async sendPrivateMessage(sender: User, receiver: User, contents: Contents[]): Promise<PrivateMessageScene> {
+  async sendPrivateMessage(sender: Contact, receiver: Contact, contents: Contents[]): Promise<PrivateMessageScene> {
     const lastContent = contents.at(-1)
     if (lastContent?.type === 'text') {
       lastContent.data.text = lastContent.data.text.trimEnd()
     }
     const message_id = getMessageId().toString()
     let sub_type: 'temp' | 'friend' | 'group' = 'temp'
-    const isFriend = !!(await db.friends.get({ userId: this.status.assignUser, friendId: this.status.assignBot }))
+    const isFriend = !!(await db.friends.get({ userId: this.state.user!.id, friendId: this.state.bot!.id }))
     if (isFriend) {
       sub_type = 'friend'
     } else {
@@ -87,11 +90,11 @@ export class Behav {
   }
 
   /** 发送群聊消息 */
-  async sendGroupMessage(sender: User, receiver: Group, contents: Contents[]): Promise<GroupMessageScene> {
+  async sendGroupMessage(sender: Contact, receiver: Contact, contents: Contents[]): Promise<GroupMessageScene> {
     const member = await db.members.get({ userId: sender.id, groupId: receiver.id })
     if (!member) {
-      // message.error('只有群成员才能发送消息')
-      throw new Error('不是本群成员')
+      toast.error('发送错误', { description: '只有群成员才能发送消息，你还不是本群成员' })
+      throw new Error(`${sender.id} 不是本群成员`)
     }
     const lastContent = contents.at(-1)
     if (lastContent?.type === 'text') {
@@ -119,15 +122,14 @@ export class Behav {
 
   /** 发送消息 */
   async sendMessage(
-    chatType: 'private' | 'group',
-    sender: User,
-    receiver: User | Group,
+    sender: Contact,
+    receiver: Contact,
     contents: Contents[]
   ): Promise<PrivateMessageScene | GroupMessageScene> {
-    if (chatType === 'private') {
-      return this.sendPrivateMessage(sender, receiver as User, contents)
+    if (receiver.type === 'user') {
+      return this.sendPrivateMessage(sender, receiver, contents)
     } else {
-      return this.sendGroupMessage(sender, receiver as Group, contents)
+      return this.sendGroupMessage(sender, receiver, contents)
     }
   }
 
@@ -138,9 +140,9 @@ export class Behav {
   ): Promise<PrivateMessageDeleteNoticeScene | GroupMessageDeleteNoticeScene> {
     const messageChat = this.chat.getMessage(messageId)
     if (!messageChat) {
-      throw new Error('消息不存在')
+      throw new Error(`消息 ${messageId} 不存在`)
     }
-    messageChat.recall = true
+    messageChat.isRecall = true
     const { scene } = messageChat
     if (scene.detail_type === 'private') {
       return await this.chat.appendScene(
@@ -192,7 +194,7 @@ export class Behav {
   ): Promise<JoinGroupRequestScene> {
     const group = await db.groups.get(groupId)
     if (!group) {
-      throw new Error('群组不存在')
+      throw new Error(`群组 ${groupId}不存在`)
     }
     return await this.chat.appendScene({
       ...this.createScene('request'),
@@ -211,7 +213,7 @@ export class Behav {
   async inviteJoinGroup(groupId: string, userId: string, invitorId: string): Promise<GroupInviteRequestScene> {
     const group = await db.groups.get(groupId)
     if (!group) {
-      throw new Error('群组不存在')
+      throw new Error(`群组 ${groupId}不存在`)
     }
     return await this.chat.appendScene({
       ...this.createScene('request'),
@@ -234,7 +236,7 @@ export class Behav {
   ): Promise<GroupMemberIncreaseNoticeScene | undefined> {
     const request = this.chat.getChat(requestId, 'request')
     const scene = request.scene as JoinGroupRequestScene
-    if (!(await roleCheck('admin', scene.group_id, scene.user_id))) {
+    if (!(await roleCheck('admin', scene.group_id, operatorId))) {
       throw new Error('无权操作')
     }
     if (!approve) {
@@ -243,6 +245,17 @@ export class Behav {
       return
     }
     request.action = 'agree'
+    await db.members.add({
+      groupId: scene.group_id,
+      userId: scene.user_id,
+      card: '',
+      role: 'member',
+      level: 0,
+      title: '',
+      joinTime: getTimestamp(),
+      titleExpireTime: 0,
+      banExpireTime: 0,
+    })
     return await this.chat.appendScene({
       ...this.createScene('notice'),
       detail_type: 'group_member_increase',

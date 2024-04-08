@@ -34,7 +34,7 @@
     "active": true,
     "category": "DeveloperTool",
     "copyright": "Copyright © 2023 Akirami",
-    "shortDescription": "模拟聊天交互的辅助开发工具",
+    "shortDescription": "Matcha",
     "longDescription": "Matcha 是一个专为 KiramiBot 设计的辅助开发工具，能够与 KiramiBot 进行模拟聊天交互，同时提供一系列的开发辅助功能",
     "targets": "all",
     "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],

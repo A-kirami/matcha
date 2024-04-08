@@ -2,10 +2,12 @@
 import { resolve } from 'node:path'
 
 import Vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
 import { internalIpV4 } from 'internal-ip'
 import postcssNesting from 'postcss-nesting'
 import UnoCSS from 'unocss/vite'
 import AutoImport from 'unplugin-auto-import/vite'
+import Info from 'unplugin-info/vite'
 import TurboConsole from 'unplugin-turbo-console/vite'
 import Components from 'unplugin-vue-components/vite'
 import VueMacros from 'unplugin-vue-macros/vite'
@@ -23,6 +25,7 @@ export default defineConfig(async () => ({
     VueMacros({
       plugins: {
         vue: Vue(),
+        vueJsx: vueJsx(),
       },
       betterDefine: false,
     }),
@@ -37,13 +40,14 @@ export default defineConfig(async () => ({
       imports: [
         'vue',
         '@vueuse/core',
+        'pinia',
         VueRouterAutoImports,
         {
           '@tauri-apps/plugin-log': [['*', 'logger']],
         },
         {
-          from: 'src/database',
-          imports: ['User', 'Friend', 'Group', 'Member'],
+          from: 'src/database/model',
+          imports: ['User', 'Friend', 'Group', 'Member', 'CacheFile'],
           type: true,
         },
       ],
@@ -55,6 +59,13 @@ export default defineConfig(async () => ({
       dts: 'src/components.d.ts',
     }),
     UnoCSS(),
+    Info({
+      meta: {
+        isBuild: process.env.GITHUB_WORKFLOW === 'Build',
+        isRelease: process.env.GITHUB_WORKFLOW === 'Release',
+        prNum: process.env.GITHUB_PR_NUMBER,
+      },
+    }),
     TurboConsole(),
     VueDevTools(),
   ],
@@ -69,6 +80,13 @@ export default defineConfig(async () => ({
     postcss: {
       plugins: [postcssNesting()],
     },
+    modules: {
+      localsConvention: 'camelCaseOnly' as const,
+    },
+  },
+
+  define: {
+    'process.env': {},
   },
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`

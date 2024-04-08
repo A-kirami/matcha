@@ -148,15 +148,18 @@ export type FileContent<T extends string = 'file', D extends StrKeyObject = StrK
 export type ImageContent = FileContent<
   'image',
   {
-    sub_type: 'normal' | 'emoji' | 'flash' | 'show'
+    sub_type?: 'normal' | 'emoji' | 'flash' | 'show'
   }
 >
 
-/** 语音内容 */
-export type VoiceContent = FileContent<'voice'>
+/** 音频内容 */
+export type AudioContent = FileContent<'audio'>
 
 /** 视频内容 */
 export type VideoContent = FileContent<'video'>
+
+/** 链接内容 */
+export type LinkContent = Content<'link', { url: string }>
 
 /** 转发内容 */
 export type ForwardContent = Content<
@@ -192,8 +195,9 @@ export interface ContentMapping {
   location: LocationContent
   file: FileContent
   image: ImageContent
-  voice: VoiceContent
+  audio: AudioContent
   video: VideoContent
+  link: LinkContent
   forward: ForwardContent
   node: ForwardContentNode
 }

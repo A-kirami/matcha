@@ -1,1 +1,1 @@
-export const focused = useWindowFocus()
+export const focused = $(useWindowFocus())
