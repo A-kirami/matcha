@@ -5,7 +5,21 @@ const props = defineProps<ToasterProps>()
 </script>
 
 <template>
-  <Toaster v-bind="props" close-button class="toaster">
+  <Toaster
+    v-bind="props"
+    close-button
+    class="toaster group"
+    :toast-options="{
+      classes: {
+        toast:
+          'group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg',
+        description: 'group-[.toast]:text-muted-foreground',
+        actionButton: 'group-[.toast]:bg-primary group-[.toast]:text-primary-foreground',
+        cancelButton: 'group-[.toast]:bg-muted group-[.toast]:text-muted-foreground',
+        closeButton: 'group-[.toast]:bg-background group-[.toast]:text-muted-foreground',
+      },
+    }"
+  >
     <template #loading-icon>
       <ToastIcon type="loading" />
     </template>
@@ -41,15 +55,15 @@ const props = defineProps<ToasterProps>()
     }
 
     & [data-description] {
-      @apply text-gray-500 text-sm;
+      @apply text-sm;
     }
 
     & [data-button] {
-      @apply ml-auto bg-blue-400;
+      @apply ml-auto;
     }
 
     & [data-close-button] {
-      @apply static order-last border-none rounded-md size-7 transform-none hover:bg-gray-100;
+      @apply static order-last border-none rounded-md size-7 transform-none hover:bg-muted;
 
       & svg {
         @apply w-5 h-5;

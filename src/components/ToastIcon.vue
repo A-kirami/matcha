@@ -40,22 +40,22 @@ const IconClass = (() => {
 
 <style module>
 .icon-info {
-  @apply bg-blue-50 text-blue-300;
+  @apply bg-blue-50 text-blue-300 dark:bg-blue-600/60 dark:text-blue-50;
 }
 
 .icon-warning {
-  @apply bg-orange-50 text-orange-300;
+  @apply bg-orange-50 text-orange-300 dark:bg-orange-600/60 dark:text-orange-50;
 }
 
 .icon-error {
-  @apply bg-red-50 text-red-300;
+  @apply bg-red-50 text-red-300 dark:bg-red-600/60 dark:text-red-50;
 }
 
 .icon-success {
-  @apply bg-green-50 text-green-300;
+  @apply bg-green-50 text-green-300 dark:bg-green-600/60 dark:text-green-50;
 }
 
 .icon-loading {
-  @apply text-blue-400;
+  @apply text-blue-400 dark:text-blue-300;
 }
 </style>
