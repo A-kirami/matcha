@@ -21,13 +21,16 @@ const userFormSchema = toTypedSchema(
   })
 )
 
-let open = $ref(false)
+let open = $(defineModel('open', { default: false }))
 
 const formRef = $ref<InstanceType<typeof Form> | null>(null)
 
 const onSubmit = getSubmitFn(userFormSchema, async (values) => {
   await db.users.update(targetId, values)
   await state.refreshChatTarget()
+  if (state.bot?.id === targetId) {
+    await state.refreshBot()
+  }
   open = false
   toast.success('', { description: '保存修改成功' })
 })
