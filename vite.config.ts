@@ -64,6 +64,7 @@ export default defineConfig(async () => ({
         isBuild: process.env.GITHUB_WORKFLOW === 'Build',
         isRelease: process.env.GITHUB_WORKFLOW === 'Release',
         prNum: process.env.GITHUB_PR_NUMBER,
+        buildSha: process.env.GITHUB_BUILD_SHA,
       },
     }),
     TurboConsole(),

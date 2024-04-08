@@ -1,6 +1,6 @@
 import { isCI, isPR } from '~build/ci'
-import { github, sha, tag } from '~build/git'
-import { isBuild, isRelease, prNum } from '~build/meta'
+import { github, tag } from '~build/git'
+import { isBuild, isRelease, prNum, buildSha } from '~build/meta'
 import { version } from '~build/package'
 
 interface Version {
@@ -17,7 +17,7 @@ export function getVersion(): Version {
   }
   if (isCI) {
     if (isBuild) {
-      const shortSha = sha.slice(0, 7)
+      const shortSha = buildSha.slice(0, 7)
       if (isPR) {
         return {
           name: `${version}-build.${shortSha} (pr#${prNum})`,
@@ -26,7 +26,7 @@ export function getVersion(): Version {
       } else {
         return {
           name: `${version}-build.${shortSha}`,
-          link: `${github}/commit/${sha}`,
+          link: `${github}/commit/${buildSha}`,
         }
       }
     }

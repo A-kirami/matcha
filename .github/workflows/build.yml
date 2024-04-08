@@ -41,6 +41,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
+      GITHUB_BUILD_SHA: ${{ github.event.pull_request && github.event.pull_request.head.sha || github.sha }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
