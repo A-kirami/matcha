@@ -74,7 +74,7 @@ const plainStrategy: PlainStrategy<ContentMapping> = {
     const mentionString = await getMentionString(content.data, groupId)
     return mentionString + ''
   },
-  reply: '回复> ',
+  reply: '[回复] ',
   face: (content: FaceContent): string => `[表情:${content.data.name}]`,
   dice: '[掷骰子]',
   rps: '[猜拳]',
