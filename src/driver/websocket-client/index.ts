@@ -12,11 +12,30 @@ import type { Event } from '~/adapter/event'
 
 export class websocketClient implements Driver {
   ws: WebSocket | null = null
-  static id = ''
+  connectUrl: string
+  heartbeatPause?: () => void
+  heartbeatResume?: () => void
 
-  constructor(public adapter: Adapter) {}
+  constructor(public adapter: Adapter) {
+    this.connectUrl = this.adapter.getConnectUrl()
+
+    if (this.adapter.config.heartbeatInterval) {
+      const { pause, resume } = useIntervalFn(
+        async () => {
+          await this.adapter.onHeartbeat()
+        },
+        this.adapter.config.heartbeatInterval * 1000,
+        { immediate: false }
+      )
+      this.heartbeatPause = pause
+      this.heartbeatResume = resume
+    }
+
+    useEventListener('beforeunload', () => this.stop())
+  }
 
   async run(): Promise<void> {
+    await this.disconnect()
     await this.connect()
   }
 
@@ -37,73 +56,68 @@ export class websocketClient implements Driver {
   }
 
   async connect(): Promise<void> {
-    const state = useStateStore()
-    websocketClient.id = getUUID()
-    const connectID = websocketClient.id
-    const connectUrl = this.adapter.getConnectUrl()
-    const connectConfig = await this.getConnectConfig()
-    const autoConnect = async () => {
-      if (connectID !== websocketClient.id) {
-        return
-      }
-      const wsId = sessionStorage.getItem('ws_id')
-      if (wsId) {
-        this.ws = new WebSocket(Number(wsId), [])
-        await this.disconnect()
-        await this.connect()
-        return
-      }
-      try {
-        logger.info(`正在尝试连接到反向 WebSocket 服务器 ${connectUrl}`)
-        this.ws = await WebSocket.connect(connectUrl, connectConfig)
-        sessionStorage.setItem('ws_id', this.ws.id.toString())
-        this.ws.addListener(async (message: Message) => {
-          switch (message.type) {
-            case 'Text':
-            case 'Binary': {
-              const request: ActionRequest = message.type === 'Text' ? JSON.parse(message.data) : decode(message.data)
-              const response = { ...(await this.adapter.actionHandle(request)), echo: request.echo }
-              const data =
-                message.type === 'Text'
-                  ? JSON.stringify(response, this.adapter.JSONEncode)
-                  : Array.from(encode(response))
-              await this.ws?.send(data)
-              break
-            }
-            case 'Ping':
-            case 'Pong':
-              break
-            default:
-              state.isConnected = false
-              toast.error('连接错误', { description: 'WebSocket 服务器的连接被关闭' })
-              logger.error(`[WebSocket] 反向 WebSocket 服务器 ${connectUrl} 的连接被关闭: ${message.data?.reason}`)
-              if (this.adapter.config.reconnectInterval) {
-                setTimeout(autoConnect, this.adapter.config.reconnectInterval * 1000)
-              }
-          }
-        })
-        state.isConnected = true
-        logger.info(`已连接到反向 WebSocket 服务器 ${connectUrl}`)
-        toast.success('连接成功', { description: '已连接到反向 WebSocket 服务器' })
-        await this.adapter.onConnect()
-        await this.startHeartbeat()
-      } catch (error) {
-        state.isConnected = false
-        logger.error(`[WebSocket] 连接到反向 WebSocket 服务器 ${connectUrl} 时出现错误: ${error}`)
-        toast.error('连接错误', { description: `连接到反向 WebSocket 服务器时出现错误: ${error}` })
-        if (this.adapter.config.reconnectInterval) {
-          setTimeout(autoConnect, this.adapter.config.reconnectInterval * 1000)
-        }
-      }
+    if (!this.connectUrl) {
+      return
     }
-    await autoConnect()
+
+    logger.info(`正在尝试连接到反向 WebSocket 服务器 ${this.connectUrl}`)
+
+    const connectConfig = await this.getConnectConfig()
+
+    try {
+      this.ws = await WebSocket.connect(this.connectUrl, connectConfig)
+      this.ws.addListener(this.onMessage.bind(this))
+      this.heartbeatResume?.()
+      this.adapter.state.isConnected = true
+      logger.info(`已连接到反向 WebSocket 服务器 ${this.connectUrl}`)
+      toast.success('连接成功', { description: '已连接到反向 WebSocket 服务器' })
+    } catch (error) {
+      logger.error(`[WebSocket] 连接到反向 WebSocket 服务器 ${this.connectUrl} 失败: ${error}`)
+      toast.error('连接错误', { description: `无法连接到 WebSocket 服务器: ${error}` })
+      this.autoReconnection()
+    }
   }
 
   async disconnect(): Promise<void> {
-    sessionStorage.removeItem('ws_id')
-    await this.ws?.disconnect()
+    this.heartbeatPause?.()
+    try {
+      await this.ws?.disconnect()
+    } catch (_) {
+      // ignore
+    }
     this.ws = null
-    websocketClient.id = ''
+    this.adapter.state.isConnected = false
+  }
+
+  async onMessage(message: Message): Promise<void> {
+    switch (message.type) {
+      case 'Text':
+      case 'Binary': {
+        const request: ActionRequest = message.type === 'Text' ? JSON.parse(message.data) : decode(message.data)
+        const response = { ...(await this.adapter.actionHandle(request)), echo: request.echo }
+        const data =
+          message.type === 'Text' ? JSON.stringify(response, this.adapter.JSONEncode) : Array.from(encode(response))
+        await this.ws?.send(data)
+        break
+      }
+      case 'Ping':
+      case 'Pong':
+        break
+      case 'Close':
+        await this.disconnect()
+        toast.error('连接错误', { description: 'WebSocket 服务器的连接被关闭' })
+        logger.error(`[WebSocket] 反向 WebSocket 服务器 ${this.connectUrl} 的连接被关闭: ${message.data?.reason}`)
+        this.autoReconnection()
+        break
+      default:
+        break
+    }
+  }
+
+  autoReconnection(): void {
+    if (this.adapter.config.reconnectInterval) {
+      setTimeout(this.connect.bind(this), this.adapter.config.reconnectInterval * 1000)
+    }
   }
 
   async getConnectConfig(): Promise<ConnectionConfig> {
@@ -112,12 +126,5 @@ export class websocketClient implements Driver {
       connectConfig.headers.Authorization = `Bearer ${this.adapter.config.accessToken}`
     }
     return connectConfig
-  }
-
-  async startHeartbeat(): Promise<void> {
-    if (this.ws && this.adapter.config.heartbeatInterval) {
-      await this.adapter.onHeartbeat()
-      setTimeout(this.startHeartbeat.bind(this), this.adapter.config.heartbeatInterval * 1000)
-    }
   }
 }
