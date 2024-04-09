@@ -130,6 +130,7 @@ watch(
   () => state.user,
   async () => {
     noticeDisplay = await getNoticeDisplay(notice.scene)
+    notice.preview = noticeDisplay
   },
   { immediate: true }
 )

@@ -84,6 +84,7 @@ watch(
   async () => {
     requestInfo = await getRequestInfo(scene)
     isAdmin = scene.detail_type === 'join_group' ? await roleCheck('admin', scene.group_id, state.user?.id || '') : true
+    request.preview = requestInfo.prompt
   },
   { immediate: true }
 )
