@@ -28,6 +28,9 @@ const formRef = $ref<InstanceType<typeof Form> | null>(null)
 const onSubmit = getSubmitFn(userFormSchema, async (values) => {
   await db.users.update(targetId, values)
   await state.refreshChatTarget()
+  if (state.user?.id === targetId) {
+    await state.refreshUser()
+  }
   if (state.bot?.id === targetId) {
     await state.refreshBot()
   }
