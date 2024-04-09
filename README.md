@@ -47,9 +47,9 @@
 <p align="center">
   <a href="https://github.com/A-kirami/matcha" target="__blank">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="./public/preview-dark.webp">
-      <source media="(prefers-color-scheme: light)" srcset="./public/preview-light.webp">
-      <img src="./public/preview-light.webp" alt="Matcha - Preview" width="100%" />
+      <source media="(prefers-color-scheme: dark)" srcset="./docs/preview-dark.webp">
+      <source media="(prefers-color-scheme: light)" srcset="./docs/preview-light.webp">
+      <img src="./docs/preview-light.webp" alt="Matcha - Preview" width="100%" />
     </picture>
   </a>
 </p>
@@ -70,28 +70,50 @@ Matcha 是一个专为 [KiramiBot](https://github.com/A-kirami/KiramiBot) 设计
 - 全平台支持（Windows，Mac，Linux）
 - 多协议适配支持
 - 支持多用户多群组
-- 支持多媒体消息
+- 支持多媒体消息（图片、语音、视频）
 - 原始事件展示
 
 ## 🚀 快速上手
 
-### 创建用户
+### 创建角色
 
-在联系栏顶部右侧的 ![add-chat](./src/assets/add-chat.svg) 按钮上，选择创建用户
+点击侧边栏底部的圆形按钮，打开角色管理面板。
 
-![create-user](./docs/create-user.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./docs/user-manage-dark.webp">
+  <source media="(prefers-color-scheme: light)" srcset="./docs/user-manage-light.webp">
+  <img src="./docs/user-manage-light.webp" alt="user manage" />
+</picture>
 
-### 设置 Bot 与 身份
+点击“新建角色”，填写角色信息并创建。
 
-从用户列表中挑选，指定使用的 Bot 和扮演的身份
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./docs/create-user-dark.webp">
+  <source media="(prefers-color-scheme: light)" srcset="./docs/create-user-light.webp">
+  <img src="./docs/create-user-light.webp" alt="create user" />
+</picture>
 
-![select-user](./docs/select-user.png)
+### 设置用户与机器人
+
+点击角色列表中的按钮，将角色设置为用户和机器人。
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./docs/bot-user-dark.webp">
+  <source media="(prefers-color-scheme: light)" srcset="./docs/bot-user-light.webp">
+  <img src="./docs/bot-user-light.webp" alt="bot user" />
+</picture>
 
 ### 设置连接
 
-修改连接配置，保存即可
+点击侧边栏底部的菜单按钮，打开设置页面，在设置页面中，选择“连接”设置，填写连接信息。
 
-![setting-connect](./docs/setting-connect.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./docs/connect-settings-dark.webp">
+  <source media="(prefers-color-scheme: light)" srcset="./docs/connect-settings-light.webp">
+  <img src="./docs/connect-settings-light.webp" alt="connect settings" />
+</picture>
+
+提示连接成功后，即可开始使用。
 
 ## 🔌 协议适配
 
