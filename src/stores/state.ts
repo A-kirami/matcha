@@ -66,13 +66,9 @@ export const useStateStore = defineStore(
 
     const adapter = useAdapterStore()
 
-    watch(
-      $$(bot),
-      async () => {
-        await adapter.bot.reboot()
-      },
-      { immediate: true }
-    )
+    watch($$(bot), async () => {
+      await adapter.bot.reboot()
+    })
 
     return $$({
       user,
