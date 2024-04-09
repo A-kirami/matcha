@@ -49,21 +49,12 @@ async function pokeUser(): Promise<void> {
   await behav.pokeUser(state.user!.id, scene.user_id, 'group_id' in scene ? scene.group_id : undefined)
 }
 
-const messageRef = ref<HTMLElement | null>(null)
-
-const messageIsRead = useElementVisibility(messageRef)
-
-watchOnce(messageIsRead, () => {
-  message.isRead = true
-})
-
 const general = useGeneralSettingsStore()
 </script>
 
 <template>
   <article
     v-if="!message.isRecall || (message.isRecall && general.showRecallMessage)"
-    ref="messageRef"
     class="flex gap-3 transition-opacity duration-300"
     :class="{
       'flex-row-reverse': isUserMsg,

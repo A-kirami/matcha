@@ -1,7 +1,12 @@
-<script setup lang="ts">
+<script setup lang="tsx">
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-vue'
 
+import ChatMessage from './ChatMessage.vue'
+import ChatNotice from './ChatNotice.vue'
+import ChatRequest from './ChatRequest.vue'
+
 import type { OverlayScrollbars } from 'overlayscrollbars'
+import type { Chats } from '~/stores/chat'
 
 const state = useStateStore()
 
@@ -62,6 +67,28 @@ function isSeparator(index: number): boolean {
 
   return prevScene ? currentScene.time - prevScene.time > SPLIT_TIME : false
 }
+
+const ChatItem = (props: { chat: Chats }) => {
+  const { chat } = props
+  const chatRef = ref<HTMLElement | null>(null)
+  const chatIsRead = useElementVisibility(chatRef)
+
+  watchOnce(chatIsRead, () => {
+    chat.isRead = true
+  })
+
+  return (
+    <div ref={chatRef}>
+      {chat.type === 'message' ? (
+        <ChatMessage message={chat} />
+      ) : chat.type === 'notice' ? (
+        <ChatNotice notice={chat} />
+      ) : chat.type === 'request' ? (
+        <ChatRequest request={chat} />
+      ) : null}
+    </div>
+  )
+}
 </script>
 
 <template>
@@ -74,9 +101,7 @@ function isSeparator(index: number): boolean {
     <div class="px-4 py-3 space-y-6">
       <template v-for="(item, index) in chatList" :key="item.id">
         <ChatTimeSeparator v-if="isSeparator(index)" :time="item.scene.time" />
-        <ChatMessage v-if="item.type === 'message'" :message="item" />
-        <ChatNotice v-else-if="item.type === 'notice'" :notice="item" />
-        <ChatRequest v-else-if="item.type === 'request'" :request="item" />
+        <ChatItem :chat="item" />
       </template>
     </div>
   </OverlayScrollbarsComponent>
