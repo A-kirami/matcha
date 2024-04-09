@@ -173,7 +173,7 @@ async function assignUser(type: 'user' | 'bot', uid: string) {
       </OverlayScrollbarsComponent>
       <DialogFooter>
         <UserCreateFormDialog>
-          <Button class="h-8 w-full">创建新角色</Button>
+          <Button class="h-8 w-full">新建角色</Button>
         </UserCreateFormDialog>
       </DialogFooter>
     </DialogContent>
