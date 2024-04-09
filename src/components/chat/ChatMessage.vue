@@ -85,8 +85,8 @@ const general = useGeneralSettingsStore()
       </Avatar>
     </ChatUserCard>
     <div class="max-w-75% flex flex-col gap-y-1" :class="[isUserMsg ? 'items-end' : 'items-start']">
-      <div class="flex items-center" :class="{ 'flex-row-reverse': isUserMsg }">
-        <span class="mx-1 text-sm font-medium">{{ userName }}</span>
+      <div class="flex items-center space-x-1" :class="{ 'flex-row-reverse': isUserMsg }">
+        <span class="text-sm font-medium">{{ userName }}</span>
         <span
           v-if="scene.sender_id === state.bot?.id"
           class="flex items-center gap-0.5 border border-violet-200 rounded-sm bg-violet-50 px-0.5 text-xs text-violet-400"
