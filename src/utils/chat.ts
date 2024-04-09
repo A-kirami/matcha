@@ -186,7 +186,7 @@ export async function getContact(type: Contact['type'], id: string): Promise<Con
   return {
     type,
     id,
-    name: contactObj?.name || '',
+    name: contactObj?.name ?? id,
     avatar: getAvatarUrl(type, id),
   }
 }
