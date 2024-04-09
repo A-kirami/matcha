@@ -72,7 +72,7 @@ const isPinned = $computed(() => state.pinnedOrder.includes(contact.id))
         <span v-if="unReadCount" class="w-full rounded-full bg-blue-100 text-center text-xs text-blue-400">
           {{ unReadCountString }}
         </span>
-        <template v-else-if="lastChat">
+        <template v-else-if="lastChat?.scene.sender_id === state.user?.id">
           <CheckCheck v-if="lastChat?.isSent" class="size-4 cursor-pointer text-emerald-400" />
           <X v-else class="size-4 cursor-pointer text-rose-400" />
         </template>
