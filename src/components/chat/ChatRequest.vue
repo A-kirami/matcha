@@ -24,6 +24,7 @@ interface RequestInfo {
   type: 'group' | 'user'
   target: string
   name: string
+  avatar: string
   prompt: string
   comment?: string
   handle: (approve: boolean) => Promise<Scenes | undefined>
@@ -49,13 +50,10 @@ async function getRequestInfo(scene: Request['scene']): Promise<RequestInfo> {
 
   const title = RequestTitles[detail_type]
   const type = detail_type === 'group_invite' ? 'group' : 'user'
-  const target =
-    detail_type === 'group_invite' ? group_id : scene.sender_id === state.user?.id ? receiver_id : sender_id
+  const target = detail_type === 'group_invite' ? group_id : sender_id
   const prompt = RequestPrompts[detail_type].replace('{pronoun}', scene.sender_id === state.user?.id ? '对方' : '你')
 
-  const dbGet = type === 'group' ? db.groups : db.users
-  const targetObject = await dbGet.get(target)
-  const name = targetObject?.name || ''
+  const { name, avatar } = await getContact(type, target)
 
   const handle =
     detail_type === 'add_friend'
@@ -75,6 +73,7 @@ async function getRequestInfo(scene: Request['scene']): Promise<RequestInfo> {
     prompt,
     comment,
     name,
+    avatar,
     handle,
   }
 }
@@ -96,21 +95,21 @@ watch(
     class="mx-auto w-64 flex flex-col items-center overflow-hidden rounded-md bg-background shadow-sm"
   >
     <div class="text-base font-medium leading-loose">{{ requestInfo.title }}</div>
-    <div class="w-full flex items-center px-4 py-3">
+    <div class="w-full flex items-center gap-3 px-4 py-3">
       <Avatar>
-        <AvatarImage :src="getAvatarUrl(requestInfo.type, scene.sender_id)" alt="request avatar" />
+        <AvatarImage :src="requestInfo.avatar" alt="request avatar" />
         <AvatarFallback>{{ requestInfo.name }}</AvatarFallback>
       </Avatar>
-      <div class="ml-4 flex flex-col gap-1">
-        <span v-if="scene.detail_type !== 'group_invite'" class="max-w-50 flex items-center gap-1">
-          <span class="truncate font-semibold">{{ requestInfo.name }}</span>
-          <span class="whitespace-nowrap">{{ requestInfo.prompt }}</span>
+      <div class="flex flex-col gap-1">
+        <span v-if="scene.detail_type !== 'group_invite'" class="max-w-50 flex flex-col">
+          <span class="truncate font-medium">{{ requestInfo.name }}</span>
+          <span class="whitespace-nowrap text-sm text-muted-foreground">{{ requestInfo.prompt }}</span>
         </span>
         <span v-else class="max-w-50 flex items-center gap-1">
           <span class="whitespace-nowrap">{{ requestInfo.prompt }}</span>
-          <span class="truncate font-semibold">{{ requestInfo.name }}</span>
+          <span class="truncate font-medium">{{ requestInfo.name }}</span>
         </span>
-        <span v-if="requestInfo.comment" class="line-clamp-2 text-xs text-gray-400"
+        <span v-if="requestInfo.comment" class="line-clamp-2 text-xs text-muted-foreground"
           >附加信息：{{ requestInfo.comment }}</span
         >
       </div>
