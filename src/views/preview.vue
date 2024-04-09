@@ -1,6 +1,6 @@
 <route lang="yaml">
 meta:
-  layout: 'raw'
+  layout: 'native'
 </route>
 
 <template>
