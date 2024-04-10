@@ -83,9 +83,8 @@ jobs:
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
         with:
-          args: -t ${{ matrix.target }}
+          args: -t ${{ matrix.target }} -c '{"plugins":{"updater":{"pubkey":""}}}'
 
       - uses: actions/upload-artifact@v4
         with:
