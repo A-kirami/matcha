@@ -159,7 +159,7 @@ const tribute = new Tribute<Mentions>({
   menuItemTemplate(item) {
     const userIdInfo =
       item.original.id === 'all' ? '' : `<span class="text-sm text-muted-foreground">${item.original.id}</span>`
-    return `<img src="${getMentionAvatar(item.original.id)}" class="w-6 rounded-1/2 v-middle inline"><div class="flex items-center gap-1"><span class="inline-block truncate max-w-26 ">${item.original.name}</span>${userIdInfo}</div>`
+    return `<img src="${getMentionAvatar(item.original.id)}" class="w-6 rounded-1/2 v-middle inline" alt="avatar"><div class="flex items-center gap-1"><span class="inline-block truncate max-w-26 ">${item.original.name}</span>${userIdInfo}</div>`
   },
   noMatchTemplate() {
     return '<span style:"visibility: hidden;"></span>'

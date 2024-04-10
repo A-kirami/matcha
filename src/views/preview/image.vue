@@ -156,6 +156,7 @@ function handleLoad() {
         :class="{ '': hasOverflow }"
         :src="currentImage"
         :style="`transform: scale(${scale})`"
+        alt="image"
         draggable="false"
         @load="handleLoad"
       />

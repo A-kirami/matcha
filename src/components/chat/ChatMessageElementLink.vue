@@ -38,7 +38,7 @@ onBeforeMount(async () => {
       <div
         class="mt-2 border border-gray-200 rounded-xl p-3 transition-colors dark:bg-gray-600 hover:bg-gray-100 dark:hover:bg-gray-500"
       >
-        <img :src="metadata.image" class="mb-2 rounded-lg" />
+        <img :src="metadata.image" class="mb-2 rounded-lg" alt="image" />
         <div class="text-sm text-gray-900 font-medium dark:text-white">
           {{ metadata.title }}
         </div>
