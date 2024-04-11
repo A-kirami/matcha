@@ -15,6 +15,8 @@
     "window:allow-toggle-maximize",
     "window:allow-close",
     "window:allow-start-dragging",
+    "window:allow-set-focus",
+    "window:allow-set-effects",
     "webview:allow-create-webview-window",
     "log:default",
     "websocket:default",
@@ -24,7 +26,28 @@
     "os:allow-version",
     {
       "identifier": "fs:allow-exists",
-      "allow": [{ "path": "$APPCACHE/**" }]
-    }
+      "allow": [
+        {
+          "path": "$APPCACHE/**/*"
+        }
+      ]
+    },
+    {
+      "identifier": "http:default",
+      "allow": [
+        {
+          "url": "http://**/*"
+        },
+        {
+          "url": "https://**/*"
+        }
+      ]
+    },
+    "dialog:allow-open",
+    "dialog:allow-save",
+    "fs:allow-stat",
+    "updater:default",
+    "process:allow-restart",
+    "shell:allow-open"
   ]
 }

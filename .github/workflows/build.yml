@@ -39,6 +39,9 @@ jobs:
             target: x86_64-pc-windows-msvc
     name: ${{ matrix.label }}
     runs-on: ${{ matrix.os }}
+    env:
+      GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
+      GITHUB_BUILD_SHA: ${{ github.event.pull_request && github.event.pull_request.head.sha || github.sha }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -53,6 +56,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Rust cache
+        if: matrix.os != 'windows-latest'
         uses: swatinem/rust-cache@v2
         with:
           workspaces: './src-tauri -> target'
@@ -75,12 +79,12 @@ jobs:
         run: rustup target add ${{ matrix.target }}
 
       - name: Build the app
-        uses: tauri-apps/tauri-action@v0
         id: tauri-build
+        uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: -t ${{ matrix.target }}
+          args: -t ${{ matrix.target }} -c '{"plugins":{"updater":{"pubkey":""}}}'
 
       - uses: actions/upload-artifact@v4
         with:
@@ -91,15 +95,15 @@ jobs:
     needs: build
     permissions:
       pull-requests: write
-    if: github.event.pull_request
+    if: github.event.pull_request && github.event.sender.type != 'Bot'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Format artifact comment
-        uses: actions/github-script@v7
         id: format-artifact-comment
+        uses: actions/github-script@v7
         with:
           result-encoding: string
           script: |

@@ -3,7 +3,7 @@ import hljsVuePlugin from '@highlightjs/vue-plugin'
 import hljs from 'highlight.js/lib/core'
 import json from 'highlight.js/lib/languages/json'
 
-import 'highlight.js/styles/stackoverflow-light.css'
+import 'highlight.js/styles/atom-one-dark.css'
 
 hljs.registerLanguage('json', json)
 
@@ -23,7 +23,10 @@ onMounted(() => {
     for (let index = 0; index < codeSpan.length; index++) {
       const element = codeSpan[index]
       if (element.innerText.startsWith('"base64://')) {
-        element.classList.add('line-fold')
+        element.classList.add('line-clamp-3 cursor-pointer')
+        element.onclick = () => {
+          element.classList.toggle('line-clamp-3')
+        }
       }
     }
   }

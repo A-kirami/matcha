@@ -13,13 +13,17 @@
     "windows": [
       {
         "title": "Matcha",
-        "height": 800,
-        "width": 1280,
-        "minHeight": 640,
-        "minWidth": 798,
+        "height": 720,
+        "width": 1080,
+        "minHeight": 540,
+        "minWidth": 620,
         "center": true,
         "decorations": false,
-        "transparent": true
+        "transparent": true,
+        "windowEffects": {
+          "effects": ["acrylic", "blur", "hudWindow"],
+          "state": "active"
+        }
       }
     ],
     "security": {
@@ -30,7 +34,7 @@
     "active": true,
     "category": "DeveloperTool",
     "copyright": "Copyright © 2023 Akirami",
-    "shortDescription": "模拟聊天交互的辅助开发工具",
+    "shortDescription": "Matcha",
     "longDescription": "Matcha 是一个专为 KiramiBot 设计的辅助开发工具，能够与 KiramiBot 进行模拟聊天交互，同时提供一系列的开发辅助功能",
     "targets": "all",
     "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
@@ -47,6 +51,12 @@
         "installerIcon": "icons/icon.ico",
         "languages": ["SimpChinese"]
       }
+    }
+  },
+  "plugins": {
+    "updater": {
+      "endpoints": ["https://github.com/A-kirami/matcha/releases/latest/download/latest.json"],
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEFFMkYxODgzQzRGOTY0MTAKUldRUVpQbkVneGd2cm10SzFYYm8wV01CNjgwTmV5UXhDYzQ0eXJUeVFFNUJORTZWZ3dTd1lDU3IK"
     }
   }
 }

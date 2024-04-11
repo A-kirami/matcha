@@ -2,8 +2,6 @@ import { invoke } from '@tauri-apps/api/core'
 import { appCacheDir, join } from '@tauri-apps/api/path'
 import { exists, BaseDirectory } from '@tauri-apps/plugin-fs'
 
-import { CacheFile } from '~/database/model'
-
 interface FileSource {
   str?: string
   binary?: number[]
@@ -24,7 +22,8 @@ async function getSHA256(buffer: ArrayBuffer): Promise<string> {
  */
 export async function createFileCache(
   file: string | File,
-  validateType: string | null = null
+  validateType: string | null = null,
+  name?: string
 ): Promise<{ id: string; url: string }> {
   const cacheFile = await getCacheFile(file)
   if (cacheFile) {
@@ -44,8 +43,11 @@ export async function createFileCache(
     fileSource,
     validateType,
   })
-  const fileId = getUUID()
-  await db.files.add({ id: fileId, name: file instanceof File ? file.name : sha256, size, sha256 })
+  const existFile = await db.files.get({ sha256 })
+  const fileId = existFile ? existFile.id : getUUID()
+  if (!existFile) {
+    await db.files.add({ id: fileId, name: name || sha256, size, sha256 })
+  }
   return {
     id: fileId,
     url: await getFile(GetType.URL, fileId),
@@ -57,7 +59,7 @@ async function getCacheFile(file: string | File): Promise<CacheFile | undefined>
     const buffer = await file.arrayBuffer()
     const fileSHA256 = await getSHA256(buffer)
     return await db.files.where({ sha256: fileSHA256 }).first()
-  } else {
+  } else if (/^[a-z,0-9,-]{36,36}$/.test(file)) {
     const cacheFile = await db.files.where({ id: file }).first()
     if (cacheFile && (await exists(`cache/${cacheFile.sha256}`, { baseDir: BaseDirectory.AppCache }))) {
       return cacheFile
@@ -88,10 +90,35 @@ export async function getFile(type: GetType, fileId: string): Promise<string | U
       if (type === GetType.PATH) {
         return path
       } else {
-        return await invoke<Uint8Array>('read_file', { path })
+        const contents = await invoke<number[]>('read_file', { path })
+        return new Uint8Array(contents)
       }
     }
     default:
       throw new Error('无效的获取方式')
+  }
+}
+
+export interface FileInfo {
+  id: string
+  name: string
+  size: number
+  url: string
+  path: string
+}
+
+export async function getFileInfo(fileId: string): Promise<FileInfo> {
+  const appCacheDirPath = await appCacheDir()
+  const file = await db.files.get(fileId)
+  if (!file) {
+    throw new Error('文件不存在')
+  }
+  const path = await join(appCacheDirPath, 'cache', file.sha256)
+  return {
+    id: fileId,
+    name: file.name,
+    size: file.size,
+    url: await getFile(GetType.URL, fileId),
+    path,
   }
 }

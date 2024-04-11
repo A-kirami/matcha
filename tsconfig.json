@@ -13,6 +13,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
+    "jsxImportSource": "vue",
 
     /* Linting */
     "strict": true,
@@ -28,10 +29,23 @@
     "paths": {
       "~/*": ["src/*"]
     },
-    "types": ["vite/client", "vitest/globals", "unplugin-vue-macros/macros-global"]
+    "types": [
+      "vite/client",
+      "vitest/globals",
+      "unplugin-vue-macros/macros-global",
+      "unplugin-vue-router/client",
+      "vite-plugin-vue-layouts/client",
+      "unplugin-info/client"
+    ]
   },
   "vueCompilerOptions": {
-    "plugins": ["@vue-macros/volar/define-slots", "@vue-macros/volar/define-models", "@vue-macros/volar/define-props"]
+    "plugins": [
+      "@vue-macros/volar/define-slots",
+      "@vue-macros/volar/define-models",
+      "@vue-macros/volar/define-props",
+      "@vue-macros/volar/define-props-refs",
+      "@vue-macros/volar/export-expose"
+    ]
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "tests/**/*.test.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]

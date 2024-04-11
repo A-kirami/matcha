@@ -16,8 +16,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Release changelog
-        uses: release-drafter/release-drafter@v6
         id: release-drafter
+        uses: release-drafter/release-drafter@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -55,6 +55,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Rust cache
+        if: matrix.os != 'windows-latest'
         uses: swatinem/rust-cache@v2
         with:
           workspaces: './src-tauri -> target'
@@ -80,6 +81,7 @@ jobs:
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
         with:
           tagName: 'v__VERSION__'
           releaseName: 'Matcha v__VERSION__'

@@ -18,10 +18,14 @@
   "parserOptions": {
     "ecmaVersion": 13,
     "parser": "@typescript-eslint/parser",
-    "sourceType": "module"
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
   "plugins": ["vue", "@typescript-eslint"],
   "parser": "vue-eslint-parser",
+  "ignorePatterns": ["**/components/ui/**"],
   "rules": {
     "linebreak-style": "off",
     "quotes": ["warn", "single"],
@@ -41,7 +45,7 @@
     "block-scoped-var": "error",
     "block-spacing": "warn",
     "brace-style": ["error", "1tbs"],
-    "camelcase": "error",
+    "camelcase": "warn",
     "comma-spacing": [
       "error",
       {
@@ -88,22 +92,35 @@
     "no-constant-condition": "error",
     "no-var": "error",
     "no-undef": "off",
+    "no-unused-vars": "off",
     "spaced-comment": ["warn", "always", { "markers": ["/"] }],
     "no-console": "warn",
     "accessor-pairs": "error",
     "no-alert": "warn",
     "no-eval": "error",
     "no-trailing-spaces": "warn",
-    "no-inline-comments": "warn",
+    "no-inline-comments": ["warn", { "ignorePattern": "@ts-expect-error:\\s.+" }],
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "args": "all",
+        "argsIgnorePattern": "^_",
+        "caughtErrors": "all",
+        "caughtErrorsIgnorePattern": "^_",
+        "destructuredArrayIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "ignoreRestSiblings": true
+      }
+    ],
     "vue/no-multiple-template-root": "off",
     "vue/no-v-model-argument": "off",
     "vue/no-v-for-template-key": "off",
     "vue/script-setup-uses-vars": "error",
     "vue/multi-word-component-names": "off",
     "vue/no-setup-props-destructure": "off",
-    "import/no-unresolved": ["error", { "ignore": ["^virtual:"] }],
+    "import/no-unresolved": ["error", { "ignore": ["^virtual:", "^~(?!/).*"] }],
     "import/order": [
       "warn",
       {
@@ -122,6 +139,7 @@
       "typescript": {
         "alwaysTryTypes": true
       }
-    }
+    },
+    "import/core-modules": ["vue-router/auto", "vue-router/auto-routes"]
   }
 }
