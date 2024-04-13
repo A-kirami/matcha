@@ -112,7 +112,7 @@ defineExpose({ resetForm })
       </FormItem>
     </FormField>
     <FormField v-slot="{ componentField }" name="url">
-      <FormItem>
+      <FormItem v-auto-animate>
         <FormLabel>连接地址</FormLabel>
         <FormControl>
           <Input type="text" v-bind="componentField" class="h-9 max-w-100" />
@@ -132,7 +132,7 @@ defineExpose({ resetForm })
       </FormItem>
     </FormField>
     <FormField v-slot="{ componentField }" name="reconnectInterval">
-      <FormItem>
+      <FormItem v-auto-animate>
         <FormLabel>重连间隔</FormLabel>
         <FormControl>
           <Input type="number" v-bind="componentField" class="h-9 max-w-100" />
@@ -142,7 +142,7 @@ defineExpose({ resetForm })
       </FormItem>
     </FormField>
     <FormField v-slot="{ componentField }" name="heartbeatInterval">
-      <FormItem>
+      <FormItem v-auto-animate>
         <FormLabel>心跳间隔</FormLabel>
         <FormControl>
           <Input type="number" v-bind="componentField" class="h-9 max-w-100" />
