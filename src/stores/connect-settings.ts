@@ -11,6 +11,7 @@ export interface Config {
   heartbeatInterval: number
   timeout: number
   postSelfEvents: boolean
+  showError: boolean
 }
 
 export const useConnectSettingsStore = defineStore(
@@ -27,6 +28,7 @@ export const useConnectSettingsStore = defineStore(
     const heartbeatInterval = ref(3)
     const timeout = ref(3)
     const postSelfEvents = ref(false)
+    const showError = ref(true)
 
     return {
       protocol,
@@ -39,6 +41,7 @@ export const useConnectSettingsStore = defineStore(
       heartbeatInterval,
       timeout,
       postSelfEvents,
+      showError,
     }
   },
 

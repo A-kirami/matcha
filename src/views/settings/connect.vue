@@ -38,6 +38,7 @@ const generalFormSchema = toTypedSchema(
       .number({ required_error: '心跳间隔不能为空', invalid_type_error: '心跳间隔必须为数字' })
       .min(0, '心跳间隔必须大于等于 0'),
     postSelfEvents: z.boolean(),
+    showError: z.boolean(),
   })
 )
 
@@ -156,6 +157,17 @@ defineExpose({ resetForm })
         <div class="space-y-0.5">
           <FormLabel>推送自身事件</FormLabel>
           <FormDescription>是否推送机器人自身事件</FormDescription>
+        </div>
+        <FormControl>
+          <Switch :checked="value" aria-readonly @update:checked="handleChange" />
+        </FormControl>
+      </FormItem>
+    </FormField>
+    <FormField v-slot="{ value, handleChange }" name="showError">
+      <FormItem class="max-w-120 flex flex-row items-center justify-between rounded-lg">
+        <div class="space-y-0.5">
+          <FormLabel>显示连接错误</FormLabel>
+          <FormDescription>显示连接中的全部错误</FormDescription>
         </div>
         <FormControl>
           <Switch :checked="value" aria-readonly @update:checked="handleChange" />

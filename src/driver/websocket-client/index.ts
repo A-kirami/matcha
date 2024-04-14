@@ -13,6 +13,7 @@ import type { Event } from '~/adapter/event'
 export class websocketClient implements Driver {
   ws: WebSocket | null = null
   connectUrl: string
+  connectingError: boolean = false
   heartbeatPause?: () => void
   heartbeatResume?: () => void
 
@@ -69,11 +70,15 @@ export class websocketClient implements Driver {
       this.ws.addListener(this.onMessage.bind(this))
       this.heartbeatResume?.()
       this.adapter.state.isConnected = true
+      this.connectingError = false
       logger.info(`已连接到反向 WebSocket 服务器 ${this.connectUrl}`)
       toast.success('连接成功', { description: '已连接到反向 WebSocket 服务器' })
     } catch (error) {
-      logger.error(`[WebSocket] 连接到反向 WebSocket 服务器 ${this.connectUrl} 失败: ${error}`)
-      toast.error('连接错误', { description: `无法连接到 WebSocket 服务器: ${error}` })
+      if (this.adapter.config.showError || !this.connectingError) {
+        logger.error(`[WebSocket] 连接到反向 WebSocket 服务器 ${this.connectUrl} 失败: ${error}`)
+        toast.error('连接错误', { description: `无法连接到 WebSocket 服务器: ${error}` })
+        this.connectingError = true
+      }
       this.autoReconnection()
     }
   }
