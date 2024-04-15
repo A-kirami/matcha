@@ -11,9 +11,10 @@ import type { ActionRequest } from '~/adapter/action'
 import type { Event } from '~/adapter/event'
 
 export class websocketClient implements Driver {
-  ws: WebSocket | null = null
+  ws?: WebSocket
   connectUrl: string
   connectingError: boolean = false
+  explicitlyClosed: boolean = false
   heartbeatPause?: () => void
   heartbeatResume?: () => void
 
@@ -37,10 +38,12 @@ export class websocketClient implements Driver {
 
   async run(): Promise<void> {
     await this.disconnect()
+    this.explicitlyClosed = false
     await this.connect()
   }
 
   async stop(): Promise<void> {
+    this.explicitlyClosed = true
     await this.disconnect()
   }
 
@@ -57,7 +60,7 @@ export class websocketClient implements Driver {
   }
 
   async connect(): Promise<void> {
-    if (!this.connectUrl) {
+    if (this.explicitlyClosed || !this.connectUrl) {
       return
     }
 
@@ -90,7 +93,7 @@ export class websocketClient implements Driver {
     } catch (_) {
       // ignore
     }
-    this.ws = null
+    this.ws = undefined
     this.adapter.state.isConnected = false
   }
 
@@ -120,7 +123,7 @@ export class websocketClient implements Driver {
   }
 
   autoReconnection(): void {
-    if (this.adapter.config.reconnectInterval) {
+    if (!this.explicitlyClosed && this.adapter.config.reconnectInterval) {
       setTimeout(this.connect.bind(this), this.adapter.config.reconnectInterval * 1000)
     }
   }
