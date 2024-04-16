@@ -61,19 +61,42 @@ const EditDialog = $computed(() => {
     </Avatar>
     <div class="flex-shrink truncate text-foreground font-medium">{{ state.chatTarget?.name }}</div>
     <div class="ml-auto flex text-muted-foreground">
-      <component :is="EditDialog" v-if="state.chatTarget" :target-id="state.chatTarget?.id">
-        <Button variant="ghost" size="icon">
-          <Pencil class="size-5 stroke-1.5" />
-        </Button>
-      </component>
-      <Button v-if="state.chatTarget?.type === 'group'" variant="ghost" size="icon" @click="handleGroupMember">
-        <LogOut v-if="isGroupMember" class="size-5 stroke-1.5" />
-        <LogIn v-else class="size-5 stroke-1.5" />
-      </Button>
-      <Button v-else variant="ghost" size="icon" @click="handleFriend">
-        <UserRoundMinus v-if="isFriend" class="size-5 stroke-1.5" />
-        <UserRoundPlus v-else class="size-5 stroke-1.5" />
-      </Button>
+      <TooltipProvider :delay-duration="1500">
+        <Tooltip>
+          <TooltipTrigger>
+            <component :is="EditDialog" v-if="state.chatTarget" :target-id="state.chatTarget?.id">
+              <Button variant="ghost" size="icon">
+                <Pencil class="size-5 stroke-1.5" />
+              </Button>
+            </component>
+          </TooltipTrigger>
+          <TooltipContent side="bottom" class="px-2">
+            <p class="text-xs">{{ state.chatTarget?.type === 'group' ? '编辑群组' : '编辑用户' }}</p>
+          </TooltipContent>
+        </Tooltip>
+        <Tooltip v-if="state.chatTarget?.type === 'group'">
+          <TooltipTrigger as-child>
+            <Button variant="ghost" size="icon" @click="handleGroupMember">
+              <LogOut v-if="isGroupMember" class="size-5 stroke-1.5" />
+              <LogIn v-else class="size-5 stroke-1.5" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="bottom" class="px-2">
+            <p class="text-xs">{{ isGroupMember ? '退出群组' : '加入群组' }}</p>
+          </TooltipContent>
+        </Tooltip>
+        <Tooltip v-else>
+          <TooltipTrigger as-child>
+            <Button variant="ghost" size="icon" @click="handleFriend">
+              <UserRoundMinus v-if="isFriend" class="size-5 stroke-1.5" />
+              <UserRoundPlus v-else class="size-5 stroke-1.5" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="bottom" class="px-2">
+            <p class="text-xs">{{ isFriend ? '删除好友' : '添加好友' }}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
       <Button variant="ghost" size="icon">
         <EllipsisVertical class="size-5 stroke-1.5" />
       </Button>
