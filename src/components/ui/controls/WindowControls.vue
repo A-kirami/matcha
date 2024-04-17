@@ -17,7 +17,7 @@ const props = withDefaults(defineProps<WindowControlsProps>(), {
   className: '',
 })
 
-let platform = props.platform
+let platform = $ref(props.platform)
 
 onMounted(async () => {
   const osType = await getOsType()
@@ -43,7 +43,7 @@ const customClass = twMerge(
 </script>
 
 <template>
-  <MacOs v-if="platform === 'macos'" :class="twMerge(customClass, props.justify && 'ml-0')" />
+  <MacOs v-if="platform === 'macos'" :class="twMerge(customClass, props.justify && 'ml-auto')" />
   <Gnome v-else-if="platform === 'gnome'" :class="twMerge(customClass, props.justify && 'ml-auto')" />
   <Windows v-else :class="twMerge(customClass, props.justify && 'ml-auto')" />
 </template>
