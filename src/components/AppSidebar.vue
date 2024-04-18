@@ -3,7 +3,7 @@ import type { OsType } from '@tauri-apps/plugin-os'
 
 const osType = inject<OsType>('osType')
 
-const isMacOs = $computed(() => osType === 'macos')
+const isMacOs = $computed(() => unref(osType) === 'macos')
 </script>
 
 <template>

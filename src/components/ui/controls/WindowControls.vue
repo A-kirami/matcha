@@ -17,7 +17,7 @@ const props = withDefaults(defineProps<WindowControlsProps>(), {
   className: '',
 })
 
-let platform = props.platform
+let platform = $ref(props.platform)
 
 onMounted(async () => {
   const osType = await getOsType()
