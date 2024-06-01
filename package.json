@@ -20,7 +20,7 @@
     "@formkit/auto-animate": "^0.8.2",
     "@highlightjs/vue-plugin": "^2.1.0",
     "@msgpack/msgpack": "3.0.0-beta2",
-    "@tauri-apps/api": "2.0.0-beta.7",
+    "@tauri-apps/api": "2.0.0-beta.13",
     "@tauri-apps/plugin-dialog": "2.0.0-beta.2",
     "@tauri-apps/plugin-fs": "2.0.0-beta.2",
     "@tauri-apps/plugin-http": "2.0.0-beta.2",
@@ -65,7 +65,7 @@
   },
   "devDependencies": {
     "@iconify-json/carbon": "^1.1.31",
-    "@tauri-apps/cli": "2.0.0-beta.12",
+    "@tauri-apps/cli": "2.0.0-beta.20",
     "@types/node": "^20.12.7",
     "@typescript-eslint/eslint-plugin": "^7.7.0",
     "@typescript-eslint/parser": "^7.7.0",
