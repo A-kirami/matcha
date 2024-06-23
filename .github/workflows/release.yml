@@ -41,6 +41,7 @@ jobs:
             target: x86_64-pc-windows-msvc
     name: ${{ matrix.label }}
     runs-on: ${{ matrix.os }}
+    environment: release
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -63,7 +64,7 @@ jobs:
       - name: Pnpm setup
         uses: pnpm/action-setup@v3
         with:
-          version: 8
+          version: 9
 
       - name: Sync node version and setup cache
         uses: actions/setup-node@v4
