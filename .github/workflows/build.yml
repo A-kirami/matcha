@@ -84,7 +84,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: -t ${{ matrix.target }}
+          args: -t ${{ matrix.target }} -c '{"plugins":{"updater":{"pubkey":""}}}'
 
       - uses: actions/upload-artifact@v4
         with:

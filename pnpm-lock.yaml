@@ -51,8 +51,8 @@ dependencies:
     specifier: ^4.13.1
     version: 4.13.1(vue@3.4.30)
   '@vitejs/plugin-vue-jsx':
-    specifier: ^3.1.0
-    version: 3.1.0(vite@5.3.1)(vue@3.4.30)
+    specifier: ^4.0.0
+    version: 4.0.0(vite@5.3.1)(vue@3.4.30)
   '@vueuse/core':
     specifier: ^10.11.0
     version: 10.11.0(vue@3.4.30)
@@ -87,8 +87,8 @@ dependencies:
     specifier: ^4.1.3
     version: 4.1.3
   lucide-vue-next:
-    specifier: ^0.354.0
-    version: 0.354.0(vue@3.4.30)
+    specifier: ^0.396.0
+    version: 0.396.0(vue@3.4.30)
   mime:
     specifier: ^4.0.3
     version: 4.0.3
@@ -158,8 +158,8 @@ devDependencies:
     specifier: ^7.13.1
     version: 7.13.1(eslint@8.57.0)(typescript@5.5.2)
   '@unocss/eslint-config':
-    specifier: ^0.58.9
-    version: 0.58.9(eslint@8.57.0)(typescript@5.5.2)
+    specifier: ^0.61.0
+    version: 0.61.0(eslint@8.57.0)(typescript@5.5.2)
   '@vitejs/plugin-vue':
     specifier: ^5.0.5
     version: 5.0.5(vite@5.3.1)(vue@3.4.30)
@@ -170,8 +170,8 @@ devDependencies:
     specifier: ^1.6.0
     version: 1.6.0(vitest@1.6.0)
   '@vue-macros/volar':
-    specifier: ^0.18.18
-    version: 0.18.18(@vue-macros/reactivity-transform@0.4.6)(typescript@5.5.2)(vue-tsc@1.8.27)(vue@3.4.30)
+    specifier: ^0.22.0
+    version: 0.22.0(@vue-macros/reactivity-transform@0.4.6)(typescript@5.5.2)(vue-tsc@2.0.22)(vue@3.4.30)
   '@vue/test-utils':
     specifier: ^2.4.6
     version: 2.4.6
@@ -251,8 +251,8 @@ devDependencies:
     specifier: ^0.3.1
     version: 0.3.1(unocss@0.61.0)
   unocss-preset-shadcn:
-    specifier: ^0.2.3
-    version: 0.2.3(unocss-preset-animations@1.0.2)(unocss@0.61.0)
+    specifier: ^0.3.0
+    version: 0.3.0(unocss-preset-animations@1.0.2)(unocss@0.61.0)
   unplugin-auto-import:
     specifier: ^0.17.6
     version: 0.17.6(@vueuse/core@10.11.0)
@@ -263,14 +263,14 @@ devDependencies:
     specifier: ^1.8.6
     version: 1.8.6(vite@5.3.1)(vue@3.4.30)
   unplugin-vue-components:
-    specifier: ^0.26.0
-    version: 0.26.0(vue@3.4.30)
+    specifier: ^0.27.0
+    version: 0.27.0(vue@3.4.30)
   unplugin-vue-macros:
     specifier: ^2.9.5
     version: 2.9.5(@vueuse/core@10.11.0)(typescript@5.5.2)(vite@5.3.1)(vue@3.4.30)
   unplugin-vue-router:
-    specifier: ^0.8.8
-    version: 0.8.8(vue-router@4.4.0)(vue@3.4.30)
+    specifier: ^0.9.1
+    version: 0.9.1(vue-router@4.4.0)(vue@3.4.30)
   vite:
     specifier: ^5.3.1
     version: 5.3.1(@types/node@20.14.8)
@@ -287,8 +287,8 @@ devDependencies:
     specifier: ^9.4.3
     version: 9.4.3(eslint@8.57.0)
   vue-tsc:
-    specifier: ^1.8.27
-    version: 1.8.27(typescript@5.5.2)
+    specifier: ^2.0.22
+    version: 2.0.22(typescript@5.5.2)
 
 packages:
 
@@ -1663,14 +1663,6 @@ packages:
       - rollup
     dev: true
 
-  /@unocss/config@0.58.9:
-    resolution: {integrity: sha512-90wRXIyGNI8UenWxvHUcH4l4rgq813MsTzYWsf6ZKyLLvkFjV2b2EfGXI27GPvZ7fVE1OAqx+wJNTw8CyQxwag==, tarball: https://registry.npmmirror.com/@unocss/config/-/config-0.58.9.tgz}
-    engines: {node: '>=14'}
-    dependencies:
-      '@unocss/core': 0.58.9
-      unconfig: 0.3.13
-    dev: true
-
   /@unocss/config@0.61.0:
     resolution: {integrity: sha512-k8uV4n8eMti4S6BFeAkc9QBXJefDIlPyOWrdKykUMOHLIWVAIS53JixW9FJNgJRw0RVI6B7UR+rOznWwKpORPA==, tarball: https://registry.npmmirror.com/@unocss/config/-/config-0.61.0.tgz}
     engines: {node: '>=14'}
@@ -1683,32 +1675,28 @@ packages:
     resolution: {integrity: sha512-fx5VhOjSHn0HdV2D34pEwFMAHJcJQRTCp1xEE4GzxY1irXzaa+m2aYf5PZjmDxehiOC16IH7TO9FOWANXk1E0w==, tarball: https://registry.npmmirror.com/@unocss/core/-/core-0.56.5.tgz}
     dev: true
 
-  /@unocss/core@0.58.9:
-    resolution: {integrity: sha512-wYpPIPPsOIbIoMIDuH8ihehJk5pAZmyFKXIYO/Kro98GEOFhz6lJoLsy6/PZuitlgp2/TSlubUuWGjHWvp5osw==, tarball: https://registry.npmmirror.com/@unocss/core/-/core-0.58.9.tgz}
-    dev: true
-
   /@unocss/core@0.61.0:
     resolution: {integrity: sha512-Y/Ly3LPIAzOBlWCdKBVzVzIaaWDsf+oWPIUZlaW7DL++WWypVBCghmxXIT5dyuMGXE560Hj92st4AkXfuVdxGQ==, tarball: https://registry.npmmirror.com/@unocss/core/-/core-0.61.0.tgz}
     dev: true
 
-  /@unocss/eslint-config@0.58.9(eslint@8.57.0)(typescript@5.5.2):
-    resolution: {integrity: sha512-7Cf9NVPQqdhd6rbe2JDlqY9bBwuFfxvZOmeEUcKaI10QNNrDNvnMKd8rToxCdm5RToSjNeuj66V/scl8Kv8rfQ==, tarball: https://registry.npmmirror.com/@unocss/eslint-config/-/eslint-config-0.58.9.tgz}
+  /@unocss/eslint-config@0.61.0(eslint@8.57.0)(typescript@5.5.2):
+    resolution: {integrity: sha512-X5PqMToLtIaNCWjim3ZReBPxUYDVeGCoUEW/kydsAp4uIZb7rwS49tMGZZg12GLYPg/AUw5Rdk13t1MFF1aclQ==, tarball: https://registry.npmmirror.com/@unocss/eslint-config/-/eslint-config-0.61.0.tgz}
     engines: {node: '>=14'}
     dependencies:
-      '@unocss/eslint-plugin': 0.58.9(eslint@8.57.0)(typescript@5.5.2)
+      '@unocss/eslint-plugin': 0.61.0(eslint@8.57.0)(typescript@5.5.2)
     transitivePeerDependencies:
       - eslint
       - supports-color
       - typescript
     dev: true
 
-  /@unocss/eslint-plugin@0.58.9(eslint@8.57.0)(typescript@5.5.2):
-    resolution: {integrity: sha512-StlHO850jow2w/PTA01opkGAD6WO+iu65fxel062gp/aeoO/cRwVlQntVX7Z8QHDGXnftjW83RjvX9LqW8+iLw==, tarball: https://registry.npmmirror.com/@unocss/eslint-plugin/-/eslint-plugin-0.58.9.tgz}
+  /@unocss/eslint-plugin@0.61.0(eslint@8.57.0)(typescript@5.5.2):
+    resolution: {integrity: sha512-iZzERoVNTC/RJ4KUkhWDRu3LYYOeJmi7+AnuM2QGjkhNV5nHWb7fl7gVQvujK6xk+Kcy+f26k40tTKA9cCkuEg==, tarball: https://registry.npmmirror.com/@unocss/eslint-plugin/-/eslint-plugin-0.61.0.tgz}
     engines: {node: '>=14'}
     dependencies:
       '@typescript-eslint/utils': 7.13.1(eslint@8.57.0)(typescript@5.5.2)
-      '@unocss/config': 0.58.9
-      '@unocss/core': 0.58.9
+      '@unocss/config': 0.61.0
+      '@unocss/core': 0.61.0
       magic-string: 0.30.10
       synckit: 0.9.0
     transitivePeerDependencies:
@@ -1911,11 +1899,11 @@ packages:
       - vue
     dev: false
 
-  /@vitejs/plugin-vue-jsx@3.1.0(vite@5.3.1)(vue@3.4.30):
-    resolution: {integrity: sha512-w9M6F3LSEU5kszVb9An2/MmXNxocAnUb3WhRr8bHlimhDrXNt6n6D2nJQR3UXpGlZHh/EsgouOHCsM8V3Ln+WA==, tarball: https://registry.npmmirror.com/@vitejs/plugin-vue-jsx/-/plugin-vue-jsx-3.1.0.tgz}
-    engines: {node: ^14.18.0 || >=16.0.0}
+  /@vitejs/plugin-vue-jsx@4.0.0(vite@5.3.1)(vue@3.4.30):
+    resolution: {integrity: sha512-A+6wL2AdQhDsLsDnY+2v4rRDI1HLJGIMc97a8FURO9tqKsH5QvjWrzsa5DH3NlZsM742W2wODl2fF+bfcTWtXw==, tarball: https://registry.npmmirror.com/@vitejs/plugin-vue-jsx/-/plugin-vue-jsx-4.0.0.tgz}
+    engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
-      vite: ^4.0.0 || ^5.0.0
+      vite: ^5.0.0
       vue: ^3.0.0
     dependencies:
       '@babel/core': 7.24.7
@@ -2015,23 +2003,22 @@ packages:
       pretty-format: 29.7.0
     dev: true
 
-  /@volar/language-core@1.11.1:
-    resolution: {integrity: sha512-dOcNn3i9GgZAcJt43wuaEykSluAuOkQgzni1cuxLxTV0nJKanQztp7FxyswdRILaKH+P2XZMPRp2S4MV/pElCw==, tarball: https://registry.npmmirror.com/@volar/language-core/-/language-core-1.11.1.tgz}
+  /@volar/language-core@2.3.1:
+    resolution: {integrity: sha512-25CZ3ulM6jWgQsPQjKb7maKDlryvXWvsl7ytw4uj1Yyy17BgdiTWqMuNSxIODC3+/7IBOOGYoINC/1OOLACLLw==, tarball: https://registry.npmmirror.com/@volar/language-core/-/language-core-2.3.1.tgz}
     dependencies:
-      '@volar/source-map': 1.11.1
+      '@volar/source-map': 2.3.1
     dev: true
 
-  /@volar/source-map@1.11.1:
-    resolution: {integrity: sha512-hJnOnwZ4+WT5iupLRnuzbULZ42L7BWWPMmruzwtLhJfpDVoZLjNBxHDi2sY2bgZXCKlpU5XcsMFoYrsQmPhfZg==, tarball: https://registry.npmmirror.com/@volar/source-map/-/source-map-1.11.1.tgz}
-    dependencies:
-      muggle-string: 0.3.1
+  /@volar/source-map@2.3.1:
+    resolution: {integrity: sha512-fU3IL19wRy5S5OaGq67ejSl+/xdMuOHgp9Rsp3OiOhLyg25CctLYDdGZ9Y3+MJ1iqTLDh94PdvdR1BZX6I0hNQ==, tarball: https://registry.npmmirror.com/@volar/source-map/-/source-map-2.3.1.tgz}
     dev: true
 
-  /@volar/typescript@1.11.1:
-    resolution: {integrity: sha512-iU+t2mas/4lYierSnoFOeRFQUhAEMgsFuQxoxvwn5EdQopw43j+J27a4lt9LMInx1gLJBC6qL14WYGlgymaSMQ==, tarball: https://registry.npmmirror.com/@volar/typescript/-/typescript-1.11.1.tgz}
+  /@volar/typescript@2.3.1:
+    resolution: {integrity: sha512-OrUV6dYt/1h92+aWElexra6dp++gF/IEddvwyxeobyYfKAoKDUMsWU0iJCj0clZlfdyYaLmNEAkulJlVimxnOw==, tarball: https://registry.npmmirror.com/@volar/typescript/-/typescript-2.3.1.tgz}
     dependencies:
-      '@volar/language-core': 1.11.1
+      '@volar/language-core': 2.3.1
       path-browserify: 1.0.1
+      vscode-uri: 3.0.8
     dev: true
 
   /@vue-macros/api@0.9.7(vue@3.4.30):
@@ -2078,26 +2065,6 @@ packages:
     transitivePeerDependencies:
       - rollup
       - vue
-    dev: true
-
-  /@vue-macros/common@1.10.2(vue@3.4.30):
-    resolution: {integrity: sha512-WC66NPVh2mJWqm4L0l/u/cOqm4pNOIwVdMGnDYAH2rHcOWy5x68GkhpkYTBu1+xwCSeHWOQn1TCGGbD+98fFpA==, tarball: https://registry.npmmirror.com/@vue-macros/common/-/common-1.10.2.tgz}
-    engines: {node: '>=16.14.0'}
-    peerDependencies:
-      vue: ^2.7.0 || ^3.2.25
-    peerDependenciesMeta:
-      vue:
-        optional: true
-    dependencies:
-      '@babel/types': 7.24.7
-      '@rollup/pluginutils': 5.1.0
-      '@vue/compiler-sfc': 3.4.30
-      ast-kit: 0.12.2
-      local-pkg: 0.5.0
-      magic-string-ast: 0.3.0
-      vue: 3.4.30(typescript@5.5.2)
-    transitivePeerDependencies:
-      - rollup
     dev: true
 
   /@vue-macros/common@1.10.4(vue@3.4.30):
@@ -2173,21 +2140,6 @@ packages:
       vue: ^2.7.0 || ^3.2.25
     dependencies:
       '@vue-macros/common': 1.10.4(vue@3.4.30)
-      unplugin: 1.10.1
-      vue: 3.4.30(typescript@5.5.2)
-    transitivePeerDependencies:
-      - rollup
-    dev: true
-
-  /@vue-macros/define-props@2.0.4(@vue-macros/reactivity-transform@0.4.6)(vue@3.4.30):
-    resolution: {integrity: sha512-opifxLT9yF+A/bEfEpuFxNcAMPEmnPv/ewlCDmOH8VX+CBnlWbDqY0n0LcimPGRTYkRDAkNBHRRQulxNfRXNpw==, tarball: https://registry.npmmirror.com/@vue-macros/define-props/-/define-props-2.0.4.tgz}
-    engines: {node: '>=16.14.0'}
-    peerDependencies:
-      '@vue-macros/reactivity-transform': ^0.4.4
-      vue: ^2.7.0 || ^3.2.25
-    dependencies:
-      '@vue-macros/common': 1.10.2(vue@3.4.30)
-      '@vue-macros/reactivity-transform': 0.4.6(vue@3.4.30)
       unplugin: 1.10.1
       vue: 3.4.30(typescript@5.5.2)
     transitivePeerDependencies:
@@ -2377,17 +2329,6 @@ packages:
       - vue
     dev: true
 
-  /@vue-macros/short-bind@0.2.3(vue@3.4.30):
-    resolution: {integrity: sha512-3QwHQQDVNpsWh36/q4sB5QmGGedwIZUmL2rvQ8YQD6EA455samG0r2zB9Q6Z7DA8+qk6TjpmkvltubDY9TWtEQ==, tarball: https://registry.npmmirror.com/@vue-macros/short-bind/-/short-bind-0.2.3.tgz}
-    engines: {node: '>=16.14.0'}
-    dependencies:
-      '@vue-macros/common': 1.10.2(vue@3.4.30)
-      '@vue/compiler-core': 3.4.30
-    transitivePeerDependencies:
-      - rollup
-      - vue
-    dev: true
-
   /@vue-macros/short-bind@0.2.5(vue@3.4.30):
     resolution: {integrity: sha512-p8kKgEKnWBUqu5Ug0xNThPW3XM4BlBGCFS0wP/32GthXzc9zSagdEGSI1ZzAgVE1lqMSiS4QQ3FgUiOTQ2cMxQ==, tarball: https://registry.npmmirror.com/@vue-macros/short-bind/-/short-bind-0.2.5.tgz}
     engines: {node: '>=16.14.0'}
@@ -2410,17 +2351,6 @@ packages:
       - vue
     dev: true
 
-  /@vue-macros/short-vmodel@1.4.3(vue@3.4.30):
-    resolution: {integrity: sha512-ZQph4GuKl4kEXtzGDddqSgfykAZ9cT7tu14G4K3ZGJ8wsLmhuLGWfFL596UVg5zfVyMWuC/SbTmR8UEp/eMPJA==, tarball: https://registry.npmmirror.com/@vue-macros/short-vmodel/-/short-vmodel-1.4.3.tgz}
-    engines: {node: '>=16.14.0'}
-    dependencies:
-      '@vue-macros/common': 1.10.2(vue@3.4.30)
-      '@vue/compiler-core': 3.4.30
-    transitivePeerDependencies:
-      - rollup
-      - vue
-    dev: true
-
   /@vue-macros/short-vmodel@1.4.5(vue@3.4.30):
     resolution: {integrity: sha512-Q2geG7eAHFVu8w6/joxK5AQlpzKW6NcpxbU4k2ummuvjYPP9JnmY0h8pU1CRsEf6uzRv+yEUDDyDDeqHsN0IpA==, tarball: https://registry.npmmirror.com/@vue-macros/short-vmodel/-/short-vmodel-1.4.5.tgz}
     engines: {node: '>=16.14.0'}
@@ -2432,23 +2362,24 @@ packages:
       - vue
     dev: true
 
-  /@vue-macros/volar@0.18.18(@vue-macros/reactivity-transform@0.4.6)(typescript@5.5.2)(vue-tsc@1.8.27)(vue@3.4.30):
-    resolution: {integrity: sha512-oDY085pdFMGG/mnJH6z4pFKdlVjp/3vqBbIzDUMDGysqizmpb6r6ly1RXO3/pfGaN9iCvMiwhx/dbYkg/LHpNA==, tarball: https://registry.npmmirror.com/@vue-macros/volar/-/volar-0.18.18.tgz}
+  /@vue-macros/volar@0.22.0(@vue-macros/reactivity-transform@0.4.6)(typescript@5.5.2)(vue-tsc@2.0.22)(vue@3.4.30):
+    resolution: {integrity: sha512-gitCOxzYXbH20Zx7VUPxjtymMBm2pFpNcLqXkETnwzfri9H9xUy0aSAsI8yPqdsBx0j5wY5PLjJTCK/xsqi0Xg==, tarball: https://registry.npmmirror.com/@vue-macros/volar/-/volar-0.22.0.tgz}
     engines: {node: '>=16.14.0'}
     peerDependencies:
-      vue-tsc: ^1.6.0
+      vue-tsc: ^2.0.0
     peerDependenciesMeta:
       vue-tsc:
         optional: true
     dependencies:
       '@rollup/pluginutils': 5.1.0
-      '@vue-macros/common': 1.10.2(vue@3.4.30)
-      '@vue-macros/define-props': 2.0.4(@vue-macros/reactivity-transform@0.4.6)(vue@3.4.30)
-      '@vue-macros/short-bind': 0.2.3(vue@3.4.30)
-      '@vue-macros/short-vmodel': 1.4.3(vue@3.4.30)
-      '@vue/language-core': 1.8.27(typescript@5.5.2)
+      '@vue-macros/boolean-prop': 0.4.0(vue@3.4.30)
+      '@vue-macros/common': 1.10.4(vue@3.4.30)
+      '@vue-macros/define-props': 2.0.6(@vue-macros/reactivity-transform@0.4.6)(vue@3.4.30)
+      '@vue-macros/short-bind': 0.2.5(vue@3.4.30)
+      '@vue-macros/short-vmodel': 1.4.5(vue@3.4.30)
+      '@vue/language-core': 2.0.21(typescript@5.5.2)
       '@vue/shared': 3.4.30
-      vue-tsc: 1.8.27(typescript@5.5.2)
+      vue-tsc: 2.0.22(typescript@5.5.2)
     transitivePeerDependencies:
       - '@vue-macros/reactivity-transform'
       - rollup
@@ -2565,21 +2496,38 @@ packages:
       rfdc: 1.4.1
     dev: true
 
-  /@vue/language-core@1.8.27(typescript@5.5.2):
-    resolution: {integrity: sha512-L8Kc27VdQserNaCUNiSFdDl9LWT24ly8Hpwf1ECy3aFb9m6bDhBGQYOujDm21N7EW3moKIOKEanQwe1q5BK+mA==, tarball: https://registry.npmmirror.com/@vue/language-core/-/language-core-1.8.27.tgz}
+  /@vue/language-core@2.0.21(typescript@5.5.2):
+    resolution: {integrity: sha512-vjs6KwnCK++kIXT+eI63BGpJHfHNVJcUCr3RnvJsccT3vbJnZV5IhHR2puEkoOkIbDdp0Gqi1wEnv3hEd3WsxQ==, tarball: https://registry.npmmirror.com/@vue/language-core/-/language-core-2.0.21.tgz}
     peerDependencies:
       typescript: '*'
     peerDependenciesMeta:
       typescript:
         optional: true
     dependencies:
-      '@volar/language-core': 1.11.1
-      '@volar/source-map': 1.11.1
+      '@volar/language-core': 2.3.1
       '@vue/compiler-dom': 3.4.30
       '@vue/shared': 3.4.30
       computeds: 0.0.1
       minimatch: 9.0.4
-      muggle-string: 0.3.1
+      path-browserify: 1.0.1
+      typescript: 5.5.2
+      vue-template-compiler: 2.7.16
+    dev: true
+
+  /@vue/language-core@2.0.22(typescript@5.5.2):
+    resolution: {integrity: sha512-dNTAAtEOuMiz7N1s5tKpypnVVCtawxVSF5BukD0ELcYSw+DSbrSlYYSw8GuwvurodCeYFSHsmslE+c2sYDNoiA==, tarball: https://registry.npmmirror.com/@vue/language-core/-/language-core-2.0.22.tgz}
+    peerDependencies:
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@volar/language-core': 2.3.1
+      '@vue/compiler-dom': 3.4.30
+      '@vue/shared': 3.4.30
+      computeds: 0.0.1
+      minimatch: 9.0.4
+      muggle-string: 0.4.1
       path-browserify: 1.0.1
       typescript: 5.5.2
       vue-template-compiler: 2.7.16
@@ -4925,11 +4873,6 @@ packages:
       wrap-ansi: 9.0.0
     dev: true
 
-  /local-pkg@0.4.3:
-    resolution: {integrity: sha512-SFppqq5p42fe2qcZQqqEOiVRXl+WCP1MdT6k7BDEW1j++sp5fIY+/fdRQitvKgB5BrBcmrs5m/L0v2FrU5MY1g==, tarball: https://registry.npmmirror.com/local-pkg/-/local-pkg-0.4.3.tgz}
-    engines: {node: '>=14'}
-    dev: true
-
   /local-pkg@0.5.0:
     resolution: {integrity: sha512-ok6z3qlYyCDS4ZEU27HaU6x/xZa9Whf8jD4ptH5UZTQYZVYeb9bnZ3ojVhiJNLiXK1Hfc0GNbLXcmZ5plLDDBg==, tarball: https://registry.npmmirror.com/local-pkg/-/local-pkg-0.5.0.tgz}
     engines: {node: '>=14'}
@@ -4984,20 +4927,13 @@ packages:
     dependencies:
       yallist: 3.1.1
 
-  /lucide-vue-next@0.354.0(vue@3.4.30):
-    resolution: {integrity: sha512-FVs/VXBTVSqfLywln5U0MQsB/iBdov5BBa2R9hhOaKzP9XtvuUV1jTctevEL7cgLxHpK9J4RPWSjPbPJzu1EPA==, tarball: https://registry.npmmirror.com/lucide-vue-next/-/lucide-vue-next-0.354.0.tgz}
+  /lucide-vue-next@0.396.0(vue@3.4.30):
+    resolution: {integrity: sha512-fY2FbKWVlAH6KyGHLWQvjPmDAbAh5UH6eqakDYB815UG5wPLtDQmhSYQlZvDLvhkahLdUZt5f+IWKwSANaS0Zw==, tarball: https://registry.npmmirror.com/lucide-vue-next/-/lucide-vue-next-0.396.0.tgz}
     peerDependencies:
       vue: '>=3.0.1'
     dependencies:
       vue: 3.4.30(typescript@5.5.2)
     dev: false
-
-  /magic-string-ast@0.3.0:
-    resolution: {integrity: sha512-0shqecEPgdFpnI3AP90epXyxZy9g6CRZ+SZ7BcqFwYmtFEnZ1jpevcV5HoyVnlDS9gCnc1UIg3Rsvp3Ci7r8OA==, tarball: https://registry.npmmirror.com/magic-string-ast/-/magic-string-ast-0.3.0.tgz}
-    engines: {node: '>=16.14.0'}
-    dependencies:
-      magic-string: 0.30.10
-    dev: true
 
   /magic-string-ast@0.6.1:
     resolution: {integrity: sha512-eczKQUDaBpB/mcEqZZNGEUG1FQNsXCuk3uOrCpu6y7qTygIy6jnpqDa62j9MGKSoqlXhM1lCFQv1THuGDQtvUA==, tarball: https://registry.npmmirror.com/magic-string-ast/-/magic-string-ast-0.6.1.tgz}
@@ -5132,8 +5068,8 @@ packages:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==, tarball: https://registry.npmmirror.com/ms/-/ms-2.1.3.tgz}
     dev: true
 
-  /muggle-string@0.3.1:
-    resolution: {integrity: sha512-ckmWDJjphvd/FvZawgygcUeQCxzvohjFO5RxTjj4eq8kw359gFF3E1brjfI+viLMxss5JrHTDRHZvu2/tuy0Qg==, tarball: https://registry.npmmirror.com/muggle-string/-/muggle-string-0.3.1.tgz}
+  /muggle-string@0.4.1:
+    resolution: {integrity: sha512-VNTrAak/KhO2i8dqqnqnAHOa3cYBwXEZe9h+D5h/1ZqFSTEFHdM65lR7RoIqq3tBBYavsOXV84NoHXZ0AkPyqQ==, tarball: https://registry.npmmirror.com/muggle-string/-/muggle-string-0.4.1.tgz}
     dev: true
 
   /nanoid@3.3.7:
@@ -6585,8 +6521,8 @@ packages:
       unocss: 0.61.0(postcss@8.4.38)(vite@5.3.1)
     dev: true
 
-  /unocss-preset-shadcn@0.2.3(unocss-preset-animations@1.0.2)(unocss@0.61.0):
-    resolution: {integrity: sha512-bmc4gCAKKeQP1I7FAU2OLqEoFDbSutWiD8/cEqZX6L2qVcMb/Hm3Cp4Q9PmIGSBz7hZYp3L8dSiJFW36vCPXRQ==, tarball: https://registry.npmmirror.com/unocss-preset-shadcn/-/unocss-preset-shadcn-0.2.3.tgz}
+  /unocss-preset-shadcn@0.3.0(unocss-preset-animations@1.0.2)(unocss@0.61.0):
+    resolution: {integrity: sha512-GCtp2o/9LZL0xl11T9mE35UMIhow8mmkvMvGEKGD8TiienAXM9I7lf5vSOgJd9ywyuGYV3Av5DZ+sR4GX5KRvA==, tarball: https://registry.npmmirror.com/unocss-preset-shadcn/-/unocss-preset-shadcn-0.3.0.tgz}
     peerDependencies:
       unocss: '>= 0.56.0 < 1'
       unocss-preset-animations: ^1.0.1
@@ -6757,8 +6693,8 @@ packages:
       - uWebSockets.js
     dev: true
 
-  /unplugin-vue-components@0.26.0(vue@3.4.30):
-    resolution: {integrity: sha512-s7IdPDlnOvPamjunVxw8kNgKNK8A5KM1YpK5j/p97jEKTjlPNrA0nZBiSfAKKlK1gWZuyWXlKL5dk3EDw874LQ==, tarball: https://registry.npmmirror.com/unplugin-vue-components/-/unplugin-vue-components-0.26.0.tgz}
+  /unplugin-vue-components@0.27.0(vue@3.4.30):
+    resolution: {integrity: sha512-77eTEy23sQ0UpzGWnZ9I2mY3cnmXwklz4ITcn3JfxjCoX643ghImkiZ4nFm58sxbdVcc4Fo/o4LIoFnlqEqsSg==, tarball: https://registry.npmmirror.com/unplugin-vue-components/-/unplugin-vue-components-0.27.0.tgz}
     engines: {node: '>=14'}
     peerDependencies:
       '@babel/parser': ^7.15.8
@@ -6775,7 +6711,7 @@ packages:
       chokidar: 3.6.0
       debug: 4.3.5
       fast-glob: 3.3.2
-      local-pkg: 0.4.3
+      local-pkg: 0.5.0
       magic-string: 0.30.10
       minimatch: 9.0.4
       resolve: 1.22.8
@@ -6842,8 +6778,8 @@ packages:
       - webpack
     dev: true
 
-  /unplugin-vue-router@0.8.8(vue-router@4.4.0)(vue@3.4.30):
-    resolution: {integrity: sha512-8fKHzIF8+Suc1DhoBHmGxLhXUjhzIKvdTwngAybJ+3UrhNLv7KsGrNjaBVnQmlS9VNpxlwHRJzZ2Vc7IDlDm+A==, tarball: https://registry.npmmirror.com/unplugin-vue-router/-/unplugin-vue-router-0.8.8.tgz}
+  /unplugin-vue-router@0.9.1(vue-router@4.4.0)(vue@3.4.30):
+    resolution: {integrity: sha512-kQfplWIowamMLclOdJREiVqhuwTs5dSNPz7YftjKibwSmihds6KdMI9O/3WqilGFo6Q5+8gNwQTpu356wWs8KQ==, tarball: https://registry.npmmirror.com/unplugin-vue-router/-/unplugin-vue-router-0.9.1.tgz}
     peerDependencies:
       vue-router: ^4.3.0
     peerDependenciesMeta:
@@ -7120,6 +7056,10 @@ packages:
       - terser
     dev: true
 
+  /vscode-uri@3.0.8:
+    resolution: {integrity: sha512-AyFQ0EVmsOZOlAnxoFOGOq1SQDWAB7C6aqMGS23svWAllfOaxbuFvcT8D1i8z3Gyn8fraVeZNNmN6e9bxxXkKw==, tarball: https://registry.npmmirror.com/vscode-uri/-/vscode-uri-3.0.8.tgz}
+    dev: true
+
   /vue-component-type-helpers@2.0.22:
     resolution: {integrity: sha512-gPr2Ba7efUwy/Vfbuf735bHSVdN4ycoZUCHfypkI33M9DUH+ieRblLLVM2eImccFYaWNWwEzURx02EgoXDBmaQ==, tarball: https://registry.npmmirror.com/vue-component-type-helpers/-/vue-component-type-helpers-2.0.22.tgz}
     dev: true
@@ -7183,14 +7123,14 @@ packages:
       he: 1.2.0
     dev: true
 
-  /vue-tsc@1.8.27(typescript@5.5.2):
-    resolution: {integrity: sha512-WesKCAZCRAbmmhuGl3+VrdWItEvfoFIPXOvUJkjULi+x+6G/Dy69yO3TBRJDr9eUlmsNAwVmxsNZxvHKzbkKdg==, tarball: https://registry.npmmirror.com/vue-tsc/-/vue-tsc-1.8.27.tgz}
+  /vue-tsc@2.0.22(typescript@5.5.2):
+    resolution: {integrity: sha512-lMBIwPBO0sxCcmvu45yt1b035AaQ8/XSXQDk8m75y4j0jSXY/y/XzfEtssQ9JMS47lDaR10O3/926oCs8OeGUw==, tarball: https://registry.npmmirror.com/vue-tsc/-/vue-tsc-2.0.22.tgz}
     hasBin: true
     peerDependencies:
       typescript: '*'
     dependencies:
-      '@volar/typescript': 1.11.1
-      '@vue/language-core': 1.8.27(typescript@5.5.2)
+      '@volar/typescript': 2.3.1
+      '@vue/language-core': 2.0.22(typescript@5.5.2)
       semver: 7.6.2
       typescript: 5.5.2
     dev: true
