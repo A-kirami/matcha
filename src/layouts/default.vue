@@ -40,7 +40,7 @@ onMounted(async () => {
       </Suspense>
     </RouterView>
   </div>
-  <Toaster />
+  <Toaster class="pointer-events-auto" />
 </template>
 
 <style module>
