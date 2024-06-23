@@ -39,15 +39,15 @@ let updateInfo = $ref<Update>()
 
 async function manualCheckUpdate() {
   const update = await checkUpdate()
-  if (update) {
-    if (update.available) {
-      updateInfo = update
-      updateOpen = true
-    } else {
-      toast.success('', { description: '当前已是最新版本，无需更新' })
-    }
+  if (update?.available) {
+    updateInfo = update
+    updateOpen = true
+  } else {
+    toast.success('', { description: '当前已是最新版本，无需更新' })
   }
 }
+
+const isDev = import.meta.env.DEV
 </script>
 
 <template>
@@ -72,7 +72,7 @@ async function manualCheckUpdate() {
         <Info class="mr-2 size-4 stroke-1.5" />
         <span>关于</span>
       </DropdownMenuItem>
-      <DropdownMenuItem v-if="isRelease" class="cursor-pointer" @click="manualCheckUpdate">
+      <DropdownMenuItem v-if="isRelease || isDev" class="cursor-pointer" @click="manualCheckUpdate">
         <RefreshCw class="mr-2 size-4 stroke-1.5" />
         <span>检查更新</span>
       </DropdownMenuItem>

@@ -3,6 +3,7 @@ import {
   presetUno,
   presetAttributify,
   presetIcons,
+  presetTypography,
   transformerDirectives,
   transformerVariantGroup,
 } from 'unocss'
@@ -15,6 +16,7 @@ export default defineConfig({
     presetUno(),
     presetAttributify(),
     presetIcons(),
+    presetTypography(),
     presetScrollbar(),
     presetAnimations(),
     presetShadcn({
