@@ -1,7 +1,8 @@
 import { setupLayouts } from 'virtual:generated-layouts'
-import { createRouter, createWebHistory } from 'vue-router/auto'
+import { createRouter, createWebHistory } from 'vue-router'
+import { routes } from 'vue-router/auto-routes'
 
 export const router = createRouter({
   history: createWebHistory(),
-  extendRoutes: (routes) => setupLayouts(routes),
+  routes: setupLayouts(routes),
 })

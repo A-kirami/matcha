@@ -140,6 +140,6 @@
         "alwaysTryTypes": true
       }
     },
-    "import/core-modules": ["vue-router/auto", "vue-router/auto-routes"]
+    "import/core-modules": ["vue-router/auto-routes"]
   }
 }
