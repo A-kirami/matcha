@@ -64,7 +64,7 @@ jobs:
       - name: Pnpm setup
         uses: pnpm/action-setup@v3
         with:
-          version: 8
+          version: 9
 
       - name: Sync node version and setup cache
         uses: actions/setup-node@v4
@@ -84,7 +84,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: -t ${{ matrix.target }} -c '{"plugins":{"updater":{"pubkey":""}}}'
+          args: -t ${{ matrix.target }}
 
       - uses: actions/upload-artifact@v4
         with:
