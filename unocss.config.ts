@@ -22,11 +22,8 @@ export default defineConfig({
     presetShadcn({
       color: {
         base: 'blue',
-        color: {
-          name: 'matcha',
-          light: { primary: '213 94% 68%', ring: '213 94% 68%' },
-          dark: { background: '222 22% 15%', primary: '210 100% 75%', ring: '210 100% 75%', popover: '222 22% 15%' },
-        },
+        light: { primary: '213 94% 68%', ring: '213 94% 68%' },
+        dark: { background: '222 22% 15%', primary: '210 100% 75%', ring: '210 100% 75%', popover: '222 22% 15%' },
       },
     }),
   ],
