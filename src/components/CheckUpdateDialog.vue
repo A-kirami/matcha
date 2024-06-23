@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { relaunch } from '@tauri-apps/plugin-process'
+import { OverlayScrollbarsComponent } from 'overlayscrollbars-vue'
+import VueMarkdown from 'vue-markdown-render'
 
 import type { Update } from '@tauri-apps/plugin-updater'
 
@@ -16,16 +18,18 @@ async function installUpdate() {
 </script>
 
 <template>
-  <AlertDialog v-model:open="open">
-    <AlertDialogContent>
-      <AlertDialogHeader>
-        <AlertDialogTitle>发现新版本！</AlertDialogTitle>
-        <AlertDialogDescription>检测到新版本可用，建议立即更新以获取最新功能</AlertDialogDescription>
-      </AlertDialogHeader>
-      <AlertDialogFooter>
-        <AlertDialogCancel>之后再说</AlertDialogCancel>
-        <AlertDialogAction @click="installUpdate">立即更新</AlertDialogAction>
-      </AlertDialogFooter>
-    </AlertDialogContent>
-  </AlertDialog>
+  <Dialog v-model:open="open">
+    <DialogContent class="grid-rows-[auto_minmax(0,1fr)_auto] max-h-[90dvh] sm:max-w-[425px]">
+      <DialogHeader>
+        <DialogTitle>发现新版本！</DialogTitle>
+        <DialogDescription>检测到新版本可用，建议立即更新以获取最新功能</DialogDescription>
+      </DialogHeader>
+      <OverlayScrollbarsComponent v-if="updateInfo.body" defer>
+        <VueMarkdown class="mx-2 text-sm prose prose-truegray" :source="updateInfo.body" />
+      </OverlayScrollbarsComponent>
+      <DialogFooter>
+        <Button class="h-8 w-full" @click="installUpdate">立即更新</Button>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
 </template>
