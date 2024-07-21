@@ -20,7 +20,8 @@ const groupFormSchema = toTypedSchema(
       .string({ required_error: '群组名称不能为空', invalid_type_error: '群组名称必须是字符串' })
       .min(2, { message: '群组名称长度不能小于2' })
       .max(12, { message: '群组名称长度不能大于12' }),
-    join: z.boolean().default(true),
+    owner_join: z.boolean().default(true),
+    bot_join: z.boolean().default(true),
   })
 )
 
@@ -44,12 +45,25 @@ const onSubmit = getSubmitFn(groupFormSchema, async (values) => {
     lastMessageTime: 0,
   })
   open = false
-  if (values.join && state.user) {
+  if (values.owner_join && state.user) {
     await db.members.add({
       groupId: values.id,
       userId: state.user.id,
       card: '',
       role: 'owner',
+      level: 0,
+      title: '',
+      joinTime: getTimestamp(),
+      titleExpireTime: 0,
+      banExpireTime: 0,
+    })
+  }
+  if (values.bot_join && state.bot) {
+    await db.members.add({
+      groupId: values.id,
+      userId: state.bot.id,
+      card: '',
+      role: 'member',
       level: 0,
       title: '',
       joinTime: getTimestamp(),
@@ -96,18 +110,32 @@ const onSubmit = getSubmitFn(groupFormSchema, async (values) => {
             <FormMessage />
           </FormItem>
         </FormField>
-        <FormField v-slot="{ value, handleChange }" type="checkbox" name="join">
-          <FormItem class="flex flex-row items-start gap-x-3 border rounded-md p-4 space-y-0">
-            <FormControl>
-              <Checkbox :checked="value" @update:checked="handleChange" />
-            </FormControl>
-            <div class="leading-none space-y-1">
-              <FormLabel>自动加入</FormLabel>
-              <FormDescription>创建后作为群主加入该群组</FormDescription>
-              <FormMessage />
-            </div>
-          </FormItem>
-        </FormField>
+        <div class="grid grid-cols-2 gap-4">
+          <FormField v-slot="{ value, handleChange }" type="checkbox" name="owner_join">
+            <FormItem class="flex flex-row items-start gap-x-3 border rounded-md p-4 space-y-0">
+              <FormControl>
+                <Checkbox :checked="value" @update:checked="handleChange" />
+              </FormControl>
+              <div class="leading-none space-y-1">
+                <FormLabel>群主自动加入</FormLabel>
+                <FormDescription>创建后作为群主加入该群组</FormDescription>
+                <FormMessage />
+              </div>
+            </FormItem>
+          </FormField>
+          <FormField v-slot="{ value, handleChange }" type="checkbox" name="bot_join">
+            <FormItem class="flex flex-row items-start gap-x-3 border rounded-md p-4 space-y-0">
+              <FormControl>
+                <Checkbox :checked="value" @update:checked="handleChange" />
+              </FormControl>
+              <div class="leading-none space-y-1">
+                <FormLabel>Bot 自动加入</FormLabel>
+                <FormDescription>创建后 Bot 自动加入该群组</FormDescription>
+                <FormMessage />
+              </div>
+            </FormItem>
+          </FormField>
+        </div>
       </Form>
       <DialogFooter>
         <Button form="group-form" type="submit" class="mt-2 h-8 w-full">创建</Button>
