@@ -44,33 +44,30 @@ const onSubmit = getSubmitFn(groupFormSchema, async (values) => {
     wholeBanned: false,
     lastMessageTime: 0,
   })
+
   open = false
-  if (values.owner_join && state.user) {
-    await db.members.add({
-      groupId: values.id,
-      userId: state.user.id,
-      card: '',
-      role: 'owner',
-      level: 0,
-      title: '',
-      joinTime: getTimestamp(),
-      titleExpireTime: 0,
-      banExpireTime: 0,
-    })
-  }
-  if (values.bot_join && state.bot) {
-    await db.members.add({
-      groupId: values.id,
-      userId: state.bot.id,
-      card: '',
-      role: 'member',
-      level: 0,
-      title: '',
-      joinTime: getTimestamp(),
-      titleExpireTime: 0,
-      banExpireTime: 0,
-    })
-  }
+
+  const membersToAdd = [
+    values.owner_join && state.user ? ({ userId: state.user.id, role: 'owner' } as const) : null,
+    values.bot_join && state.bot ? ({ userId: state.bot.id, role: 'member' } as const) : null,
+  ].filter(nonNullable)
+
+  await Promise.all(
+    membersToAdd.map((member) =>
+      db.members.add({
+        groupId: values.id,
+        userId: member.userId,
+        card: '',
+        role: member.role,
+        level: 0,
+        title: '',
+        joinTime: getTimestamp(),
+        titleExpireTime: 0,
+        banExpireTime: 0,
+      })
+    )
+  )
+
   toast.success('', { description: '创建群组成功' })
 })
 </script>
@@ -129,8 +126,8 @@ const onSubmit = getSubmitFn(groupFormSchema, async (values) => {
                 <Checkbox :checked="value" @update:checked="handleChange" />
               </FormControl>
               <div class="leading-none space-y-1">
-                <FormLabel>Bot 自动加入</FormLabel>
-                <FormDescription>创建后 Bot 自动加入该群组</FormDescription>
+                <FormLabel>机器人自动加入</FormLabel>
+                <FormDescription>创建后机器人加入该群组</FormDescription>
                 <FormMessage />
               </div>
             </FormItem>
