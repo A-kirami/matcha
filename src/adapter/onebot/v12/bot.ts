@@ -24,10 +24,10 @@ export class OneBotV12 extends Adapter {
   readonly eventHandler = new EventHandler()
 
   async getConnectHeaders(): Promise<OneBotV12Headers> {
-    const archName = await arch()
-    const platformName = await platform()
-    const osType = await type()
-    const osVersion = await version()
+    const archName = arch()
+    const platformName = platform()
+    const osType = type()
+    const osVersion = version()
     const tauriVersion = await getTauriVersion()
     const appVersion = await getVersion()
     return {

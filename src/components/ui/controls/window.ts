@@ -1,7 +1,7 @@
-import { getCurrent } from '@tauri-apps/api/webviewWindow'
+import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow'
 import { ref } from 'vue'
 
-export const appWindow = getCurrent()
+export const appWindow = getCurrentWebviewWindow()
 export const isWindowMaximized = ref(false)
 
 appWindow.onResized(async () => {

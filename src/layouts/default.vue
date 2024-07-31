@@ -16,7 +16,7 @@ let osType = $ref<OsType>()
 provide('osType', $$(osType))
 
 onMounted(async () => {
-  osType = await getOsType()
+  osType = getOsType()
 
   const general = useGeneralSettingsStore()
 

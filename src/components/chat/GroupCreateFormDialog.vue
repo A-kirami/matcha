@@ -114,7 +114,7 @@ const onSubmit = getSubmitFn(groupFormSchema, async (values) => {
                 <Checkbox :checked="value" @update:checked="handleChange" />
               </FormControl>
               <div class="leading-none space-y-1">
-                <FormLabel>群主自动加入</FormLabel>
+                <FormLabel>创建者自动加入</FormLabel>
                 <FormDescription>创建后作为群主加入该群组</FormDescription>
                 <FormMessage />
               </div>

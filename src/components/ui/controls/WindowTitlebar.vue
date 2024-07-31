@@ -13,9 +13,7 @@ const { controlsOrder, windowControlsProps } = withDefaults(defineProps<WindowTi
 const osType = ref<OsType | undefined>(undefined)
 
 onMounted(() => {
-  getOsType().then((type) => {
-    osType.value = type
-  })
+  osType.value = getOsType()
 })
 
 const left =

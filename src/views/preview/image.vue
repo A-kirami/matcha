@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { getCurrent } from '@tauri-apps/api/webviewWindow'
+import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow'
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-vue'
 
 import type { OverlayScrollbars } from 'overlayscrollbars'
 
-const currentWindow = getCurrent()
+const currentWindow = getCurrentWebviewWindow()
 
 interface PreviewContent {
   urls: string[]

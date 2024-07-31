@@ -20,7 +20,7 @@ const props = withDefaults(defineProps<WindowControlsProps>(), {
 let platform = $ref(props.platform)
 
 onMounted(async () => {
-  const osType = await getOsType()
+  const osType = getOsType()
   if (!platform) {
     switch (osType) {
       case 'macos':
