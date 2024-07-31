@@ -71,6 +71,7 @@ export class websocketClient implements Driver {
     try {
       this.ws = await WebSocket.connect(this.connectUrl, connectConfig)
       this.ws.addListener(this.onMessage.bind(this))
+      await this.adapter.onConnect()
       this.heartbeatResume?.()
       this.adapter.state.isConnected = true
       this.connectingError = false
