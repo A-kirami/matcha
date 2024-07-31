@@ -65,10 +65,10 @@
     "eqeqeq": ["error", "always"],
     "for-direction": "error",
     "func-names": ["warn", "as-needed"],
-    "function-paren-newline": ["warn", "multiline-arguments"],
+    // "function-paren-newline": ["warn", "multiline-arguments"],
     "getter-return": ["error", { "allowImplicit": true }],
     "guard-for-in": "error",
-    "implicit-arrow-linebreak": ["warn", "beside"],
+    // "implicit-arrow-linebreak": ["warn", "beside"],
     "key-spacing": [
       "error",
       {
