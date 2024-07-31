@@ -48,7 +48,7 @@
     "mime": "^4.0.4",
     "overlayscrollbars": "^2.10.0",
     "overlayscrollbars-vue": "^0.5.9",
-    "pinia": "2.1.7",
+    "pinia": "2.2.0",
     "pinia-plugin-persistedstate": "^3.2.1",
     "radix-vue": "^1.9.2",
     "tailwind-merge": "^2.4.0",
