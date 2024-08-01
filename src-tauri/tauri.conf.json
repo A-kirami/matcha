@@ -51,7 +51,8 @@
         "installerIcon": "icons/icon.ico",
         "languages": ["SimpChinese"]
       }
-    }
+    },
+    "createUpdaterArtifacts": true
   },
   "plugins": {
     "updater": {
