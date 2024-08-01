@@ -40,6 +40,10 @@
     {
       "groupName": "lint packages",
       "matchPackagePatterns": ["eslint", "stylelint"]
+    },
+    {
+      "groupName": "tauri packages",
+      "matchPackagePatterns": ["tauri-apps"]
     }
   ]
 }
