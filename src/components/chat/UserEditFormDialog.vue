@@ -53,12 +53,16 @@ async function deleteUser() {
   toast.success('', { description: '删除角色成功' })
 }
 
-onUpdated(async () => {
+async function resetForm() {
   const user = await db.users.get(targetId)
   if (formRef && user) {
     formRef.resetForm({ values: { name: user.name } })
   }
-})
+}
+
+onMounted(resetForm)
+
+onUpdated(resetForm)
 </script>
 
 <template>

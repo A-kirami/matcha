@@ -54,10 +54,12 @@ async function assignUser(type: 'user' | 'bot', uid: string) {
   }
   await db.users.update(uid, { lastUseTime: getTimestamp() })
 }
+
+const open = $(defineModel('open', { default: false }))
 </script>
 
 <template>
-  <Dialog>
+  <Dialog v-model:open="open">
     <DialogTrigger as-child>
       <slot></slot>
     </DialogTrigger>

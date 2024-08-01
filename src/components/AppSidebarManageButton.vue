@@ -5,8 +5,6 @@ import { check } from '@tauri-apps/plugin-updater'
 import { SlidersHorizontal, Info, Bolt, Terminal, RefreshCw } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 
-import type { Update } from '@tauri-apps/plugin-updater'
-
 import { github } from '~build/git'
 import { isRelease } from '~build/meta'
 
@@ -36,16 +34,13 @@ async function openAbout() {
 
 let commandOpen = $ref(false)
 
-let updateOpen = $ref(false)
-
-let updateInfo = $ref<Update>()
+const modal = useModalStore()
 
 async function manualCheckUpdate() {
   try {
     const update = await check()
     if (update?.available) {
-      updateInfo = update
-      updateOpen = true
+      modal.openModal('checkUpdate', { updateInfo: update })
     } else {
       toast.success('', { description: '当前已是最新版本，无需更新' })
     }
@@ -93,5 +88,4 @@ const isDev = import.meta.env.DEV
     </DropdownMenuContent>
   </DropdownMenu>
   <AppCommand v-model:open="commandOpen" />
-  <CheckUpdateDialog v-if="updateInfo" v-model:open="updateOpen" :update-info="updateInfo" />
 </template>

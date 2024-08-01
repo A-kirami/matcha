@@ -43,12 +43,16 @@ async function removeMember() {
   toast.success('', { description: '移除成员成功' })
 }
 
-onUpdated(async () => {
+async function resetForm() {
   const member = await db.members.get([groupId, userId])
   if (formRef && member) {
     formRef.resetForm({ values: { card: member.card, role: member.role } })
   }
-})
+}
+
+onMounted(resetForm)
+
+onUpdated(resetForm)
 </script>
 
 <template>

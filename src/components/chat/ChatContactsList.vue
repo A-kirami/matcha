@@ -55,6 +55,12 @@ watchDebounced(
   },
   { immediate: true, debounce: 50, maxWait: 100 }
 )
+
+const modal = useModalStore()
+
+function openUserManage() {
+  modal.openModal('userManage')
+}
 </script>
 
 <template>
@@ -69,8 +75,6 @@ watchDebounced(
         </RouterLink>
       </li>
     </ul>
-    <UserManageDialog v-else>
-      <Button class="h-8 w-full">管理机器人</Button>
-    </UserManageDialog>
+    <Button v-else class="h-8 w-full" @click="openUserManage">管理机器人</Button>
   </OverlayScrollbarsComponent>
 </template>

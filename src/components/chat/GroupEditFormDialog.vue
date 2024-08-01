@@ -41,12 +41,16 @@ async function deleteGroup() {
   toast.success('', { description: '删除群组成功' })
 }
 
-onUpdated(async () => {
+async function resetForm() {
   const group = await db.groups.get(targetId)
   if (formRef && group) {
     formRef.resetForm({ values: { name: group.name } })
   }
-})
+}
+
+onMounted(resetForm)
+
+onUpdated(resetForm)
 </script>
 
 <template>
