@@ -4,8 +4,6 @@ import { liveQuery } from 'dexie'
 import { EllipsisVertical, UserRoundPlus, LogIn, LogOut, Pencil, UserRoundMinus } from 'lucide-vue-next'
 
 import { Behav } from '~/adapter/behav'
-import GroupEditFormDialog from '~/components/chat/GroupEditFormDialog.vue'
-import UserEditFormDialog from '~/components/chat/UserEditFormDialog.vue'
 
 const behav = new Behav()
 
@@ -48,9 +46,13 @@ async function handleFriend() {
   }
 }
 
-const EditDialog = $computed(() => {
-  return state.chatTarget?.type === 'group' ? GroupEditFormDialog : UserEditFormDialog
-})
+const modal = useModalStore()
+
+function openEditDialog() {
+  modal.openModal(state.chatTarget?.type === 'group' ? 'groupEdit' : 'userEdit', {
+    targetId: state.chatTarget!.id,
+  })
+}
 </script>
 
 <template>
@@ -64,11 +66,9 @@ const EditDialog = $computed(() => {
       <TooltipProvider :delay-duration="1500">
         <Tooltip>
           <TooltipTrigger>
-            <component :is="EditDialog" v-if="state.chatTarget" :target-id="state.chatTarget?.id">
-              <Button variant="ghost" size="icon">
-                <Pencil class="size-5 stroke-1.5" />
-              </Button>
-            </component>
+            <Button variant="ghost" size="icon" @click="openEditDialog">
+              <Pencil class="size-5 stroke-1.5" />
+            </Button>
           </TooltipTrigger>
           <TooltipContent side="bottom" class="px-2">
             <p class="text-xs">{{ state.chatTarget?.type === 'group' ? '编辑群组' : '编辑用户' }}</p>

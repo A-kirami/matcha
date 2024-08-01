@@ -131,6 +131,7 @@ declare module 'vue' {
     Input: typeof import('./components/ui/input/Input.vue')['default']
     Label: typeof import('./components/ui/label/Label.vue')['default']
     MemberEditFormDialog: typeof import('./components/chat/MemberEditFormDialog.vue')['default']
+    ModalWindow: typeof import('./components/ModalWindow.vue')['default']
     RadioGroup: typeof import('./components/ui/radio-group/RadioGroup.vue')['default']
     RadioGroupItem: typeof import('./components/ui/radio-group/RadioGroupItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

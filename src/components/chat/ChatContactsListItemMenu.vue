@@ -1,9 +1,6 @@
-<script setup lang="tsx">
+<script setup lang="ts">
 import { Pin, PinOff, Pencil, Trash2 } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
-
-import GroupEditFormDialog from '~/components/chat/GroupEditFormDialog.vue'
-import UserEditFormDialog from '~/components/chat/UserEditFormDialog.vue'
 
 import type { Contact } from '~/types'
 
@@ -22,21 +19,30 @@ function handlePin() {
   }
 }
 
-const editOpen = $ref(false)
-
 const deleteOpen = $ref(false)
 
-async function deleteGroup() {
-  await db.groups.delete(contact.id)
+const isGroup = contact.type === 'group'
+
+const contactText = isGroup ? '群组' : '角色'
+
+async function deleteContact() {
+  const contactDb = isGroup ? db.groups : db.users
+  await contactDb.delete(contact.id)
   if (state.chatTarget?.id === contact.id) {
     state.chatTarget = null
   }
-  toast.success('', { description: '删除群组成功' })
+  if (!isGroup) {
+    state.bot = null
+  }
+  toast.success('', { description: `删除${contactText}成功` })
 }
 
-const EditFormDialog = () => {
-  const EditComponent = contact.type === 'group' ? GroupEditFormDialog : UserEditFormDialog
-  return <EditComponent v-model:open={editOpen} targetId={contact.id} />
+const modal = useModalStore()
+
+function openEditDialog() {
+  modal.openModal(isGroup ? 'groupEdit' : 'userEdit', {
+    targetId: contact.id,
+  })
 }
 </script>
 
@@ -46,15 +52,17 @@ const EditFormDialog = () => {
       <slot></slot>
     </ContextMenuTrigger>
     <ContextMenuContent class="text-sm space-y-1">
-      <ContextMenuItem v-if="isPinned" class="flex items-center gap-2 px-2 py-1 text-gray-500" @click="handlePin">
-        <PinOff class="size-4 stroke-1" />
-        <span>取消置顶</span>
-      </ContextMenuItem>
-      <ContextMenuItem v-else class="flex items-center gap-2 px-2 py-1 text-gray-500" @click="handlePin">
-        <Pin class="size-4 stroke-1" />
-        <span>置顶</span>
-      </ContextMenuItem>
-      <ContextMenuItem class="flex items-center gap-2 px-2 py-1 text-gray-500" @click="editOpen = true">
+      <template v-if="isGroup">
+        <ContextMenuItem v-if="isPinned" class="flex items-center gap-2 px-2 py-1 text-gray-500" @click="handlePin">
+          <PinOff class="size-4 stroke-1" />
+          <span>取消置顶</span>
+        </ContextMenuItem>
+        <ContextMenuItem v-else class="flex items-center gap-2 px-2 py-1 text-gray-500" @click="handlePin">
+          <Pin class="size-4 stroke-1" />
+          <span>置顶</span>
+        </ContextMenuItem>
+      </template>
+      <ContextMenuItem class="flex items-center gap-2 px-2 py-1 text-gray-500" @click="openEditDialog">
         <Pencil class="size-4 stroke-1" />
         <span>编辑</span>
       </ContextMenuItem>
@@ -64,16 +72,15 @@ const EditFormDialog = () => {
       </ContextMenuItem>
     </ContextMenuContent>
   </ContextMenu>
-  <EditFormDialog />
   <AlertDialog v-model:open="deleteOpen">
     <AlertDialogContent>
       <AlertDialogHeader>
-        <AlertDialogTitle>删除此联系人</AlertDialogTitle>
+        <AlertDialogTitle>删除此{{ contactText }}</AlertDialogTitle>
         <AlertDialogDescription>删除后将无法恢复，确定要删除吗？</AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogCancel>取消</AlertDialogCancel>
-        <AlertDialogAction variant="destructive" @click="deleteGroup">确认</AlertDialogAction>
+        <AlertDialogAction variant="destructive" @click="deleteContact">确认</AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>
   </AlertDialog>

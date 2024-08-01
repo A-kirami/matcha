@@ -13,6 +13,18 @@ const getMemberRole = $computed(() => (id: string) => {
   }
   return member.role
 })
+
+const state = useStateStore()
+
+const modal = useModalStore()
+
+function openMemberEdit(member: Contact) {
+  modal.openModal('memberEdit', {
+    groupId: state.chatTarget!.id,
+    userId: member.id,
+    userName: member.name,
+  })
+}
 </script>
 
 <template>
@@ -21,11 +33,12 @@ const getMemberRole = $computed(() => (id: string) => {
       <Tooltip v-for="member in memberContacts.slice(0, MAX_AVATAR_COUNT)" :key="member.id">
         <TooltipTrigger as-child>
           <Avatar
-            class="size-8 ring-2 ring-white hover:z-1"
+            class="size-8 cursor-pointer ring-2 ring-white hover:z-1"
             :class="{
               'ring-amber-200': getMemberRole(member.id) === 'owner',
               'ring-sky-200': getMemberRole(member.id) === 'admin',
             }"
+            @click="openMemberEdit(member)"
           >
             <AvatarImage :src="member.avatar" alt="member avatar" />
             <AvatarFallback>{{ member.name }}</AvatarFallback>

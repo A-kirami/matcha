@@ -46,6 +46,7 @@ onMounted(async () => {
     </RouterView>
   </div>
   <Toaster class="pointer-events-auto" />
+  <ModalWindow />
 </template>
 
 <style module>
