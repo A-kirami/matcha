@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { WebviewWindow } from '@tauri-apps/api/webviewWindow'
+import { open } from '@tauri-apps/plugin-shell'
+import { check } from '@tauri-apps/plugin-updater'
 import { SlidersHorizontal, Info, Bolt, Terminal, RefreshCw } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 
 import type { Update } from '@tauri-apps/plugin-updater'
 
+import { github } from '~build/git'
 import { isRelease } from '~build/meta'
 
 const router = useRouter()
@@ -38,12 +41,23 @@ let updateOpen = $ref(false)
 let updateInfo = $ref<Update>()
 
 async function manualCheckUpdate() {
-  const update = await checkUpdate()
-  if (update?.available) {
-    updateInfo = update
-    updateOpen = true
-  } else {
-    toast.success('', { description: '当前已是最新版本，无需更新' })
+  try {
+    const update = await check()
+    if (update?.available) {
+      updateInfo = update
+      updateOpen = true
+    } else {
+      toast.success('', { description: '当前已是最新版本，无需更新' })
+    }
+  } catch (error) {
+    toast.error('检查更新失败', {
+      description: '请尝试手动更新',
+      action: {
+        label: '前往发布页',
+        onClick: () => open(github + '/releases/latest'),
+      },
+    })
+    logger.error(`检查更新失败: ${error}`)
   }
 }
 

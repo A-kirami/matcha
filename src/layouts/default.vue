@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { type as getOsType } from '@tauri-apps/plugin-os'
 import { relaunch } from '@tauri-apps/plugin-process'
+import { check } from '@tauri-apps/plugin-updater'
 import { configure } from 'vee-validate'
 
 import type { OsType } from '@tauri-apps/plugin-os'
@@ -21,10 +22,14 @@ onMounted(async () => {
   const general = useGeneralSettingsStore()
 
   if (isRelease && general.autoUpdate) {
-    const update = await checkUpdate()
-    if (update?.available) {
-      await update.downloadAndInstall()
-      await relaunch()
+    try {
+      const update = await check()
+      if (update?.available) {
+        await update.downloadAndInstall()
+        await relaunch()
+      }
+    } catch (error) {
+      logger.error(`检查更新失败: ${error}`)
     }
   }
 })
