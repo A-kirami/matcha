@@ -4,18 +4,18 @@
   "description": "Capability for the preview window",
   "windows": ["preview"],
   "permissions": [
-    "path:default",
-    "event:default",
-    "window:default",
-    "app:default",
-    "resources:default",
-    "menu:default",
-    "tray:default",
+    "core:path:default",
+    "core:event:default",
+    "core:window:default",
+    "core:app:default",
+    "core:resources:default",
+    "core:menu:default",
+    "core:tray:default",
+    "core:window:allow-minimize",
+    "core:window:allow-toggle-maximize",
+    "core:window:allow-close",
+    "core:window:allow-start-dragging",
     "dialog:allow-save",
-    "os:allow-os-type",
-    "window:allow-minimize",
-    "window:allow-toggle-maximize",
-    "window:allow-close",
-    "window:allow-start-dragging"
+    "os:allow-os-type"
   ]
 }
