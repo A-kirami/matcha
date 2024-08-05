@@ -11,7 +11,7 @@ async function previewImage(event: Event) {
   const currentIndex = Array.from(gallery).indexOf(event.target as HTMLImageElement)
   const urls = Array.from(gallery).map((img) => img.src)
   const window = await createPreviewWindow('/preview/image', '图像预览', naturalWidth, naturalHeight)
-  window.listen('preview-window-created', () => {
+  window.once('preview-window-created', () => {
     window.emit('set-preview-content', { urls, currentIndex })
   })
 }
