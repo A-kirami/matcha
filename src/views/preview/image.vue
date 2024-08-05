@@ -11,14 +11,14 @@ interface PreviewContent {
   currentIndex: number
 }
 
-let previewContent: PreviewContent = $ref<PreviewContent>({
+let previewContent = $ref<PreviewContent>({
   urls: [],
   currentIndex: 0,
 })
 
 const currentImage = $computed(() => previewContent.urls[previewContent.currentIndex])
 
-currentWindow.listen<PreviewContent>('set-preview-content', (e) => {
+currentWindow.once<PreviewContent>('set-preview-content', (e) => {
   previewContent = e.payload
 })
 
