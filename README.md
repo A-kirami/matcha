@@ -237,3 +237,6 @@ Code: AGPL-3.0 - 2023 - Akirami
 Logo: CC-BY-NC-ND, Designs by Akirami
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FA-kirami%2Fmatcha.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FA-kirami%2Fmatcha?ref=badge_large)
+
+ 
+
