@@ -59,21 +59,19 @@ jobs:
         if: matrix.os != 'windows-latest'
         uses: swatinem/rust-cache@v2
         with:
-          workspaces: './src-tauri -> target'
+          workspaces: ./src-tauri -> target
 
       - name: Pnpm setup
-        uses: pnpm/action-setup@v3
-        with:
-          version: 9
+        uses: pnpm/action-setup@v4
 
       - name: Sync node version and setup cache
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'pnpm'
+          node-version-file: package.json
+          cache: pnpm
 
-      - name: Install app dependencies and build web
-        run: pnpm i
+      - name: Install app dependencies
+        run: pnpm install
 
       - name: Rustup add target
         run: rustup target add ${{ matrix.target }}
@@ -84,8 +82,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
         with:
-          tagName: 'v__VERSION__'
-          releaseName: 'Matcha v__VERSION__'
+          tagName: v__VERSION__
+          releaseName: Matcha v__VERSION__
           releaseBody: ${{ needs.changelog.outputs.changelog }}
           releaseDraft: true
           args: -t ${{ matrix.target }}
