@@ -127,5 +127,9 @@
     ],
     "*.{vue,css,scss,sass}": "stylelint --fix",
     "*.{html,vue,js,ts,jsx,tsx,json,md}": "prettier --write --ignore-unknown"
-  }
+  },
+  "engines": {
+    "node": ">=22.11.0"
+  },
+  "packageManager": "pnpm@9.14.2"
 }
