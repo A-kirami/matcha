@@ -25,6 +25,8 @@ provide('themeMode', themeMode)
 
 onBeforeMount(async () => {
   await attachConsole()
+  await setWindowEffect()
+  await setAcrylicWindowEffect(general.applyAcrylicWindowEffects)
 })
 </script>
 

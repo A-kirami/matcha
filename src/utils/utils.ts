@@ -90,3 +90,41 @@ export function formatBytes(bytes: number, decimals: number = 2): string {
     i = Math.floor(Math.log(bytes) / Math.log(k))
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
 }
+
+interface NavigatorUAData {
+  getHighEntropyValues(hints: string[]): Promise<{ platformVersion: string }>
+  platform: string
+}
+
+interface NavigatorUA extends Navigator {
+  readonly userAgentData?: NavigatorUAData
+}
+
+// https://learn.microsoft.com/en-us/microsoft-edge/web-platform/how-to-detect-win11#sample-code-for-detecting-windows-11
+export async function isWindows11(): Promise<boolean> {
+  const { userAgentData } = navigator as NavigatorUA
+
+  if (!userAgentData) {
+    return false
+  }
+
+  try {
+    const ua = await userAgentData.getHighEntropyValues(['platformVersion'])
+    if (userAgentData.platform === 'Windows') {
+      const majorPlatformVersion = parseInt(ua.platformVersion.split('.')[0])
+      return majorPlatformVersion >= 13
+    }
+  } catch {
+    return false
+  }
+
+  return false
+}
+
+export function setTransparentBackground(enable: boolean = true): void {
+  if (enable) {
+    document.body.classList.add('bg-transparent')
+  } else {
+    document.body.classList.remove('bg-transparent')
+  }
+}

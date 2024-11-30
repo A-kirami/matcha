@@ -6,6 +6,7 @@ interface GeneralSettings {
   autoUpdate: boolean
   enbaleSuperUser: boolean
   showRecallMessage: boolean
+  applyAcrylicWindowEffects: boolean
 }
 
 export const useGeneralSettingsStore = defineStore(
@@ -17,6 +18,11 @@ export const useGeneralSettingsStore = defineStore(
     const autoUpdate = ref<GeneralSettings['autoUpdate']>(true)
     const enbaleSuperUser = ref<GeneralSettings['enbaleSuperUser']>(false)
     const showRecallMessage = ref<GeneralSettings['showRecallMessage']>(true)
+    const applyAcrylicWindowEffects = ref<GeneralSettings['applyAcrylicWindowEffects']>(false)
+
+    watch(applyAcrylicWindowEffects, async (enable) => {
+      await setAcrylicWindowEffect(enable)
+    })
 
     return {
       theme,
@@ -24,6 +30,7 @@ export const useGeneralSettingsStore = defineStore(
       sendMessageShortcut,
       enbaleSuperUser,
       showRecallMessage,
+      applyAcrylicWindowEffects,
     }
   },
 
