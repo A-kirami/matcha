@@ -2,6 +2,8 @@ import { WebviewWindow, getCurrentWebviewWindow } from '@tauri-apps/api/webviewW
 import { Effect, EffectState } from '@tauri-apps/api/window'
 import { type as getOsType } from '@tauri-apps/plugin-os'
 
+import type { Effects } from '@tauri-apps/api/window'
+
 const screenWidth = window.screen.width
 const screenHeight = window.screen.height
 
@@ -47,14 +49,19 @@ export async function createPreviewWindow(
   })
 }
 
+const effectsByOs = {
+  windows: { effects: [Effect.Acrylic, Effect.Blur] },
+  macos: { effects: [Effect.HudWindow], state: EffectState.Active },
+} as { 'windows': Effects; 'macos': Effects; [key: string]: Effects | undefined }
+
 export async function setWindowEffect(enable: boolean = true): Promise<void> {
   const osType = getOsType()
   const appWindow = getCurrentWebviewWindow()
+
+  const effects = effectsByOs[osType]
   if (enable) {
-    if (osType === 'windows') {
-      await appWindow.setEffects({ effects: [Effect.Acrylic, Effect.Blur] })
-    } else if (osType === 'macos') {
-      await appWindow.setEffects({ effects: [Effect.HudWindow], state: EffectState.Active })
+    if (effects) {
+      await appWindow.setEffects(effects)
     }
   } else {
     await appWindow.clearEffects()
@@ -71,13 +78,13 @@ export async function setAcrylicWindowEffect(enable: boolean = true): Promise<vo
   }
   const appWindow = getCurrentWebviewWindow()
   if (enable) {
+    await appWindow.setEffects(effectsByOs.windows)
     setTransparentBackground(true)
-    await appWindow.setEffects({ effects: [Effect.Acrylic, Effect.Blur] })
   } else if (await isWindows11()) {
-    setTransparentBackground(true)
     await appWindow.setEffects({ effects: [Effect.Mica] })
+    setTransparentBackground(true)
   } else {
-    setTransparentBackground(false)
     await appWindow.clearEffects()
+    setTransparentBackground(false)
   }
 }
