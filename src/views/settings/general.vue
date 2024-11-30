@@ -7,7 +7,9 @@ meta:
 </route>
 
 <script setup lang="ts">
+import { type as getOsType } from '@tauri-apps/plugin-os'
 import { toTypedSchema } from '@vee-validate/zod'
+import { TriangleAlert } from 'lucide-vue-next'
 import { useForm } from 'vee-validate'
 import * as z from 'zod'
 
@@ -24,6 +26,7 @@ const generalSettingsSchema = toTypedSchema(
     autoUpdate: z.boolean(),
     enbaleSuperUser: z.boolean(),
     showRecallMessage: z.boolean(),
+    applyAcrylicWindowEffects: z.boolean(),
   })
 )
 
@@ -53,6 +56,8 @@ const themeOptions = [
 let themeMode = inject('themeMode')
 
 defineExpose({ resetForm })
+
+const osType = getOsType()
 </script>
 
 <template>
@@ -73,6 +78,22 @@ defineExpose({ resetForm })
             </FormLabel>
           </FormItem>
         </RadioGroup>
+      </FormItem>
+    </FormField>
+    <FormField v-if="osType === 'windows'" v-slot="{ value, handleChange }" name="applyAcrylicWindowEffects">
+      <FormItem class="max-w-120 flex flex-row items-center justify-between rounded-lg">
+        <div class="space-y-0.5">
+          <FormLabel>亚力克模糊效果</FormLabel>
+          <FormDescription v-auto-animate>
+            是否为窗口应用亚力克模糊效果
+            <p v-if="value" class="mt-2 flex flex-row text-xs text-red-400">
+              <TriangleAlert class="mr-1 size-4" />在部分设备上可能导致调整窗口大小或拖动窗口时的性能问题
+            </p>
+          </FormDescription>
+        </div>
+        <FormControl>
+          <Switch :checked="value" aria-readonly @update:checked="handleChange" />
+        </FormControl>
       </FormItem>
     </FormField>
     <FormField v-slot="{ componentField }" name="sendMessageShortcut">

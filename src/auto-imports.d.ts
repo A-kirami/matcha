@@ -72,6 +72,7 @@ declare global {
   const isReactive: (typeof import('vue'))['isReactive']
   const isReadonly: (typeof import('vue'))['isReadonly']
   const isRef: (typeof import('vue'))['isRef']
+  const isWindows11: (typeof import('./utils/utils'))['isWindows11']
   const logger: typeof import('@tauri-apps/plugin-log')
   const makeDestructurable: (typeof import('@vueuse/core'))['makeDestructurable']
   const mapActions: (typeof import('pinia'))['mapActions']
@@ -122,8 +123,11 @@ declare global {
   const resolveRef: (typeof import('@vueuse/core'))['resolveRef']
   const resolveUnref: (typeof import('@vueuse/core'))['resolveUnref']
   const roleCheck: (typeof import('./utils/chat'))['roleCheck']
+  const setAcrylicWindowEffect: (typeof import('./utils/window'))['setAcrylicWindowEffect']
   const setActivePinia: (typeof import('pinia'))['setActivePinia']
   const setMapStoreSuffix: (typeof import('pinia'))['setMapStoreSuffix']
+  const setTransparentBackground: (typeof import('./utils/utils'))['setTransparentBackground']
+  const setWindowEffect: (typeof import('./utils/window'))['setWindowEffect']
   const shallowReactive: (typeof import('vue'))['shallowReactive']
   const shallowReadonly: (typeof import('vue'))['shallowReadonly']
   const shallowRef: (typeof import('vue'))['shallowRef']
@@ -426,6 +430,7 @@ declare module 'vue' {
     readonly isReactive: UnwrapRef<(typeof import('vue'))['isReactive']>
     readonly isReadonly: UnwrapRef<(typeof import('vue'))['isReadonly']>
     readonly isRef: UnwrapRef<(typeof import('vue'))['isRef']>
+    readonly isWindows11: UnwrapRef<(typeof import('./utils/utils'))['isWindows11']>
     readonly logger: UnwrapRef<typeof import('@tauri-apps/plugin-log')>
     readonly makeDestructurable: UnwrapRef<(typeof import('@vueuse/core'))['makeDestructurable']>
     readonly mapActions: UnwrapRef<(typeof import('pinia'))['mapActions']>
@@ -476,8 +481,11 @@ declare module 'vue' {
     readonly resolveRef: UnwrapRef<(typeof import('@vueuse/core'))['resolveRef']>
     readonly resolveUnref: UnwrapRef<(typeof import('@vueuse/core'))['resolveUnref']>
     readonly roleCheck: UnwrapRef<(typeof import('./utils/chat'))['roleCheck']>
+    readonly setAcrylicWindowEffect: UnwrapRef<(typeof import('./utils/window'))['setAcrylicWindowEffect']>
     readonly setActivePinia: UnwrapRef<(typeof import('pinia'))['setActivePinia']>
     readonly setMapStoreSuffix: UnwrapRef<(typeof import('pinia'))['setMapStoreSuffix']>
+    readonly setTransparentBackground: UnwrapRef<(typeof import('./utils/utils'))['setTransparentBackground']>
+    readonly setWindowEffect: UnwrapRef<(typeof import('./utils/window'))['setWindowEffect']>
     readonly shallowReactive: UnwrapRef<(typeof import('vue'))['shallowReactive']>
     readonly shallowReadonly: UnwrapRef<(typeof import('vue'))['shallowReadonly']>
     readonly shallowRef: UnwrapRef<(typeof import('vue'))['shallowRef']>
@@ -758,6 +766,7 @@ declare module '@vue/runtime-core' {
     readonly isReactive: UnwrapRef<(typeof import('vue'))['isReactive']>
     readonly isReadonly: UnwrapRef<(typeof import('vue'))['isReadonly']>
     readonly isRef: UnwrapRef<(typeof import('vue'))['isRef']>
+    readonly isWindows11: UnwrapRef<(typeof import('./utils/utils'))['isWindows11']>
     readonly logger: UnwrapRef<typeof import('@tauri-apps/plugin-log')>
     readonly makeDestructurable: UnwrapRef<(typeof import('@vueuse/core'))['makeDestructurable']>
     readonly mapActions: UnwrapRef<(typeof import('pinia'))['mapActions']>
@@ -808,8 +817,11 @@ declare module '@vue/runtime-core' {
     readonly resolveRef: UnwrapRef<(typeof import('@vueuse/core'))['resolveRef']>
     readonly resolveUnref: UnwrapRef<(typeof import('@vueuse/core'))['resolveUnref']>
     readonly roleCheck: UnwrapRef<(typeof import('./utils/chat'))['roleCheck']>
+    readonly setAcrylicWindowEffect: UnwrapRef<(typeof import('./utils/window'))['setAcrylicWindowEffect']>
     readonly setActivePinia: UnwrapRef<(typeof import('pinia'))['setActivePinia']>
     readonly setMapStoreSuffix: UnwrapRef<(typeof import('pinia'))['setMapStoreSuffix']>
+    readonly setTransparentBackground: UnwrapRef<(typeof import('./utils/utils'))['setTransparentBackground']>
+    readonly setWindowEffect: UnwrapRef<(typeof import('./utils/window'))['setWindowEffect']>
     readonly shallowReactive: UnwrapRef<(typeof import('vue'))['shallowReactive']>
     readonly shallowReadonly: UnwrapRef<(typeof import('vue'))['shallowReadonly']>
     readonly shallowRef: UnwrapRef<(typeof import('vue'))['shallowRef']>

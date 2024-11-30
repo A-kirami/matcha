@@ -1,4 +1,5 @@
 {
+  "$schema": "https://schema.tauri.app/config/2",
   "productName": "matcha",
   "version": "../package.json",
   "identifier": "com.akirami.matcha",
@@ -19,11 +20,7 @@
         "minWidth": 620,
         "center": true,
         "decorations": false,
-        "transparent": true,
-        "windowEffects": {
-          "effects": ["acrylic", "blur", "hudWindow"],
-          "state": "active"
-        }
+        "transparent": true
       }
     ],
     "security": {
