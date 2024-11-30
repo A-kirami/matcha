@@ -49,7 +49,7 @@ export async function createPreviewWindow(
   })
 }
 
-const effectsByOs = {
+const osEffects = {
   windows: { effects: [Effect.Acrylic, Effect.Blur] },
   macos: { effects: [Effect.HudWindow], state: EffectState.Active },
 } as { 'windows': Effects; 'macos': Effects; [key: string]: Effects | undefined }
@@ -58,7 +58,7 @@ export async function setWindowEffect(enable: boolean = true): Promise<void> {
   const osType = getOsType()
   const appWindow = getCurrentWebviewWindow()
 
-  const effects = effectsByOs[osType]
+  const effects = osEffects[osType]
   if (enable) {
     if (effects) {
       await appWindow.setEffects(effects)
@@ -78,7 +78,7 @@ export async function setAcrylicWindowEffect(enable: boolean = true): Promise<vo
   }
   const appWindow = getCurrentWebviewWindow()
   if (enable) {
-    await appWindow.setEffects(effectsByOs.windows)
+    await appWindow.setEffects(osEffects.windows)
     setTransparentBackground(true)
   } else if (await isWindows11()) {
     await appWindow.setEffects({ effects: [Effect.Mica] })
