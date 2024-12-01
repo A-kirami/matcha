@@ -56,7 +56,6 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Rust cache
-        if: matrix.os != 'windows-latest'
         uses: swatinem/rust-cache@v2
         with:
           workspaces: ./src-tauri -> target
