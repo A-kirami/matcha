@@ -9,6 +9,7 @@
     "core:window:allow-close",
     "core:window:allow-start-dragging",
     "shell:allow-open",
-    "os:allow-os-type"
+    "os:allow-os-type",
+    "core:window:allow-set-effects"
   ]
 }

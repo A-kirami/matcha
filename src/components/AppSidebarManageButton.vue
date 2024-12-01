@@ -29,6 +29,7 @@ async function openAbout() {
     height: 320,
     resizable: false,
     decorations: false,
+    transparent: true,
   })
 }
 
