@@ -18,12 +18,12 @@ const userFormSchema = toTypedSchema(
       .string({ required_error: '角色名称不能为空', invalid_type_error: '角色名称必须是字符串' })
       .min(2, { message: '角色名称长度不能小于2' })
       .max(12, { message: '角色名称长度不能大于12' }),
-  })
+  }),
 )
 
 let open = $(defineModel('open', { default: false }))
 
-const formRef = $ref<InstanceType<typeof Form> | null>(null)
+const formRef = $ref<InstanceType<typeof Form>>()
 
 const onSubmit = getSubmitFn(userFormSchema, async (values) => {
   await db.users.update(targetId, values)
@@ -41,13 +41,13 @@ const onSubmit = getSubmitFn(userFormSchema, async (values) => {
 async function deleteUser() {
   await db.users.delete(targetId)
   if (state.chatTarget?.id === targetId) {
-    state.chatTarget = null
+    state.chatTarget = undefined
   }
   if (state.user?.id === targetId) {
-    state.user = null
+    state.user = undefined
   }
   if (state.bot?.id === targetId) {
-    state.bot = null
+    state.bot = undefined
   }
   open = false
   toast.success('', { description: '删除角色成功' })
@@ -68,7 +68,7 @@ onUpdated(resetForm)
 <template>
   <Dialog v-model:open="open">
     <DialogTrigger as-child>
-      <slot></slot>
+      <slot />
     </DialogTrigger>
     <DialogContent class="max-w-100">
       <DialogHeader>
@@ -79,7 +79,9 @@ onUpdated(resetForm)
         <AvatarImage :src="getAvatarUrl('user', targetId)" alt="user avatar" />
         <AvatarFallback>{{ formRef?.values.name }}</AvatarFallback>
       </Avatar>
-      <div class="text-center text-lg text-muted-foreground font-medium">{{ targetId }}</div>
+      <div class="text-center text-lg text-muted-foreground font-medium">
+        {{ targetId }}
+      </div>
       <Form id="user-form" ref="formRef" :validation-schema="userFormSchema" class="space-y-2" @submit="onSubmit">
         <FormField v-slot="{ componentField }" name="name">
           <FormItem v-auto-animate>
@@ -93,10 +95,14 @@ onUpdated(resetForm)
         </FormField>
       </Form>
       <DialogFooter class="gap-2 sm:flex-col">
-        <Button form="user-form" type="submit" class="h-8 w-full">保存修改</Button>
+        <Button form="user-form" type="submit" class="h-8 w-full">
+          保存修改
+        </Button>
         <AlertDialog>
           <AlertDialogTrigger as-child>
-            <Button variant="destructive" class="h-8 w-full">删除角色</Button>
+            <Button variant="destructive" class="h-8 w-full">
+              删除角色
+            </Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
@@ -105,7 +111,9 @@ onUpdated(resetForm)
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>取消</AlertDialogCancel>
-              <AlertDialogAction variant="destructive" @click="deleteUser">确认</AlertDialogAction>
+              <AlertDialogAction variant="destructive" @click="deleteUser">
+                确认
+              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

@@ -11,4 +11,12 @@ import 'virtual:uno.css'
 
 import '~/styles/main.css'
 
-createApp(App).use(createPinia().use(piniaPluginPersistedstate)).use(router).use(autoAnimatePlugin).mount('#app')
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+
+const app = createApp(App)
+
+app.use(pinia)
+  .use(router)
+  .use(autoAnimatePlugin)
+  .mount('#app')

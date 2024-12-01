@@ -1,16 +1,17 @@
-@import './highlight.css';
-@import './tribute.css';
-@import './overlayscrollbars.css';
+@import "./highlight.css";
+@import "./tribute.css";
+@import "./overlayscrollbars.css";
 
 @font-face {
-  font-family: "SourceHanSans";
+  font-family: SourceHanSans;
   font-weight: 250 900;
   src: url("/SourceHanSansCN-VF.otf.woff2");
   font-display: swap;
 }
 
-html, body {
-  font-family: "SourceHanSans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+html,
+body {
+  font-family: SourceHanSans, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
   @apply m-0 select-none p-0 antialiased overflow-hidden;
 }

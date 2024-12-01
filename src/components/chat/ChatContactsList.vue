@@ -18,9 +18,9 @@ const groupList = $(
     from(
       liveQuery(async () => {
         return await db.groups.toArray()
-      })
-    )
-  )
+      }),
+    ),
+  ),
 )
 
 let contacts = $ref<Contact[]>([])
@@ -28,32 +28,28 @@ let contacts = $ref<Contact[]>([])
 watchDebounced(
   [$$(groupList), $$(chat.chatLogs), $$(filter), () => state.pinnedOrder.length, () => state.bot],
   () => {
-    const groupContacts: (Contact & { pinned: boolean; lastMessageTime: number })[] =
-      groupList?.map((group) => ({
+    const groupContacts: (Contact & { pinned: boolean, lastMessageTime: number })[]
+      = groupList?.map(group => ({
         type: 'group',
         id: group.id,
         name: group.name,
         avatar: getAvatarUrl('group', group.id),
         pinned: state.pinnedOrder.includes(group.id),
         lastMessageTime: group.lastMessageTime,
-      })) || []
+      })) ?? []
 
     groupContacts.sort((a, b) => {
       if (a.pinned !== b.pinned) {
         return a.pinned ? -1 : 1
       }
-      if (a.pinned) {
-        return state.pinnedOrder.indexOf(a.id) - state.pinnedOrder.indexOf(b.id)
-      } else {
-        return b.lastMessageTime - a.lastMessageTime
-      }
+      return a.pinned ? state.pinnedOrder.indexOf(a.id) - state.pinnedOrder.indexOf(b.id) : b.lastMessageTime - a.lastMessageTime
     })
 
-    const contactList = state.bot ? [state.bot].concat(groupContacts) : groupContacts
+    const contactList = state.bot ? [state.bot, ...groupContacts] : groupContacts
 
-    contacts = contactList.filter((contact) => contact.id.includes(filter) || contact.name.includes(filter))
+    contacts = contactList.filter(contact => contact.id.includes(filter) || contact.name.includes(filter))
   },
-  { immediate: true, debounce: 50, maxWait: 100 }
+  { immediate: true, debounce: 50, maxWait: 100 },
 )
 
 const modal = useModalStore()
@@ -75,6 +71,8 @@ function openUserManage() {
         </RouterLink>
       </li>
     </ul>
-    <Button v-else class="h-8 w-full" @click="openUserManage">管理机器人</Button>
+    <Button v-else class="h-8 w-full" @click="openUserManage">
+      管理机器人
+    </Button>
   </OverlayScrollbarsComponent>
 </template>

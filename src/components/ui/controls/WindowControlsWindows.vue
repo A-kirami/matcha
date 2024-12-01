@@ -3,7 +3,7 @@ import { twMerge } from 'tailwind-merge'
 
 import Button from './ControlsButton.vue'
 import Icons from './ControlsIcons.vue'
-import { closeWindow, isWindowMaximized, maximizeWindow, minimizeWindow } from './window'
+import { closeWindow, isWindowMaximized, maximizeWindow, minimizeWindow } from './utils'
 </script>
 
 <template>

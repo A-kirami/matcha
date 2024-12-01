@@ -17,7 +17,7 @@ const state = useStateStore()
 <template>
   <HoverCard>
     <HoverCardTrigger as-child>
-      <slot></slot>
+      <slot />
     </HoverCardTrigger>
     <HoverCardContent v-if="state.chatTarget?.type === 'group'" class="w-full px-4 py-3">
       <div class="flex space-x-4">
@@ -26,9 +26,15 @@ const state = useStateStore()
           <AvatarFallback>{{ user?.name }}</AvatarFallback>
         </Avatar>
         <div>
-          <h4 class="text-sm font-semibold">{{ user?.name }}</h4>
-          <p class="text-sm text-muted-foreground">{{ uid }}</p>
-          <Button class="mt-2 h-auto px-3 py-1 text-xs" @click="open = true">编辑资料</Button>
+          <h4 class="text-sm font-semibold">
+            {{ user?.name }}
+          </h4>
+          <p class="text-sm text-muted-foreground">
+            {{ uid }}
+          </p>
+          <Button class="mt-2 h-auto px-3 py-1 text-xs" @click="open = true">
+            编辑资料
+          </Button>
         </div>
       </div>
     </HoverCardContent>

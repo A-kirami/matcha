@@ -57,7 +57,7 @@ export interface GroupMessageScene<T extends Message = Message> extends MessageS
   /** 群名 */
   group_name: string
   /** 匿名信息 */
-  anonymous: { id: string; name: string } | null
+  anonymous: { id: string, name: string } | null
   /** 成员信息 */
   member: MemberInfo
 }

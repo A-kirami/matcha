@@ -21,14 +21,10 @@ import type { Contact } from '~/types'
  * @returns 头像图片的链接
  */
 export function getAvatarUrl(type: 'user' | 'group', id?: string): string {
-  if ((typeof id === 'string' && !/^\d+$/.test(id)) || typeof id === 'undefined') {
+  if ((typeof id === 'string' && !/^\d+$/.test(id)) || id === undefined) {
     return ''
   }
-  if (type === 'user') {
-    return `https://q1.qlogo.cn/g?b=qq&nk=${id}&s=640`
-  } else {
-    return `https://p.qlogo.cn/gh/${id}/${id}/640/`
-  }
+  return type === 'user' ? `https://q1.qlogo.cn/g?b=qq&nk=${id}&s=640` : `https://p.qlogo.cn/gh/${id}/${id}/640/`
 }
 
 /**
@@ -41,7 +37,7 @@ export async function getPlainMessage(contents: Contents[], context: Context): P
   const plainMessagePromise = contents.map(async (content) => {
     const plainFn = plainStrategy[content.type]
     if (!plainFn) {
-      return null
+      return
     }
     if (typeof plainFn === 'string') {
       return plainFn
@@ -49,7 +45,8 @@ export async function getPlainMessage(contents: Contents[], context: Context): P
     const asyncFn = asyncWrapper<string>(plainFn)
     return await asyncFn(content, context)
   })
-  return (await Promise.all(plainMessagePromise)).filter(nonNullable).join('')
+  const plainMessage = await Promise.all(plainMessagePromise)
+  return plainMessage.filter(e => nonNullable(e)).join('')
 }
 
 export async function getMentionString(data: MentionContent['data'], groupId?: string) {
@@ -99,7 +96,7 @@ const plainStrategy: PlainStrategy<ContentMapping> = {
  * @returns 分配的消息 ID
  */
 export const getMessageId = (() => {
-  let messageId = 10000
+  let messageId = 1_0000
   return (): number => {
     messageId++
     return messageId
@@ -120,8 +117,9 @@ export function getPlainScene(scene?: Scenes): string {
     case 'message': {
       return scene.plain_message
     }
-    default:
+    default: {
       return ''
+    }
   }
 }
 
@@ -199,7 +197,7 @@ export async function getContact(type: Contact['type'], id: string): Promise<Con
  */
 export async function getPreviewMessage(scene: Scenes, uid?: string): Promise<string> {
   const message = getPlainScene(scene)
-  const { user_id, group_id } = scene as { user_id?: string; group_id?: string }
+  const { user_id, group_id } = scene as { user_id?: string, group_id?: string }
   if (!group_id || !user_id || user_id === uid) {
     return message
   }

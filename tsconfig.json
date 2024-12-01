@@ -3,7 +3,7 @@
     "target": "ES2022",
     "useDefineForClassFields": true,
     "module": "ESNext",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
 
     /* Bundler mode */
@@ -14,17 +14,18 @@
     "noEmit": true,
     "jsx": "preserve",
     "jsxImportSource": "vue",
+    "removeComments": true,
+    "esModuleInterop": true,
 
     /* Linting */
     "strict": true,
+    "strictNullChecks": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
 
-    "sourceMap": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "removeComments": true,
     "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"]
@@ -32,21 +33,30 @@
     "types": [
       "vite/client",
       "vitest/globals",
+      "vite-plugin-vue-layouts/client",
       "unplugin-vue-macros/macros-global",
       "unplugin-vue-router/client",
-      "vite-plugin-vue-layouts/client",
       "unplugin-info/client"
     ]
   },
   "vueCompilerOptions": {
-    "plugins": [
-      "@vue-macros/volar/define-slots",
-      "@vue-macros/volar/define-models",
-      "@vue-macros/volar/define-props",
-      "@vue-macros/volar/define-props-refs",
-      "@vue-macros/volar/export-expose"
-    ]
+    "plugins": ["unplugin-vue-macros/volar"],
+    "vueMacros": {
+      "shortVmodel": {
+        "prefix": "::",
+      },
+      "exportExpose": true
+    }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "tests/**/*.test.ts"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "tests/**/*.test.ts",
+    "vite.config.ts",
+    "unocss.config.ts",
+    "vitest.config.ts",
+    "eslint.config.js"
+  ]
 }

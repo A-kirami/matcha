@@ -57,11 +57,7 @@ export const useChatStore = defineStore('chat', () => {
       if (chat.scene.chat_type !== chatType) {
         return false
       }
-      if (chatType === 'group') {
-        return chat.scene.receiver_id === chatId
-      } else {
-        return sessionSet.has(chat.scene.sender_id) && sessionSet.has(chat.scene.receiver_id)
-      }
+      return chatType === 'group' ? chat.scene.receiver_id === chatId : sessionSet.has(chat.scene.sender_id) && sessionSet.has(chat.scene.receiver_id)
     })
   }
 
@@ -81,8 +77,9 @@ export const useChatStore = defineStore('chat', () => {
         chat = { ...newChat(scene, event), action: 'await' } as Request
         break
       }
-      default:
+      default: {
         throw new Error('unknown scene type')
+      }
     }
     const sendEvent = connect.postSelfEvents || scene.sender_id !== state.bot?.id
     if (event && sendEvent) {
@@ -90,7 +87,7 @@ export const useChatStore = defineStore('chat', () => {
     }
     chat.preview = await getPreviewMessage(scene, state.user?.id)
     if (insert) {
-      const index = chatLogs.findIndex((chat) => chat.id === insert)
+      const index = chatLogs.findIndex(chat => chat.id === insert)
       if (index !== -1) {
         chatLogs.splice(index + 1, 0, chat)
       }
@@ -101,15 +98,15 @@ export const useChatStore = defineStore('chat', () => {
   }
 
   function getChat<T extends Chats['type']>(chatId: string, type?: T): Extract<Chats, { type: T }> {
-    const chat = chatLogs.find((c) => (type ? c.type === type : true) && c.id === chatId)
+    const chat = chatLogs.find(c => (type ? c.type === type : true) && c.id === chatId)
     return chat as Extract<Chats, { type: T }>
   }
 
-  function getMessage(messageId: string): Message | null {
+  function getMessage(messageId: string): Message | undefined {
     return (
-      (chatLogs.find((chat) => chat.type === 'message' && chat.scene.message_id === messageId) as
-        | Message
-        | undefined) || null
+      (chatLogs.find(chat => chat.type === 'message' && chat.scene.message_id === messageId) as
+      | Message
+      | undefined)
     )
   }
 

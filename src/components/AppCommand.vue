@@ -38,8 +38,9 @@ function handleOpenChange() {
               open = false
             }
           "
-          >打开控制台</CommandItem
         >
+          打开控制台
+        </CommandItem>
       </CommandGroup>
     </CommandList>
   </CommandDialog>

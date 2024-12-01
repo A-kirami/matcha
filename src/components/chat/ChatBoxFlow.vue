@@ -10,7 +10,7 @@ import type { Chats } from '~/stores/chat'
 
 const state = useStateStore()
 
-const osRef = $ref<InstanceType<typeof OverlayScrollbarsComponent> | null>(null)
+const osRef = $ref<InstanceType<typeof OverlayScrollbarsComponent>>()
 
 let scrollLock = true
 
@@ -36,7 +36,7 @@ watch(
   () => state.chatTarget,
   () => {
     initialized = false
-  }
+  },
 )
 
 const chat = useChatStore()
@@ -61,7 +61,7 @@ function isSeparator(index: number): boolean {
 
   const prevNonDeleteIndex = prevNonDeleteIndexMap.get(state.chatTarget!.id) ?? -1
 
-  const prevScene = prevNonDeleteIndex >= 0 ? chatList[prevNonDeleteIndex].scene : null
+  const prevScene = prevNonDeleteIndex >= 0 ? chatList[prevNonDeleteIndex].scene : undefined
 
   prevNonDeleteIndexMap.set(state.chatTarget!.id, index)
 
@@ -70,22 +70,33 @@ function isSeparator(index: number): boolean {
 
 const ChatItem = (props: { chat: Chats }) => {
   const { chat } = props
-  const chatRef = ref<HTMLElement | null>(null)
+  const chatRef = ref<HTMLElement>()
   const chatIsRead = useElementVisibility(chatRef)
 
   watchOnce(chatIsRead, () => {
     chat.isRead = true
   })
 
+  let chatContent
+  switch (chat.type) {
+    case 'message': {
+      chatContent = <ChatMessage message={chat} />
+      break
+    }
+    case 'notice': {
+      chatContent = <ChatNotice notice={chat} />
+      break
+    }
+    case 'request': {
+      chatContent = <ChatRequest request={chat} />
+      break
+    }
+    // no default
+  }
+
   return (
     <div ref={chatRef}>
-      {chat.type === 'message' ? (
-        <ChatMessage message={chat} />
-      ) : chat.type === 'notice' ? (
-        <ChatNotice notice={chat} />
-      ) : chat.type === 'request' ? (
-        <ChatRequest request={chat} />
-      ) : null}
+      {chatContent}
     </div>
   )
 }

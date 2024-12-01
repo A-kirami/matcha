@@ -23,7 +23,7 @@ function openUserManage() {
     <span
       class="absolute bottom-0.5 size-4 border-2 border-transparent rounded-full bg-clip-padding -right-1"
       :class="[state.isConnected ? 'bg-emerald-400' : 'bg-rose-400']"
-    ></span>
+    />
   </div>
   <Button
     v-else

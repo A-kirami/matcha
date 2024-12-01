@@ -9,19 +9,19 @@ export const useSessionStore = defineStore('session', () => {
   const sessionMap = $ref<DefaultMap<string, Session>>(
     new DefaultMap((key) => {
       return { id: key, replyMessageId: '', uploadFiles: new Map() }
-    })
+    }),
   )
-  let currentSession = $ref<Session | null>(null)
+  let currentSession = $ref<Session>()
 
   const state = useStateStore()
 
   watch(
     () => state.chatTarget,
-    async (chatTarget) => {
+    (chatTarget) => {
       if (chatTarget) {
         currentSession = sessionMap.got(`${chatTarget?.type}:${chatTarget?.id}`)
       }
-    }
+    },
   )
 
   return $$({

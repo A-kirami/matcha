@@ -5,9 +5,9 @@ import { ref } from 'vue'
 
 import Button from './ControlsButton.vue'
 import Icons from './ControlsIcons.vue'
-import { closeWindow, fullscreenWindow, maximizeWindow, minimizeWindow } from './window'
+import { closeWindow, fullscreenWindow, maximizeWindow, minimizeWindow } from './utils'
 
-const winBtns = ref(null)
+const winBtns = ref<HTMLDivElement>()
 const { isOutside } = useMouseInElement(winBtns)
 
 const isAltKeyPressed = ref(false)
@@ -16,14 +16,14 @@ onKeyStroke(
   () => {
     isAltKeyPressed.value = true
   },
-  { eventName: 'keydown' }
+  { eventName: 'keydown' },
 )
 onKeyStroke(
   'Alt',
   () => {
     isAltKeyPressed.value = false
   },
-  { eventName: 'keyup' }
+  { eventName: 'keyup' },
 )
 </script>
 

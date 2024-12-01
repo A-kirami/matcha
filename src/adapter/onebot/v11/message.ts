@@ -226,7 +226,7 @@ export type Messages = ValueOf<MessageMapping>
 
 export function createMessage<T extends keyof MessageMapping>(
   type: T,
-  data: MessageMapping[T]['data']
+  data: MessageMapping[T]['data'],
 ): MessageMapping[T] {
   return {
     type,
@@ -235,37 +235,37 @@ export function createMessage<T extends keyof MessageMapping>(
 }
 
 const messageBuildStrategy: MessageBuildStrategy<ContentMapping> = {
-  'text': (content: TextContent): TextMessage => {
+  text: (content: TextContent): TextMessage => {
     return createMessage('text', { ...content.data })
   },
 
-  'mention': (content: MentionContent): AtMessage => {
+  mention: (content: MentionContent): AtMessage => {
     return createMessage('at', {
       qq: content.data.target,
     })
   },
 
-  'reply': (content: ReplyContent): ReplyMessage => {
+  reply: (content: ReplyContent): ReplyMessage => {
     return createMessage('reply', {
       id: content.data.message_id,
     })
   },
 
-  'face': (content: FaceContent): FaceMessage => {
+  face: (content: FaceContent): FaceMessage => {
     return createMessage('face', {
       id: content.data.id.toString(),
     })
   },
 
-  'dice': (): DiceMessage => {
+  dice: (): DiceMessage => {
     return createMessage('dice', {})
   },
 
-  'rps': (): RpsMessage => {
+  rps: (): RpsMessage => {
     return createMessage('rps', {})
   },
 
-  'poke': (content: PokeContent): PokeMessage => {
+  poke: (content: PokeContent): PokeMessage => {
     return createMessage('poke', {
       type: '',
       id: content.data.user_id,
@@ -273,15 +273,15 @@ const messageBuildStrategy: MessageBuildStrategy<ContentMapping> = {
     })
   },
 
-  'shake': (): ShakeMessage => {
+  shake: (): ShakeMessage => {
     return createMessage('shake', {})
   },
 
-  'anonymous': (): AnonymousMessage => {
+  anonymous: (): AnonymousMessage => {
     return createMessage('anonymous', {})
   },
 
-  'share': (content: LinkShareContent | MusicShareContent): LinkShareMessage | MusicShareMessage => {
+  share: (content: LinkShareContent | MusicShareContent): LinkShareMessage | MusicShareMessage => {
     const { type, url, title, content: dataContent, image } = content.data
     if (type === 'link') {
       return createMessage('share', {
@@ -303,14 +303,14 @@ const messageBuildStrategy: MessageBuildStrategy<ContentMapping> = {
     }
   },
 
-  'contact': (content: ContactContent): ContactMessage => {
+  contact: (content: ContactContent): ContactMessage => {
     return createMessage('contact', {
       type: content.data.type === 'user' ? 'qq' : 'group',
       id: content.data.id,
     })
   },
 
-  'location': (content: LocationContent): LocationMessage => {
+  location: (content: LocationContent): LocationMessage => {
     const { latitude, longitude, title, content: dataContent } = content.data
     return createMessage('location', {
       lat: latitude.toString(),
@@ -320,7 +320,7 @@ const messageBuildStrategy: MessageBuildStrategy<ContentMapping> = {
     })
   },
 
-  'image': (content: ImageContent): ImageMessage => {
+  image: (content: ImageContent): ImageMessage => {
     const { id, url, sub_type = 'normal' } = content.data
     return createMessage('image', {
       file: id,
@@ -329,7 +329,7 @@ const messageBuildStrategy: MessageBuildStrategy<ContentMapping> = {
     })
   },
 
-  'audio': (content: AudioContent): RecordMessage => {
+  audio: (content: AudioContent): RecordMessage => {
     const { id, url } = content.data
     return createMessage('record', {
       file: id,
@@ -338,7 +338,7 @@ const messageBuildStrategy: MessageBuildStrategy<ContentMapping> = {
     })
   },
 
-  'video': (content: VideoContent): VideoMessage => {
+  video: (content: VideoContent): VideoMessage => {
     const { id, url } = content.data
     return createMessage('video', {
       file: id,
@@ -346,68 +346,68 @@ const messageBuildStrategy: MessageBuildStrategy<ContentMapping> = {
     })
   },
 
-  'forward': (): ForwardMessage => {
+  forward: (): ForwardMessage => {
     throw new Error('未实现消息段, 跳过')
   },
 
-  'node': (): ForwardMessageNode => {
+  node: (): ForwardMessageNode => {
     throw new Error('未实现消息段, 跳过')
   },
 }
 
 const messageParseStrategy: MessageParseStrategy<MessageMapping> = {
-  'text': (message: TextMessage): TextContent => {
+  text: (message: TextMessage): TextContent => {
     return createContent('text', { ...message.data })
   },
 
-  'at': (message: AtMessage): MentionContent => {
+  at: (message: AtMessage): MentionContent => {
     return createContent('mention', {
-      'target': message.data.qq,
+      target: message.data.qq,
     })
   },
 
-  'reply': (message: ReplyMessage): ReplyContent => {
+  reply: (message: ReplyMessage): ReplyContent => {
     return createContent('reply', {
-      'message_id': message.data.id,
-      'user_id': '',
+      message_id: message.data.id,
+      user_id: '',
     })
   },
 
-  'face': (message: FaceMessage): FaceContent => {
+  face: (message: FaceMessage): FaceContent => {
     return createContent('face', {
-      'id': Number(message.data.id),
-      'name': '',
+      id: Number(message.data.id),
+      name: '',
     })
   },
 
-  'dice': (): DiceContent => {
+  dice: (): DiceContent => {
     return createContent('dice', { value: randomInt(0, 5) })
   },
 
-  'rps': (): RpsContent => {
+  rps: (): RpsContent => {
     return createContent('rps', { value: randomInt(0, 2) })
   },
 
-  'poke': (message: PokeMessage): PokeContent => {
-    return createContent('poke', { 'user_id': message.data.id })
+  poke: (message: PokeMessage): PokeContent => {
+    return createContent('poke', { user_id: message.data.id })
   },
 
-  'shake': (): ShakeContent => {
+  shake: (): ShakeContent => {
     return createContent('shake', {})
   },
 
-  'anonymous': (): AnonymousContent => {
+  anonymous: (): AnonymousContent => {
     return createContent('anonymous', {})
   },
 
-  'share': (message: LinkShareMessage): LinkShareContent => {
+  share: (message: LinkShareMessage): LinkShareContent => {
     return createContent('share', {
       type: 'link',
       ...message.data,
     }) as LinkShareContent
   },
 
-  'music': (message: MusicShareMessage): MusicShareContent => {
+  music: (message: MusicShareMessage): MusicShareContent => {
     const { type: sub_type, id, url, title, content, image } = message.data
     return createContent('share', {
       type: 'music',
@@ -420,14 +420,14 @@ const messageParseStrategy: MessageParseStrategy<MessageMapping> = {
     }) as MusicShareContent
   },
 
-  'contact': (message: ContactMessage): ContactContent => {
+  contact: (message: ContactMessage): ContactContent => {
     return createContent('contact', {
       type: message.data.type === 'qq' ? 'user' : 'group',
       id: message.data.id,
     })
   },
 
-  'location': (message: LocationMessage): LocationContent => {
+  location: (message: LocationMessage): LocationContent => {
     const { lat, lon, title, content } = message.data
     return createContent('location', {
       latitude: Number(lat),
@@ -437,16 +437,16 @@ const messageParseStrategy: MessageParseStrategy<MessageMapping> = {
     })
   },
 
-  'image': async (message: ImageMessage): Promise<ImageContent> => {
+  image: async (message: ImageMessage): Promise<ImageContent> => {
     const { id, url } = await createFileCache(message.data.file, 'image')
     return createContent('image', {
       id,
       url,
-      'sub_type': message.data.type ?? 'normal',
+      sub_type: message.data.type ?? 'normal',
     })
   },
 
-  'record': async (message: RecordMessage): Promise<AudioContent> => {
+  record: async (message: RecordMessage): Promise<AudioContent> => {
     const { id, url } = await createFileCache(message.data.file, 'audio')
     return createContent('audio', {
       id,
@@ -454,7 +454,7 @@ const messageParseStrategy: MessageParseStrategy<MessageMapping> = {
     })
   },
 
-  'video': async (message: VideoMessage): Promise<VideoContent> => {
+  video: async (message: VideoMessage): Promise<VideoContent> => {
     const { id, url } = await createFileCache(message.data.file, 'video')
     return createContent('video', {
       id,
@@ -462,11 +462,11 @@ const messageParseStrategy: MessageParseStrategy<MessageMapping> = {
     })
   },
 
-  'forward': (): ForwardContent => {
+  forward: (): ForwardContent => {
     throw new Error('未实现消息段, 跳过')
   },
 
-  'node': (): ForwardContentNode => {
+  node: (): ForwardContentNode => {
     throw new Error('未实现消息段, 跳过')
   },
 }

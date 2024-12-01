@@ -7,7 +7,7 @@ export class ProtocolError extends AdapterError {
 
   constructor(
     public response: ActionResponse,
-    message?: string
+    message?: string,
   ) {
     super(message || ProtocolError.message)
   }

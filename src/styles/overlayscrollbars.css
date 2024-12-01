@@ -1,4 +1,4 @@
-@import 'overlayscrollbars/overlayscrollbars.css' layer(overlayscrollbars);
+@import "overlayscrollbars/overlayscrollbars.css" layer(overlayscrollbars);
 
 @layer overlayscrollbars {
   .os-theme-light {

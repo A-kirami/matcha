@@ -23,12 +23,12 @@ const memberFormSchema = toTypedSchema(
       .optional()
       .or(z.literal('')),
     role: z.enum(['owner', 'admin', 'member']),
-  })
+  }),
 )
 
 let open = $(defineModel('open', { default: false }))
 
-const formRef = $ref<InstanceType<typeof Form> | null>(null)
+const formRef = $ref<InstanceType<typeof Form>>()
 
 const onSubmit = getSubmitFn(memberFormSchema, async (values) => {
   await db.members.update([groupId, userId], values)
@@ -58,7 +58,7 @@ onUpdated(resetForm)
 <template>
   <Dialog v-model:open="open">
     <DialogTrigger as-child>
-      <slot></slot>
+      <slot />
     </DialogTrigger>
     <DialogContent class="max-w-100">
       <DialogHeader>
@@ -70,8 +70,12 @@ onUpdated(resetForm)
         <AvatarFallback>{{ userName }}</AvatarFallback>
       </Avatar>
       <div>
-        <div class="text-center text-lg text-foreground font-medium">{{ userName }}</div>
-        <div class="text-center text-muted-foreground font-medium">{{ userId }}</div>
+        <div class="text-center text-lg text-foreground font-medium">
+          {{ userName }}
+        </div>
+        <div class="text-center text-muted-foreground font-medium">
+          {{ userId }}
+        </div>
       </div>
       <Form id="user-form" ref="formRef" :validation-schema="memberFormSchema" class="space-y-2" @submit="onSubmit">
         <FormField v-slot="{ componentField }" name="card">
@@ -95,9 +99,15 @@ onUpdated(resetForm)
               </FormControl>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value="owner">群主</SelectItem>
-                  <SelectItem value="admin">管理员</SelectItem>
-                  <SelectItem value="member">普通成员</SelectItem>
+                  <SelectItem value="owner">
+                    群主
+                  </SelectItem>
+                  <SelectItem value="admin">
+                    管理员
+                  </SelectItem>
+                  <SelectItem value="member">
+                    普通成员
+                  </SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -107,10 +117,14 @@ onUpdated(resetForm)
         </FormField>
       </Form>
       <DialogFooter class="gap-2 sm:flex-col">
-        <Button form="user-form" type="submit" class="h-8 w-full">保存修改</Button>
+        <Button form="user-form" type="submit" class="h-8 w-full">
+          保存修改
+        </Button>
         <AlertDialog>
           <AlertDialogTrigger as-child>
-            <Button variant="destructive" class="h-8 w-full">移除成员</Button>
+            <Button variant="destructive" class="h-8 w-full">
+              移除成员
+            </Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
@@ -119,7 +133,9 @@ onUpdated(resetForm)
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>取消</AlertDialogCancel>
-              <AlertDialogAction variant="destructive" @click="removeMember">确认</AlertDialogAction>
+              <AlertDialogAction variant="destructive" @click="removeMember">
+                确认
+              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

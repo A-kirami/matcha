@@ -30,7 +30,10 @@ export default defineConfig({
   transformers: [transformerDirectives(), transformerVariantGroup()],
   content: {
     pipeline: {
-      include: ['src/**/*.{vue,svelte,[jt]s,[jt]sx,md?(x),astro,elm,php,phtml,html}'],
+      include: [
+        /\.(vue|svelte|[jt]sx|mdx?|astro|elm|php|phtml|html)($|\?)/,
+        '(components|src)/**/*.{js,ts}',
+      ],
     },
   },
 })

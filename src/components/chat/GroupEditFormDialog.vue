@@ -18,12 +18,12 @@ const groupFormSchema = toTypedSchema(
       .string({ required_error: '群组名称不能为空', invalid_type_error: '群组名称必须是字符串' })
       .min(2, { message: '群组名称长度不能小于2' })
       .max(12, { message: '群组名称长度不能大于12' }),
-  })
+  }),
 )
 
 let open = $(defineModel('open', { default: false }))
 
-const formRef = $ref<InstanceType<typeof Form> | null>(null)
+const formRef = $ref<InstanceType<typeof Form>>()
 
 const onSubmit = getSubmitFn(groupFormSchema, async (values) => {
   await db.groups.update(targetId, values)
@@ -35,7 +35,7 @@ const onSubmit = getSubmitFn(groupFormSchema, async (values) => {
 async function deleteGroup() {
   await db.groups.delete(targetId)
   if (state.chatTarget?.id === targetId) {
-    state.chatTarget = null
+    state.chatTarget = undefined
   }
   open = false
   toast.success('', { description: '删除群组成功' })
@@ -56,7 +56,7 @@ onUpdated(resetForm)
 <template>
   <Dialog v-model:open="open">
     <DialogTrigger as-child>
-      <slot></slot>
+      <slot />
     </DialogTrigger>
     <DialogContent class="max-w-100">
       <DialogHeader>
@@ -67,7 +67,9 @@ onUpdated(resetForm)
         <AvatarImage :src="getAvatarUrl('group', targetId)" alt="group avatar" />
         <AvatarFallback>{{ formRef?.values.name }}</AvatarFallback>
       </Avatar>
-      <div class="text-center text-lg text-muted-foreground font-medium">{{ targetId }}</div>
+      <div class="text-center text-lg text-muted-foreground font-medium">
+        {{ targetId }}
+      </div>
       <Form id="group-form" ref="formRef" :validation-schema="groupFormSchema" class="space-y-2" @submit="onSubmit">
         <FormField v-slot="{ componentField }" name="name">
           <FormItem v-auto-animate>
@@ -81,10 +83,14 @@ onUpdated(resetForm)
         </FormField>
       </Form>
       <DialogFooter class="gap-2 sm:flex-col">
-        <Button form="group-form" type="submit" class="h-8 w-full">保存修改</Button>
+        <Button form="group-form" type="submit" class="h-8 w-full">
+          保存修改
+        </Button>
         <AlertDialog>
           <AlertDialogTrigger as-child>
-            <Button variant="destructive" class="h-8 w-full">删除群组</Button>
+            <Button variant="destructive" class="h-8 w-full">
+              删除群组
+            </Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
@@ -93,7 +99,9 @@ onUpdated(resetForm)
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>取消</AlertDialogCancel>
-              <AlertDialogAction variant="destructive" @click="deleteGroup">确认</AlertDialogAction>
+              <AlertDialogAction variant="destructive" @click="deleteGroup">
+                确认
+              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

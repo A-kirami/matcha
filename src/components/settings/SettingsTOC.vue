@@ -4,7 +4,7 @@ const router = useRouter()
 const routes = router.getRoutes()
 
 const navItems = routes
-  .filter((route) => route.meta.isSettings)
+  .filter(route => route.meta.isSettings)
   .sort((a, b) => ((a.meta.position as number) ?? Infinity) - ((b.meta.position as number) ?? Infinity))
 </script>
 
@@ -18,8 +18,9 @@ const navItems = routes
             class="h-9 w-full justify-start text-gray-800 hover:bg-accent/80"
             dark="text-gray-300"
             :class="{ 'bg-muted/80': isActive }"
-            >{{ item.meta.title }}</Button
           >
+            {{ item.meta.title }}
+          </Button>
         </RouterLink>
       </li>
     </ul>

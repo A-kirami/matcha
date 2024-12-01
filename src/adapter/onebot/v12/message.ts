@@ -89,7 +89,7 @@ export type Messages = ValueOf<MessageMapping>
 
 export function createMessage<T extends keyof MessageMapping>(
   type: T,
-  data: MessageMapping[T]['data']
+  data: MessageMapping[T]['data'],
 ): MessageMapping[T] {
   return {
     type,
@@ -98,63 +98,61 @@ export function createMessage<T extends keyof MessageMapping>(
 }
 
 const messageBuildStrategy: MessageBuildStrategy<ContentMapping> = {
-  'text': (content: TextContent): TextMessage => {
+  text: (content: TextContent): TextMessage => {
     return createMessage('text', { ...content.data })
   },
 
-  'mention': (content: MentionContent): MentionMessage | MentionAllMessage => {
-    if (content.data.target === 'all') {
-      return createMessage('mention_all', {})
-    } else {
-      return createMessage('mention', {
+  mention: (content: MentionContent): MentionMessage | MentionAllMessage => {
+    return content.data.target === 'all'
+      ? createMessage('mention_all', {})
+      : createMessage('mention', {
         user_id: content.data.target,
       })
-    }
   },
 
-  'reply': (content: ReplyContent): ReplyMessage => {
+  reply: (content: ReplyContent): ReplyMessage => {
     return createMessage('reply', content.data)
   },
 
-  'location': (content: LocationContent): LocationMessage => {
+  location: (content: LocationContent): LocationMessage => {
     return createMessage('location', content.data)
   },
 
-  'file': (content: FileContent): FileMessage => {
+  file: (content: FileContent): FileMessage => {
     return createMessage('file', { file_id: content.data.id })
   },
 
-  'image': (content: ImageContent): ImageMessage => {
+  image: (content: ImageContent): ImageMessage => {
     return createMessage('image', { file_id: content.data.id })
   },
 
-  'audio': (content: AudioContent): VoiceMessage => {
+  audio: (content: AudioContent): VoiceMessage => {
     return createMessage('voice', { file_id: content.data.id })
   },
 
-  'video': (content: VideoContent): VideoMessage => {
+  video: (content: VideoContent): VideoMessage => {
     return createMessage('video', { file_id: content.data.id })
   },
 }
 
 const messageParseStrategy: MessageParseStrategy<MessageMapping> = {
-  'text': (message: TextMessage): TextContent => {
+  text: (message: TextMessage): TextContent => {
     return createContent('text', { ...message.data })
   },
 
-  'mention': (message: MentionMessage): MentionContent => {
+  mention: (message: MentionMessage): MentionContent => {
     return createContent('mention', { target: message.data.user_id })
   },
 
-  'mention_all': (): MentionContent => {
+  mention_all: (): MentionContent => {
     return createContent('mention', { target: 'all' })
   },
 
-  'file': async (message: FileMessage): Promise<FileContent> => {
+  file: async (message: FileMessage): Promise<FileContent> => {
     return createContent('file', { id: message.data.file_id, url: await getFile(GetType.URL, message.data.file_id) })
   },
 
-  'image': async (message: ImageMessage): Promise<ImageContent> => {
+  image: async (message: ImageMessage): Promise<ImageContent> => {
     return createContent('image', {
       id: message.data.file_id,
       url: await getFile(GetType.URL, message.data.file_id),
@@ -162,32 +160,32 @@ const messageParseStrategy: MessageParseStrategy<MessageMapping> = {
     })
   },
 
-  'voice': async (message: VoiceMessage): Promise<AudioContent> => {
+  voice: async (message: VoiceMessage): Promise<AudioContent> => {
     return createContent('audio', {
       id: message.data.file_id,
       url: await getFile(GetType.URL, message.data.file_id),
     })
   },
 
-  'audio': async (message: AudioMessage): Promise<AudioContent> => {
+  audio: async (message: AudioMessage): Promise<AudioContent> => {
     return createContent('audio', {
       id: message.data.file_id,
       url: await getFile(GetType.URL, message.data.file_id),
     })
   },
 
-  'video': async (message: VideoMessage): Promise<VideoContent> => {
+  video: async (message: VideoMessage): Promise<VideoContent> => {
     return createContent('video', {
       id: message.data.file_id,
       url: await getFile(GetType.URL, message.data.file_id),
     })
   },
 
-  'location': (message: LocationMessage): LocationContent => {
+  location: (message: LocationMessage): LocationContent => {
     return createContent('location', message.data)
   },
 
-  'reply': (message: ReplyMessage): ReplyContent => {
+  reply: (message: ReplyMessage): ReplyContent => {
     return createContent('reply', message.data)
   },
 }

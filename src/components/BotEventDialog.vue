@@ -10,8 +10,8 @@ const { event } = $defineProps<{
 
 let open = $(defineModel('open', { default: false }))
 
-function copyEvent() {
-  navigator.clipboard.writeText(JSON.stringify(event))
+async function copyEvent() {
+  await navigator.clipboard.writeText(JSON.stringify(event))
   toast.success('', { description: '事件已复制' })
 }
 </script>
@@ -19,7 +19,7 @@ function copyEvent() {
 <template>
   <Dialog v-model:open="open">
     <DialogTrigger as-child>
-      <slot></slot>
+      <slot />
     </DialogTrigger>
     <DialogContent class="grid-rows-[auto_minmax(0,1fr)_auto] max-h-[90dvh] sm:max-w-[425px]">
       <DialogHeader>
@@ -30,7 +30,9 @@ function copyEvent() {
         <HighlightCode language="json" :code="JSON.stringify(event, null, '\t')" />
       </OverlayScrollbarsComponent>
       <DialogFooter>
-        <Button class="h-8 w-full" @click="copyEvent">复制事件</Button>
+        <Button class="h-8 w-full" @click="copyEvent">
+          复制事件
+        </Button>
       </DialogFooter>
     </DialogContent>
   </Dialog>

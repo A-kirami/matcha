@@ -6,7 +6,7 @@ dayjs.extend(calendar)
 
 const { time } = $defineProps<{ time: number }>()
 
-const calendarTime = dayjs.unix(time).calendar(null, {
+const calendarTime = dayjs.unix(time).calendar(undefined, {
   sameDay: 'A h:mm ',
   nextDay: '[明天]',
   nextWeek: 'dddd',

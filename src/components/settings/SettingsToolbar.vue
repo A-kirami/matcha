@@ -4,6 +4,9 @@ import { open, save } from '@tauri-apps/plugin-dialog'
 import { FileUp, FileDown } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 
+import type { ConnectSettings } from '~/stores/connect-settings'
+import type { GeneralSettings } from '~/stores/general-settings'
+
 const emits = defineEmits<{
   importSettings: []
 }>()
@@ -12,7 +15,7 @@ const general = useGeneralSettingsStore()
 const connect = useConnectSettingsStore()
 
 async function importSettings() {
-  const file = await open({
+  const filePath = await open({
     title: '选择配置文件',
     filters: [
       {
@@ -21,10 +24,10 @@ async function importSettings() {
       },
     ],
   })
-  if (file) {
-    const contents = await invoke<number[]>('read_file', { path: file.path })
+  if (filePath) {
+    const contents = await invoke<number[]>('read_file', { path: filePath })
     const setting = new TextDecoder().decode(new Uint8Array(contents))
-    const config = JSON.parse(setting)
+    const config = JSON.parse(setting) as { general: GeneralSettings, connect: ConnectSettings }
     general.$patch(config.general)
     connect.$patch(config.connect)
     emits('importSettings')
@@ -48,7 +51,7 @@ async function exportSettings() {
       general: general.$state,
       connect: connect.$state,
     })
-    const contents = Array.from(new TextEncoder().encode(setting))
+    const contents = [...new TextEncoder().encode(setting)]
     await invoke('write_file', { contents, path, overwrite: true })
     toast.success('', { description: '导出配置成功' })
   }
@@ -66,7 +69,9 @@ async function exportSettings() {
           </Button>
         </TooltipTrigger>
         <TooltipContent side="bottom" class="px-2">
-          <p class="text-xs">导入配置</p>
+          <p class="text-xs">
+            导入配置
+          </p>
         </TooltipContent>
       </Tooltip>
       <Tooltip>
@@ -76,7 +81,9 @@ async function exportSettings() {
           </Button>
         </TooltipTrigger>
         <TooltipContent side="bottom" class="px-2">
-          <p class="text-xs">导出配置</p>
+          <p class="text-xs">
+            导出配置
+          </p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

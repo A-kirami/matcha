@@ -443,6 +443,7 @@ const eventStrategy: EventStrategy<SceneMapping<Messages>> = {
       message: await messageHandler.build(message),
       raw_message,
       font: 0,
+      // eslint-disable-next-line unicorn/no-null
       anonymous: anonymous ? { id: Number(anonymous.id), name: anonymous.name, flag: anonymous.id } : null,
       sender: {
         user_id: Number(user_id),
@@ -502,7 +503,7 @@ const eventStrategy: EventStrategy<SceneMapping<Messages>> = {
       self_id: Number(self_id),
       post_type,
       notice_type: 'group_decrease',
-      sub_type: sub_type === 'leave' ? sub_type : user_id === self_id ? 'kick_me' : 'kick',
+      sub_type: sub_type === 'leave' ? sub_type : (user_id === self_id ? 'kick_me' : 'kick'),
       user_id: Number(user_id),
       group_id: Number(group_id),
       operator_id: Number(operator_id),

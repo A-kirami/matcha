@@ -7,9 +7,9 @@ export const useStateStore = defineStore(
   'state',
 
   () => {
-    let user = $ref<Contact | null>(null)
-    let bot = $ref<Contact | null>(null)
-    let chatTarget = $ref<Contact | null>(null)
+    let user = $ref<Contact>()
+    let bot = $ref<Contact>()
+    let chatTarget = $ref<Contact>()
     const pinnedOrder = $ref<string[]>([])
     const isConnected = $ref(false)
 
@@ -33,7 +33,7 @@ export const useStateStore = defineStore(
       if (!chatTarget) {
         return
       }
-      const contact = await getContact(chatTarget!.type, id || chatTarget!.id)
+      const contact = await getContact(chatTarget.type, id || chatTarget.id)
       chatTarget = {
         ...contact,
         isBot: bot?.id === id,
@@ -53,14 +53,14 @@ export const useStateStore = defineStore(
           }
         }
       },
-      { immediate: true }
+      { immediate: true },
     )
 
     const router = useRouter()
 
     watch($$(chatTarget), async (target) => {
       if (!target) {
-        router.push('/chat')
+        await router.push('/chat')
       }
     })
 
@@ -84,7 +84,7 @@ export const useStateStore = defineStore(
 
   {
     persist: {
-      paths: ['user', 'bot', 'pinnedOrder'],
+      pick: ['user', 'bot', 'pinnedOrder'],
     },
-  }
+  },
 )

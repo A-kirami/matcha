@@ -16,8 +16,12 @@ const metaData = $computed(() => {
 <template>
   <section class="grid grid-rows-[auto_auto_minmax(0,1fr)] gap-4">
     <div class="px-2">
-      <h3 class="text-lg font-medium">{{ metaData.title }}</h3>
-      <p class="text-sm text-muted-foreground">{{ metaData.description }}</p>
+      <h3 class="text-lg font-medium">
+        {{ metaData.title }}
+      </h3>
+      <p class="text-sm text-muted-foreground">
+        {{ metaData.description }}
+      </p>
     </div>
     <Separator />
     <OverlayScrollbarsComponent
@@ -25,7 +29,7 @@ const metaData = $computed(() => {
       :options="{ scrollbars: { autoHide: 'leave', autoHideDelay: 0, theme: 'os-theme-light' } }"
       class="px-2"
     >
-      <slot></slot>
+      <slot />
     </OverlayScrollbarsComponent>
   </section>
 </template>

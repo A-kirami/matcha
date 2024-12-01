@@ -13,11 +13,11 @@ const router = useRouter()
 const routes = router.getRoutes()
 
 const settingsPath = routes
-  .filter((route) => route.meta.isSettings)
+  .filter(route => route.meta.isSettings)
   .sort((a, b) => ((a.meta.position as number) ?? Infinity) - ((b.meta.position as number) ?? Infinity))[0].path
 
 async function openAbout() {
-  const window = WebviewWindow.getByLabel('about')
+  const window = await WebviewWindow.getByLabel('about')
   if (window) {
     await window.setFocus()
   }
@@ -49,10 +49,10 @@ async function manualCheckUpdate() {
       description: '请尝试手动更新',
       action: {
         label: '前往发布页',
-        onClick: () => open(github + '/releases/latest'),
+        onClick: () => void open(github + '/releases/latest'),
       },
     })
-    logger.error(`检查更新失败: ${error}`)
+    void logger.error(`检查更新失败: ${String(error)}`)
   }
 }
 

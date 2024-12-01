@@ -13,7 +13,7 @@ const behav = new Behav()
 
 const state = useStateStore()
 
-let requestInfo = $ref<RequestInfo | null>(null)
+let requestInfo = $ref<RequestInfo>()
 
 let isAdmin = $ref(true)
 
@@ -31,15 +31,15 @@ interface RequestInfo {
 }
 
 enum RequestTitles {
-  'add_friend' = '添加好友',
-  'join_group' = '申请入群',
-  'group_invite' = '邀请入群',
+  add_friend = '添加好友',
+  join_group = '申请入群',
+  group_invite = '邀请入群',
 }
 
 enum RequestPrompts {
-  'add_friend' = '请求添加{pronoun}为好友',
-  'join_group' = '申请加入本群',
-  'group_invite' = '邀请{pronoun}加入',
+  add_friend = '请求添加{pronoun}为好友',
+  join_group = '申请加入本群',
+  group_invite = '邀请{pronoun}加入',
 }
 
 async function getRequestInfo(scene: Request['scene']): Promise<RequestInfo> {
@@ -55,16 +55,16 @@ async function getRequestInfo(scene: Request['scene']): Promise<RequestInfo> {
 
   const { name, avatar } = await getContact(type, target)
 
-  const handle =
-    detail_type === 'add_friend'
+  const handle
+    = detail_type === 'add_friend'
       ? async (approve: boolean) => await behav.approveAddFriend(id, state.user?.id || '', approve)
-      : detail_type === 'join_group'
-        ? async (approve: boolean) => await behav.approveJoinGroup(id, state.user?.id || '', approve)
-        : async (approve: boolean) => {
+      : (detail_type === 'join_group'
+          ? async (approve: boolean) => await behav.approveJoinGroup(id, state.user?.id || '', approve)
+          : async (approve: boolean) => {
             if (approve) {
               return await behav.requestJoinGroup(group_id, receiver_id)
             }
-          }
+          })
 
   return {
     title,
@@ -85,7 +85,7 @@ watch(
     isAdmin = scene.detail_type === 'join_group' ? await roleCheck('admin', scene.group_id, state.user?.id || '') : true
     request.preview = requestInfo.prompt
   },
-  { immediate: true }
+  { immediate: true },
 )
 </script>
 
@@ -94,7 +94,9 @@ watch(
     v-if="requestInfo"
     class="mx-auto w-64 flex flex-col items-center overflow-hidden rounded-md bg-background shadow-sm"
   >
-    <div class="text-base font-medium leading-loose">{{ requestInfo.title }}</div>
+    <div class="text-base font-medium leading-loose">
+      {{ requestInfo.title }}
+    </div>
     <div class="w-full flex items-center gap-3 px-4 py-3">
       <Avatar>
         <AvatarImage :src="requestInfo.avatar" alt="request avatar" />
@@ -109,9 +111,7 @@ watch(
           <span class="whitespace-nowrap">{{ requestInfo.prompt }}</span>
           <span class="truncate font-medium">{{ requestInfo.name }}</span>
         </span>
-        <span v-if="requestInfo.comment" class="line-clamp-2 text-xs text-muted-foreground"
-          >附加信息：{{ requestInfo.comment }}</span
-        >
+        <span v-if="requestInfo.comment" class="line-clamp-2 text-xs text-muted-foreground">附加信息：{{ requestInfo.comment }}</span>
       </div>
     </div>
     <div
@@ -123,14 +123,12 @@ watch(
           class="flex-grow cursor-pointer text-center transition-colors duration-200"
           hover="bg-red-50 text-red-400"
           @click="requestInfo?.handle(false)"
-          >拒绝</span
-        >
+        >拒绝</span>
         <span
           class="flex-grow cursor-pointer text-center transition-colors duration-200"
           hover="bg-blue-50 text-blue-400"
           @click="requestInfo?.handle(true)"
-          >同意</span
-        >
+        >同意</span>
       </template>
       <span v-else>已{{ request.action === 'agree' ? '同意' : '拒绝' }}该请求</span>
     </div>

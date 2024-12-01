@@ -5,7 +5,7 @@ import { adapters } from '~/adapter'
 export const useAdapterStore = defineStore('adapter', () => {
   const connect = useConnectSettingsStore()
 
-  const bots = adapters.map((Adapter) => new Adapter(connect))
+  const bots = adapters.map(Adapter => new Adapter(connect))
 
   const bot = $computed(() => {
     for (const bot of bots) {

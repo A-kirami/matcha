@@ -27,7 +27,7 @@ const generalSettingsSchema = toTypedSchema(
     enbaleSuperUser: z.boolean(),
     showRecallMessage: z.boolean(),
     applyAcrylicWindowEffects: z.boolean(),
-  })
+  }),
 )
 
 const { handleSubmit, values, resetForm } = useForm({
@@ -44,7 +44,7 @@ watchDebounced(
   async () => {
     await onSubmit()
   },
-  { deep: true, debounce: 250, maxWait: 1000 }
+  { deep: true, debounce: 250, maxWait: 1000 },
 )
 
 const themeOptions = [
@@ -107,8 +107,12 @@ const osType = getOsType()
           </FormControl>
           <SelectContent>
             <SelectGroup>
-              <SelectItem value="enter">Enter</SelectItem>
-              <SelectItem value="ctrlEnter">Ctrl + Enter</SelectItem>
+              <SelectItem value="enter">
+                Enter
+              </SelectItem>
+              <SelectItem value="ctrlEnter">
+                Ctrl + Enter
+              </SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>

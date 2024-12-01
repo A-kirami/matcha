@@ -9,8 +9,8 @@ interface FileSource {
 
 async function getSHA256(buffer: ArrayBuffer): Promise<string> {
   const hashBuffer = await crypto.subtle.digest('SHA-256', buffer)
-  const hashArray = Array.from(new Uint8Array(hashBuffer))
-  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('')
+  const hashArray = [...new Uint8Array(hashBuffer)]
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
 }
 
 /**
@@ -22,9 +22,9 @@ async function getSHA256(buffer: ArrayBuffer): Promise<string> {
  */
 export async function createFileCache(
   file: string | File,
-  validateType: string | null = null,
-  name?: string
-): Promise<{ id: string; url: string }> {
+  validateType?: string,
+  name?: string,
+): Promise<{ id: string, url: string }> {
   const cacheFile = await getCacheFile(file)
   if (cacheFile) {
     return {
@@ -35,11 +35,11 @@ export async function createFileCache(
   const fileSource: FileSource = {}
   if (file instanceof File) {
     const buffer = await file.arrayBuffer()
-    fileSource.binary = Array.from(new Uint8Array(buffer))
+    fileSource.binary = [...new Uint8Array(buffer)]
   } else {
     fileSource.str = file
   }
-  const { size, sha256 } = await invoke<{ size: number; sha256: string }>('create_cache_file', {
+  const { size, sha256 } = await invoke<{ size: number, sha256: string }>('create_cache_file', {
     fileSource,
     validateType,
   })
@@ -81,8 +81,9 @@ export async function getFile(type: GetType, fileId: string): Promise<string | U
     throw new Error('文件不存在')
   }
   switch (type) {
-    case GetType.URL:
+    case GetType.URL: {
       return `http://127.0.0.1:8720/matcha/cache/${file.sha256}`
+    }
     case GetType.PATH:
     case GetType.DATA: {
       const appCacheDirPath = await appCacheDir()
@@ -94,8 +95,9 @@ export async function getFile(type: GetType, fileId: string): Promise<string | U
         return new Uint8Array(contents)
       }
     }
-    default:
+    default: {
       throw new Error('无效的获取方式')
+    }
   }
 }
 

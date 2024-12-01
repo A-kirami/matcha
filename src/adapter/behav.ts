@@ -40,13 +40,13 @@ export class Behav {
   }
 
   createScene<T extends 'message' | 'notice' | 'request'>(
-    type: T
+    type: T,
   ): {
-    id: string
-    time: number
-    self_id: string
-    type: T
-  } {
+      id: string
+      time: number
+      self_id: string
+      type: T
+    } {
     return {
       id: getUUID(),
       time: getTimestamp(),
@@ -67,10 +67,12 @@ export class Behav {
     if (isFriend) {
       sub_type = 'friend'
     } else {
-      const senderGroups = (await db.members.where({ userId: sender.id }).toArray()).map((item) => item.groupId)
-      const receiverGroups = (await db.members.where({ userId: receiver.id }).toArray()).map((item) => item.groupId)
-      const intersection = senderGroups.filter((x) => receiverGroups.includes(x))
-      if (intersection.length) {
+      const sendUserMembers = await db.members.where({ userId: sender.id }).toArray()
+      const senderGroups = sendUserMembers.map(item => item.groupId)
+      const receiverUserMembers = await db.members.where({ userId: receiver.id }).toArray()
+      const receiverGroups = new Set(receiverUserMembers.map(item => item.groupId))
+      const intersection = senderGroups.filter(x => receiverGroups.has(x))
+      if (intersection.length > 0) {
         sub_type = 'group'
       }
     }
@@ -112,6 +114,7 @@ export class Behav {
       user_name: sender.name,
       group_id: receiver.id,
       group_name: receiver.name,
+      // eslint-disable-next-line unicorn/no-null
       anonymous: null,
       member,
       chat_type: 'group',
@@ -124,19 +127,15 @@ export class Behav {
   async sendMessage(
     sender: Contact,
     receiver: Contact,
-    contents: Contents[]
+    contents: Contents[],
   ): Promise<PrivateMessageScene | GroupMessageScene> {
-    if (receiver.type === 'user') {
-      return this.sendPrivateMessage(sender, receiver, contents)
-    } else {
-      return this.sendGroupMessage(sender, receiver, contents)
-    }
+    return receiver.type === 'user' ? this.sendPrivateMessage(sender, receiver, contents) : this.sendGroupMessage(sender, receiver, contents)
   }
 
   /** 撤回消息 */
   async recallMessage(
     messageId: string,
-    operatorId: string
+    operatorId: string,
   ): Promise<PrivateMessageDeleteNoticeScene | GroupMessageDeleteNoticeScene> {
     const messageChat = this.chat.getMessage(messageId)
     if (!messageChat) {
@@ -155,14 +154,14 @@ export class Behav {
           sender_id: operatorId,
           receiver_id: scene.user_id,
         },
-        messageChat.id
+        messageChat.id,
       )
     }
     let sub_type: 'delete' | 'recall' = 'recall'
     if (scene.user_id !== operatorId) {
       if (
-        !(await roleCheck('admin', scene.group_id, operatorId)) ||
-        (await roleCheck('admin', scene.group_id, scene.user_id))
+        !(await roleCheck('admin', scene.group_id, operatorId))
+        || (await roleCheck('admin', scene.group_id, scene.user_id))
       ) {
         throw new Error('无权操作')
       }
@@ -181,7 +180,7 @@ export class Behav {
         sender_id: operatorId,
         receiver_id: scene.group_id,
       },
-      messageChat.id
+      messageChat.id,
     )
   }
 
@@ -189,8 +188,8 @@ export class Behav {
   async requestJoinGroup(
     groupId: string,
     userId: string,
-    comment = '',
-    invitorId?: string
+    comment?: string,
+    invitorId?: string,
   ): Promise<JoinGroupRequestScene> {
     const group = await db.groups.get(groupId)
     if (!group) {
@@ -202,7 +201,7 @@ export class Behav {
       user_id: userId,
       group_id: groupId,
       invitor_id: invitorId,
-      comment,
+      comment: comment ?? '',
       chat_type: 'group',
       sender_id: userId,
       receiver_id: groupId,
@@ -232,7 +231,7 @@ export class Behav {
     requestId: string,
     operatorId: string,
     approve = true,
-    reason = ''
+    reason = '',
   ): Promise<GroupMemberIncreaseNoticeScene | undefined> {
     const request = this.chat.getChat(requestId, 'request')
     const scene = request.scene as JoinGroupRequestScene
@@ -273,7 +272,7 @@ export class Behav {
   async removeGroupMember(
     groupId: string,
     userId: string,
-    operatorId: string
+    operatorId: string,
   ): Promise<GroupMemberDecreaseNoticeScene> {
     if (userId !== operatorId) {
       if (!(await roleCheck('admin', groupId, operatorId))) {
@@ -303,7 +302,7 @@ export class Behav {
     groupId: string,
     userId: string,
     operatorId: string,
-    duration: number
+    duration: number,
   ): Promise<GroupMemberBanNoticeScene> {
     if (!(await roleCheck('admin', groupId, operatorId)) || (await roleCheck('admin', groupId, userId))) {
       throw new Error('无权操作')
@@ -346,7 +345,7 @@ export class Behav {
     groupId: string,
     userId: string,
     operatorId: string,
-    enable: boolean
+    enable: boolean,
   ): Promise<GroupAdminNoticeScene> {
     if (!(await roleCheck('owner', groupId, operatorId))) {
       throw new Error('无权操作')
@@ -388,7 +387,7 @@ export class Behav {
     groupId: string,
     userId: string,
     operatorId: string,
-    card: string
+    card: string,
   ): Promise<GroupMemberCardNoticeScene> {
     if (!(await roleCheck('admin', groupId, operatorId)) || (await roleCheck('owner', groupId, userId))) {
       throw new Error('无权操作')
@@ -413,7 +412,7 @@ export class Behav {
     userId: string,
     operatorId: string,
     title: string,
-    duration: number
+    duration: number,
   ): Promise<GroupMemberTitleNoticeScene> {
     if (!(await roleCheck('owner', groupId, operatorId))) {
       throw new Error('无权操作')
@@ -450,7 +449,7 @@ export class Behav {
     requestId: string,
     operatorId: string,
     approve = true,
-    remark = ''
+    remark = '',
   ): Promise<FriendIncreaseNoticeScene | undefined> {
     const request = this.chat.getChat(requestId, 'request')
     const scene = request.scene as AddFriendRequestScene
@@ -488,7 +487,7 @@ export class Behav {
   async pokeUser(
     userId: string,
     targeId: string,
-    groupId?: string
+    groupId?: string,
   ): Promise<FriendPokeNoticeScene | GroupPokeNoticeScene> {
     const poke = {
       ...this.createScene('notice'),
@@ -496,22 +495,20 @@ export class Behav {
       user_id: userId,
       target_id: targeId,
     } as const
-    if (groupId) {
-      return await this.chat.appendScene({
+    return await (groupId
+      ? this.chat.appendScene({
         ...poke,
         group_id: groupId,
         chat_type: 'group',
         sender_id: userId,
         receiver_id: groupId,
       })
-    } else {
-      return await this.chat.appendScene({
+      : this.chat.appendScene({
         ...poke,
         chat_type: 'private',
         sender_id: userId,
         receiver_id: targeId,
-      } as FriendPokeNoticeScene)
-    }
+      } as FriendPokeNoticeScene))
   }
 
   /** 解散群组 */

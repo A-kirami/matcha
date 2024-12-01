@@ -21,21 +21,17 @@ const isUserMsg = $computed(() => scene.sender_id === state.user?.id)
 const userName = scene.detail_type === 'group' ? scene.member.card || scene.user_name : scene.user_name
 
 const title = (() => {
-  if (scene.detail_type === 'group') {
-    return scene.member.title
-  } else {
-    return null
-  }
+  return scene.detail_type === 'group' ? scene.member.title : undefined
 })()
 
 const role = (() => {
   if (scene.detail_type === 'group') {
     if (scene.anonymous) {
-      return undefined
+      return
     }
     return scene.member.role
   } else {
-    return undefined
+    return
   }
 })()
 
@@ -81,8 +77,7 @@ const general = useGeneralSettingsStore()
         <span
           v-if="scene.sender_id === state.bot?.id"
           class="flex items-center gap-0.5 border border-violet-200 rounded-sm bg-violet-50 px-0.5 text-xs text-violet-400"
-          ><Bot class="size-4 stroke-1.5" />机器人</span
-        >
+        ><Bot class="size-4 stroke-1.5" />机器人</span>
         <span
           v-if="title"
           class="border rounded-sm px-0.5 text-xs"
@@ -90,8 +85,7 @@ const general = useGeneralSettingsStore()
             'border-amber-200 bg-amber-50 text-amber-400': role === 'owner',
             'border-sky-200 bg-sky-50 text-sky-400': role === 'admin',
           }"
-          >{{ title }}</span
-        >
+        >{{ title }}</span>
       </div>
       <ChatMessageMenu :message="message">
         <div
@@ -115,14 +109,14 @@ const general = useGeneralSettingsStore()
 </template>
 
 <style module>
-.message-bubble:not(:has(> :where([data-type='image'], [data-type='video'], [data-type='file']):only-child)) {
+.message-bubble:not(:has(> :where([data-type="image"], [data-type="video"], [data-type="file"]):only-child)) {
   @apply p-2.5;
 
   & [data-message-id] {
     @apply bg-transparent;
   }
 
-  & [data-type='image'] {
+  & [data-type="image"] {
     @apply rounded-lg max-w-60;
   }
 }

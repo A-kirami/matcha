@@ -7,5 +7,7 @@ const { data } = $defineProps<{
 </script>
 
 <template>
-  <div class="bg-red-400 box-decoration-clone text-white">{{ data }}</div>
+  <div class="bg-red-400 box-decoration-clone text-white">
+    {{ data }}
+  </div>
 </template>

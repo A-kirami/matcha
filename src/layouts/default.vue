@@ -29,7 +29,7 @@ onMounted(async () => {
         await relaunch()
       }
     } catch (error) {
-      logger.error(`检查更新失败: ${error}`)
+      void logger.error(`检查更新失败: ${error as string}`)
     }
   }
 })
@@ -37,9 +37,9 @@ onMounted(async () => {
 
 <template>
   <div :class="$style.defaultLayout" class="grid h-screen">
-    <AppSidebar style="grid-area: sidebar" />
-    <AppTitlebar style="grid-area: titlebar" />
-    <RouterView v-slot="{ Component }" style="grid-area: main; height: calc(100vh - 1.75rem)">
+    <AppSidebar style="grid-area: sidebar;" />
+    <AppTitlebar style="grid-area: titlebar;" />
+    <RouterView v-slot="{ Component }" style="grid-area: main; height: calc(100vh - 1.75rem);">
       <Suspense>
         <component :is="Component" class="bg-background" :class="{ 'bg-opacity-80 dark:bg-opacity-90': focused }" />
       </Suspense>
@@ -52,8 +52,8 @@ onMounted(async () => {
 <style module>
 .default-layout {
   grid:
-    'sidebar titlebar' auto
-    'sidebar main' minmax(0, 1fr)
+    "sidebar titlebar" auto
+    "sidebar main" minmax(0, 1fr)
     / auto minmax(0, 1fr);
 }
 </style>

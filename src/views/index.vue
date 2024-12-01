@@ -5,5 +5,5 @@ definePage({
 </script>
 
 <template>
-  <div></div>
+  <div />
 </template>

@@ -18,17 +18,15 @@ export function getVersion(): Version {
   if (isCI) {
     if (isBuild) {
       const shortSha = buildSha.slice(0, 7)
-      if (isPR) {
-        return {
-          name: `${version}-build.${shortSha} (pr#${prNum})`,
-          link: `${github}/pull/${prNum}`,
-        }
-      } else {
-        return {
-          name: `${version}-build.${shortSha}`,
-          link: `${github}/commit/${buildSha}`,
-        }
-      }
+      return isPR
+        ? {
+            name: `${version}-build.${shortSha} (pr#${prNum})`,
+            link: `${github}/pull/${prNum}`,
+          }
+        : {
+            name: `${version}-build.${shortSha}`,
+            link: `${github}/commit/${buildSha}`,
+          }
     }
     if (isRelease && tag) {
       return {

@@ -23,11 +23,11 @@ export class websocketClient implements Driver {
 
     if (this.adapter.config.heartbeatInterval) {
       const { pause, resume } = useIntervalFn(
-        async () => {
-          await this.adapter.onHeartbeat()
+        () => {
+          void this.adapter.onHeartbeat()
         },
         this.adapter.config.heartbeatInterval * 1000,
-        { immediate: false }
+        { immediate: false },
       )
       this.heartbeatPause = pause
       this.heartbeatResume = resume
@@ -54,7 +54,7 @@ export class websocketClient implements Driver {
     try {
       await this.ws.send(JSON.stringify(event))
       return true
-    } catch (_) {
+    } catch {
       return false
     }
   }
@@ -64,23 +64,25 @@ export class websocketClient implements Driver {
       return
     }
 
-    logger.info(`正在尝试连接到反向 WebSocket 服务器 ${this.connectUrl}`)
+    void logger.info(`正在尝试连接到反向 WebSocket 服务器 ${this.connectUrl}`)
 
     const connectConfig = await this.getConnectConfig()
 
     try {
       this.ws = await WebSocket.connect(this.connectUrl, connectConfig)
+
       this.ws.addListener(this.onMessage.bind(this))
       await this.adapter.onConnect()
       this.heartbeatResume?.()
       this.adapter.state.isConnected = true
       this.connectingError = false
-      logger.info(`已连接到反向 WebSocket 服务器 ${this.connectUrl}`)
+      void logger.info(`已连接到反向 WebSocket 服务器 ${this.connectUrl}`)
       toast.success('连接成功', { description: '已连接到反向 WebSocket 服务器' })
     } catch (error) {
       if (this.adapter.config.showError || !this.connectingError) {
-        logger.error(`[WebSocket] 连接到反向 WebSocket 服务器 ${this.connectUrl} 失败: ${error}`)
-        toast.error('连接错误', { description: `无法连接到 WebSocket 服务器: ${error}` })
+        const errStr = String(error)
+        void logger.error(`[WebSocket] 连接到反向 WebSocket 服务器 ${this.connectUrl} 失败: ${errStr}`)
+        toast.error('连接错误', { description: `无法连接到 WebSocket 服务器: ${errStr}` })
         this.connectingError = true
       }
       this.autoReconnection()
@@ -89,11 +91,7 @@ export class websocketClient implements Driver {
 
   async disconnect(): Promise<void> {
     this.heartbeatPause?.()
-    try {
-      await this.ws?.disconnect()
-    } catch (_) {
-      // ignore
-    }
+    await this.ws?.disconnect().catch(() => { /* ignore error */ })
     this.ws = undefined
     this.adapter.state.isConnected = false
   }
@@ -102,24 +100,26 @@ export class websocketClient implements Driver {
     switch (message.type) {
       case 'Text':
       case 'Binary': {
-        const request: ActionRequest = message.type === 'Text' ? JSON.parse(message.data) : decode(message.data)
+        const request = (message.type === 'Text' ? JSON.parse(message.data) : decode(message.data)) as ActionRequest
         const response = { ...(await this.adapter.actionHandle(request)), echo: request.echo }
-        const data =
-          message.type === 'Text' ? JSON.stringify(response, this.adapter.JSONEncode) : Array.from(encode(response))
+        const data
+
+          = message.type === 'Text' ? JSON.stringify(response, this.adapter.JSONEncode) : [...encode(response)]
         await this.ws?.send(data)
         break
       }
       case 'Ping':
-      case 'Pong':
+      case 'Pong': {
         break
-      case 'Close':
+      }
+      case 'Close': {
         await this.disconnect()
         toast.error('连接错误', { description: 'WebSocket 服务器的连接被关闭' })
-        logger.error(`[WebSocket] 反向 WebSocket 服务器 ${this.connectUrl} 的连接被关闭: ${message.data?.reason}`)
+        void logger.error(`[WebSocket] 反向 WebSocket 服务器 ${this.connectUrl} 的连接被关闭: ${message.data?.reason}`)
         this.autoReconnection()
         break
-      default:
-        break
+      }
+      // no default
     }
   }
 

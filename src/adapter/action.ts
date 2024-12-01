@@ -12,9 +12,7 @@ export interface ActionResponse<D = unknown> {
   echo?: string
 }
 
-export interface ActionStrategy<R = ActionResponse> {
-  [key: string]: ((request: ActionRequest['params']) => R | Promise<R>) | undefined
-}
+export type ActionStrategy<R = ActionResponse> = Record<string, ((request: ActionRequest['params']) => R | Promise<R>) | undefined>
 
 export abstract class AdapterActionHandler {
   abstract readonly strategy: ActionStrategy
