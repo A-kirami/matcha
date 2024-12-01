@@ -12,7 +12,7 @@ import ChatMessageVideo from './ChatMessageElementVideo.vue'
 import type { Component } from 'vue'
 import type { Contents } from '~/adapter/content'
 
-const { type, data } = definePropsRefs<{
+const { type, data } = $defineProps<{
   type: Contents['type']
   data: Contents['data']
 }>()
@@ -30,5 +30,5 @@ const messageElements: Partial<Record<Contents['type'], Component>> = {
 </script>
 
 <template>
-  <component :is="messageElements[type.value] || ChatMessageFallback" :data="data" />
+  <component :is="messageElements[type as Contents['type']] || ChatMessageFallback" :data="data" />
 </template>
