@@ -30,5 +30,5 @@ const messageElements: Partial<Record<Contents['type'], Component>> = {
 </script>
 
 <template>
-  <component :is="messageElements[type] || ChatMessageFallback" :data="data" />
+  <component :is="messageElements[type.value] || ChatMessageFallback" :data="data" />
 </template>
