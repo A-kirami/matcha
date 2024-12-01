@@ -1,4 +1,4 @@
-import Dexie from 'dexie'
+import { Dexie } from 'dexie'
 
 import type { User, Friend, Group, Member, CacheFile } from './model'
 import type { Table } from 'dexie'
@@ -19,16 +19,9 @@ class MatchaDB extends Dexie {
         groups: 'id',
         members: '[groupId+userId], groupId, userId',
       })
-      .upgrade((trans) => {
-        const statusData = localStorage.getItem('status')
-        if (statusData) {
-          const status = JSON.parse(statusData)
-          status.assignBot = status.assignBot.toString()
-          status.assignUser = status.assignUser.toString()
-          localStorage.setItem('status', JSON.stringify(status))
-        }
-        const users = trans.table('users').toCollection()
-        users.modify((user) => {
+      .upgrade(async (trans) => {
+        const users = trans.table<User & { birthday?: number }>('users').toCollection()
+        await users.modify((user) => {
           user.id = user.id.toString()
           user.sex ??= 'unknown'
           user.birthdate = user.birthday
@@ -41,14 +34,14 @@ class MatchaDB extends Dexie {
           user.loginDays ??= 0
         })
 
-        const friends = trans.table('friends').toCollection()
-        friends.modify((friend) => {
+        const friends = trans.table<Friend>('friends').toCollection()
+        await friends.modify((friend) => {
           friend.userId = friend.userId.toString()
           friend.friendId = friend.friendId.toString()
         })
 
-        const groups = trans.table('groups').toCollection()
-        groups.modify((group) => {
+        const groups = trans.table<Group>('groups').toCollection()
+        await groups.modify((group) => {
           group.id = group.id.toString()
           group.time ??= getTimestamp()
           group.intro ??= ''
@@ -56,8 +49,8 @@ class MatchaDB extends Dexie {
           group.wholeBanned = false
         })
 
-        const members = trans.table('members').toCollection()
-        members.modify((member) => {
+        const members = trans.table<Member & { rank?: string, lastSentTime?: number }>('members').toCollection()
+        await members.modify((member) => {
           member.groupId = member.groupId.toString()
           member.userId = member.userId.toString()
           delete member.rank
@@ -69,12 +62,12 @@ class MatchaDB extends Dexie {
       })
     this.version(3).stores({ files: 'id, sha256' })
     this.version(4).upgrade(async (trans) => {
-      const users = trans.table('users').toCollection()
+      const users = trans.table<User>('users').toCollection()
       await users.modify((user) => {
         user.lastUseTime ??= 0
       })
 
-      const groups = trans.table('groups').toCollection()
+      const groups = trans.table<Group>('groups').toCollection()
       await groups.modify((group) => {
         group.lastMessageTime ??= 0
       })

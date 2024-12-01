@@ -1,9 +1,8 @@
 /* eslint-disable new-cap */
-import { resolve } from 'node:path'
+import path from 'node:path'
 
 import Vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import { internalIpV4 } from 'internal-ip'
 import postcssNesting from 'postcss-nesting'
 import UnoCSS from 'unocss/vite'
 import AutoImport from 'unplugin-auto-import/vite'
@@ -17,21 +16,23 @@ import { defineConfig } from 'vite'
 import VueDevTools from 'vite-plugin-vue-devtools'
 import Layouts from 'vite-plugin-vue-layouts'
 
-const mobile = !!/android|ios/.exec(process.env.TAURI_ENV_PLATFORM)
+import type { UserConfig } from 'vite'
+
+const host = process.env.TAURI_DEV_HOST
 
 // https://vitejs.dev/config/
-export default defineConfig(async () => ({
+export default defineConfig({
   plugins: [
     VueMacros({
       plugins: {
         vue: Vue(),
         vueJsx: vueJsx(),
+        vueRouter: VueRouter({
+          routesFolder: 'src/views',
+          dts: 'src/typed-router.d.ts',
+        }),
       },
       betterDefine: false,
-    }),
-    VueRouter({
-      routesFolder: 'src/views',
-      dts: 'src/typed-router.d.ts',
     }),
     Layouts({
       pagesDirs: 'src/views',
@@ -73,7 +74,7 @@ export default defineConfig(async () => ({
 
   resolve: {
     alias: {
-      '~': resolve(__dirname, 'src'),
+      '~/': `${path.resolve(import.meta.dirname, 'src')}/`,
     },
   },
 
@@ -82,12 +83,8 @@ export default defineConfig(async () => ({
       plugins: [postcssNesting()],
     },
     modules: {
-      localsConvention: 'camelCaseOnly' as const,
+      localsConvention: 'camelCaseOnly',
     },
-  },
-
-  define: {
-    'process.env': {},
   },
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
@@ -98,11 +95,11 @@ export default defineConfig(async () => ({
   server: {
     port: 1420,
     strictPort: true,
-    host: mobile ? '0.0.0.0' : false,
-    hmr: mobile
+    host: host ?? false,
+    hmr: host
       ? {
           protocol: 'ws',
-          host: await internalIpV4(),
+          host,
           port: 1421,
         }
       : undefined,
@@ -111,4 +108,4 @@ export default defineConfig(async () => ({
       ignored: ['**/src-tauri/**'],
     },
   },
-}))
+} satisfies UserConfig)

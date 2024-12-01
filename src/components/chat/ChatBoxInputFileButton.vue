@@ -11,7 +11,7 @@ const emits = defineEmits<{
 }>()
 
 async function uploadFile() {
-  const file = await open({
+  const filePath = await open({
     title: '选择上传文件',
     filters: [
       {
@@ -20,12 +20,13 @@ async function uploadFile() {
       },
     ],
   })
-  if (file) {
-    const fileStat = await stat(file.path)
-    const type = await invoke<FileType>('get_file_type', { file: { path: file.path } })
+  if (filePath) {
+    const fileStat = await stat(filePath)
+    const type = await invoke<FileType>('get_file_type', { file: { path: filePath } })
     emits('upload', {
-      name: file.name || '',
-      path: file.path,
+      name: filePath.split('/').pop()?.split('\\')
+        .pop() || '',
+      path: filePath,
       size: fileStat.size,
       type,
     })

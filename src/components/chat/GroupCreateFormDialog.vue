@@ -15,20 +15,20 @@ const groupFormSchema = toTypedSchema(
       .min(6, { message: '群组 ID 长度不能小于6' })
       .max(12, { message: '群组 ID 长度不能大于12' })
       .regex(/^[a-zA-Z0-9]+$/, { message: '群组 ID 只能包含字母和数字' })
-      .refine(async (id) => !(await db.groups.get(id)), { message: '群组 ID 已存在' }),
+      .refine(async id => !(await db.groups.get(id)), { message: '群组 ID 已存在' }),
     name: z
       .string({ required_error: '群组名称不能为空', invalid_type_error: '群组名称必须是字符串' })
       .min(2, { message: '群组名称长度不能小于2' })
       .max(12, { message: '群组名称长度不能大于12' }),
     owner_join: z.boolean().default(true),
     bot_join: z.boolean().default(true),
-  })
+  }),
 )
 
-const formRef = $ref<InstanceType<typeof Form> | null>(null)
+const formRef = $ref<InstanceType<typeof Form>>()
 
 const avatarUrl = $computed(() => {
-  return getAvatarUrl('group', formRef?.values.id)
+  return getAvatarUrl('group', formRef?.values.id as string)
 })
 
 let open = $(defineModel('open', { default: false }))
@@ -48,12 +48,12 @@ const onSubmit = getSubmitFn(groupFormSchema, async (values) => {
   open = false
 
   const membersToAdd = [
-    values.owner_join && state.user ? ({ userId: state.user.id, role: 'owner' } as const) : null,
-    values.bot_join && state.bot ? ({ userId: state.bot.id, role: 'member' } as const) : null,
-  ].filter(nonNullable)
+    values.owner_join && state.user ? ({ userId: state.user.id, role: 'owner' } as const) : undefined,
+    values.bot_join && state.bot ? ({ userId: state.bot.id, role: 'member' } as const) : undefined,
+  ].filter(e => nonNullable(e))
 
   await Promise.all(
-    membersToAdd.map((member) =>
+    membersToAdd.map(member =>
       db.members.add({
         groupId: values.id,
         userId: member.userId,
@@ -64,8 +64,8 @@ const onSubmit = getSubmitFn(groupFormSchema, async (values) => {
         joinTime: getTimestamp(),
         titleExpireTime: 0,
         banExpireTime: 0,
-      })
-    )
+      }),
+    ),
   )
 
   toast.success('', { description: '创建群组成功' })
@@ -75,7 +75,7 @@ const onSubmit = getSubmitFn(groupFormSchema, async (values) => {
 <template>
   <Dialog v-model:open="open">
     <DialogTrigger as-child>
-      <slot></slot>
+      <slot />
     </DialogTrigger>
     <DialogContent class="max-w-100">
       <DialogHeader>
@@ -135,7 +135,9 @@ const onSubmit = getSubmitFn(groupFormSchema, async (values) => {
         </div>
       </Form>
       <DialogFooter>
-        <Button form="group-form" type="submit" class="mt-2 h-8 w-full">创建</Button>
+        <Button form="group-form" type="submit" class="mt-2 h-8 w-full">
+          创建
+        </Button>
       </DialogFooter>
     </DialogContent>
   </Dialog>

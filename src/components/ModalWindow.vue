@@ -7,5 +7,5 @@ const modal = useModalStore()
     :is="modal.modalState?.component"
     v-bind="modal.modalState?.props"
     v-model:open="modal.modalOpen"
-  ></component>
+  />
 </template>

@@ -10,7 +10,7 @@ const { replyId, closed } = $defineProps<{
   closed?: boolean
 }>()
 
-defineEmits<{ (e: 'close'): void }>()
+defineEmits<(e: 'close') => void>()
 
 const chat = useChatStore()
 
@@ -26,7 +26,7 @@ let replyInfo = $ref<ReplyInfo>()
 onMounted(async () => {
   const message = chat.getMessage(replyId)
   if (message) {
-    const { user_id, group_id } = message.scene as { user_id: string; group_id?: string }
+    const { user_id, group_id } = message.scene as { user_id: string, group_id?: string }
     const nickname = await getUserNickname(user_id, group_id)
     replyInfo = {
       id: replyId,

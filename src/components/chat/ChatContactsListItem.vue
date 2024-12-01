@@ -37,9 +37,9 @@ const unReadCountString = $computed(() => {
 watchDebounced(
   () => chatList,
   () => {
-    unReadCount = chatList.filter((chat) => !chat.isRead).length
+    unReadCount = chatList.filter(chat => !chat.isRead).length
   },
-  { debounce: 100, maxWait: 1000 }
+  { debounce: 100, maxWait: 1000 },
 )
 
 watchDebounced(
@@ -47,7 +47,7 @@ watchDebounced(
   async () => {
     await db.groups.update(contact.id, { lastMessageTime: lastTime })
   },
-  { debounce: 100, maxWait: 1000 }
+  { debounce: 100, maxWait: 1000 },
 )
 
 const isPinned = $computed(() => state.pinnedOrder.includes(contact.id))
@@ -61,14 +61,14 @@ const isPinned = $computed(() => state.pinnedOrder.includes(contact.id))
       class="grid items-center gap-x-2 rounded-lg bg-background px-2 py-3"
       v-bind="$attrs"
     >
-      <Avatar style="grid-area: avatar">
+      <Avatar style="grid-area: avatar;">
         <AvatarImage loading="lazy" :src="contact.avatar" alt="contact avatar" />
         <AvatarFallback>{{ contact.name }}</AvatarFallback>
       </Avatar>
-      <span style="grid-area: name" class="truncate text-sm">{{ contact.name }}</span>
-      <span style="grid-area: time" class="w-8 text-xs text-zinc-400">{{ lastTimeFormatted }}</span>
-      <span style="grid-area: message" class="truncate text-xs text-zinc-400">{{ lastChat?.preview }}</span>
-      <span style="grid-area: status" class="mt-0.5 flex justify-center">
+      <span style="grid-area: name;" class="truncate text-sm">{{ contact.name }}</span>
+      <span style="grid-area: time;" class="w-8 text-xs text-zinc-400">{{ lastTimeFormatted }}</span>
+      <span style="grid-area: message;" class="truncate text-xs text-zinc-400">{{ lastChat?.preview }}</span>
+      <span style="grid-area: status;" class="mt-0.5 flex justify-center">
         <span v-if="unReadCount" class="w-full rounded-full bg-blue-100 text-center text-xs text-blue-400">
           {{ unReadCountString }}
         </span>
@@ -97,8 +97,8 @@ const isPinned = $computed(() => state.pinnedOrder.includes(contact.id))
 <style module>
 .contact-card {
   grid:
-    'avatar name time' minmax(0, 1fr)
-    'avatar message status' minmax(0, 1fr)
+    "avatar name time" minmax(0, 1fr)
+    "avatar message status" minmax(0, 1fr)
     / auto minmax(0, 1fr) auto;
 }
 </style>

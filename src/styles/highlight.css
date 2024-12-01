@@ -1,9 +1,9 @@
 pre {
   @apply whitespace-pre-wrap break-all !mb-0;
 
-    & code.hljs {
-      @apply !p-0;
-    }
+  & code.hljs {
+    @apply !p-0;
+  }
 }
 
 .hljs {

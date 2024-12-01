@@ -12,11 +12,7 @@ const { contact, isPinned } = $defineProps<{
 const state = useStateStore()
 
 function handlePin() {
-  if (isPinned) {
-    state.pinnedOrder = state.pinnedOrder.filter((id) => id !== contact.id)
-  } else {
-    state.pinnedOrder = state.pinnedOrder.concat(contact.id)
-  }
+  state.pinnedOrder = isPinned ? state.pinnedOrder.filter(id => id !== contact.id) : [...state.pinnedOrder, contact.id]
 }
 
 const deleteOpen = $ref(false)
@@ -29,10 +25,10 @@ async function deleteContact() {
   const contactDb = isGroup ? db.groups : db.users
   await contactDb.delete(contact.id)
   if (state.chatTarget?.id === contact.id) {
-    state.chatTarget = null
+    state.chatTarget = undefined
   }
   if (!isGroup) {
-    state.bot = null
+    state.bot = undefined
   }
   toast.success('', { description: `删除${contactText}成功` })
 }
@@ -49,7 +45,7 @@ function openEditDialog() {
 <template>
   <ContextMenu>
     <ContextMenuTrigger as-child>
-      <slot></slot>
+      <slot />
     </ContextMenuTrigger>
     <ContextMenuContent class="text-sm space-y-1">
       <template v-if="isGroup">
@@ -80,7 +76,9 @@ function openEditDialog() {
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogCancel>取消</AlertDialogCancel>
-        <AlertDialogAction variant="destructive" @click="deleteContact">确认</AlertDialogAction>
+        <AlertDialogAction variant="destructive" @click="deleteContact">
+          确认
+        </AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>
   </AlertDialog>

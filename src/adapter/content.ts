@@ -18,6 +18,7 @@ export type MentionContent = Content<
   'mention',
   {
     /** 提及的用户 id */
+
     target: string | 'all'
   }
 >
@@ -207,7 +208,7 @@ export type Contents = ValueOf<ContentMapping>
 
 export function createContent<T extends keyof ContentMapping>(
   type: T,
-  data: ContentMapping[T]['data']
+  data: ContentMapping[T]['data'],
 ): ContentMapping[T] {
   return {
     type,

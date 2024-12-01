@@ -15,14 +15,14 @@ const router = useRouter()
 const routes = router.getRoutes()
 
 const navItems: NavItem[] = routes
-  .filter((route) => route.meta.navDisplay)
+  .filter(route => route.meta.navDisplay)
   .map((route) => {
     return {
       path: route.path,
       position: (route.meta.position as number) ?? Infinity,
       icon: {
-        normal: getAssetsUrl(`navbar/${route.meta.icon}`),
-        active: getAssetsUrl(`navbar/${route.meta.activeIcon}`),
+        normal: getAssetsUrl(`navbar/${route.meta.icon as string}`),
+        active: getAssetsUrl(`navbar/${route.meta.activeIcon as string}`),
       },
     }
   })
@@ -39,18 +39,29 @@ let hoverSliderOpacity = $ref(0)
 function handleSlider(event: MouseEvent) {
   const targetTop = (event.currentTarget as HTMLElement).offsetTop
 
-  if (event.type === 'click') {
-    activeSliderTop = targetTop + 'px'
-  } else if (event.type === 'mouseenter') {
-    hoverSliderTop = targetTop + 'px'
-    hoverSliderOpacity = 0.4
-  } else if (event.type === 'mouseleave') {
-    hoverSliderOpacity = 0
+  switch (event.type) {
+    case 'click': {
+      activeSliderTop = targetTop + 'px'
+
+      break
+    }
+    case 'mouseenter': {
+      hoverSliderTop = targetTop + 'px'
+      hoverSliderOpacity = 0.4
+
+      break
+    }
+    case 'mouseleave': {
+      hoverSliderOpacity = 0
+
+      break
+    }
+    // no default
   }
 }
 
 function checkRouteInNavItems(routePath: string) {
-  return navItems.some((navItem) => routePath.startsWith(navItem.path))
+  return navItems.some(navItem => routePath.startsWith(navItem.path))
 }
 
 watch(
@@ -69,7 +80,7 @@ watch(
       activeSliderOpacity = 0
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 </script>
 
@@ -110,12 +121,14 @@ watch(
 
   &::before {
     @apply -z-1 bg-blue-300;
+
     top: v-bind(activeSliderTop);
     opacity: v-bind(activeSliderOpacity);
   }
 
   &::after {
     @apply -z-2 bg-blue-200;
+
     top: v-bind(hoverSliderTop);
     opacity: v-bind(hoverSliderOpacity);
   }

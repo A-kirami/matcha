@@ -5,8 +5,6 @@
     "rust-lang.rust-analyzer",
     "antfu.unocss",
     "dbaeumer.vscode-eslint",
-    "stylelint.vscode-stylelint",
-    "esbenp.prettier-vscode",
-    "jacobcassidy.css-nesting-syntax-highlighting"
+    "stylelint.vscode-stylelint"
   ]
 }

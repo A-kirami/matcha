@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-null */
 /* eslint-disable camelcase */
 import { getVersion } from '@tauri-apps/api/app'
 import { invoke } from '@tauri-apps/api/core'
@@ -22,30 +23,26 @@ export class ActionHandler extends AdapterActionHandler {
     try {
       const func = this.strategy[action]
       if (!func) {
-        throw new UnsupportedActionError(response(10002, null, '不支持的动作请求'))
+        throw new UnsupportedActionError(response(1_0002, null, '不支持的动作请求'))
       }
       const asyncFn = asyncWrapper<ActionResponse>(func)
       return await asyncFn(params)
     } catch (error) {
-      const errStr = (error as Error).toString()
-      logger.error(errStr)
-      if (error instanceof ProtocolError) {
-        throw error
-      } else {
-        throw new InternalHandlerError(response(20002, null, errStr))
-      }
+      const errStr = String(error)
+      void logger.error(errStr)
+      throw error instanceof ProtocolError ? error : new InternalHandlerError(response(2_0002, null, errStr))
     }
   }
 }
 
-const fileFragmented = new Map<string, { name: string; total_size: number }>()
+const fileFragmented = new Map<string, { name: string, total_size: number }>()
 
 const actionStrategy: ActionStrategy<ActionResponse> = {
-  'get_supported_actions': (): ActionResponse<string[]> => {
+  get_supported_actions: (): ActionResponse<string[]> => {
     return response(0, Object.keys(actionStrategy))
   },
 
-  'get_status': (): ActionResponse<Status> => {
+  get_status: (): ActionResponse<Status> => {
     const state = useStateStore()
     return response(0, {
       good: true,
@@ -61,7 +58,7 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
     })
   },
 
-  'get_version': async (): Promise<ActionResponse<Version>> => {
+  get_version: async (): Promise<ActionResponse<Version>> => {
     return response(0, {
       impl: 'matcha',
       version: await getVersion(),
@@ -69,7 +66,7 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
     })
   },
 
-  'send_message': async ({
+  send_message: async ({
     detail_type,
     user_id,
     group_id,
@@ -79,7 +76,7 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
     user_id?: string
     group_id?: string
     message: Messages[]
-  }): Promise<ActionResponse<{ message_id: string; time: number }>> => {
+  }): Promise<ActionResponse<{ message_id: string, time: number }>> => {
     let receiver
     if (detail_type === 'private') {
       receiver = await getContact('user', user_id!)
@@ -97,13 +94,13 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
     return response(0, { message_id: scene.message_id, time: scene.time })
   },
 
-  'delete_message': async ({ message_id }: { message_id: string }): Promise<ActionResponse<null>> => {
+  delete_message: async ({ message_id }: { message_id: string }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
     await behav.recallMessage(message_id.toString(), behav.state.bot!.id)
     return response(0)
   },
 
-  'get_self_info': (): ActionResponse<UserInfo> => {
+  get_self_info: (): ActionResponse<UserInfo> => {
     const state = useStateStore()
     return response(0, {
       user_id: state.bot!.id,
@@ -112,7 +109,7 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
     })
   },
 
-  'get_user_info': async ({
+  get_user_info: async ({
     user_id,
   }: {
     user_id: string
@@ -131,7 +128,7 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
     })
   },
 
-  'get_friend_list': async (): Promise<ActionResponse<Array<UserInfo & { user_remark: string }>>> => {
+  get_friend_list: async (): Promise<ActionResponse<(UserInfo & { user_remark: string })[]>> => {
     const state = useStateStore()
     const friends = await db.friends.where({ userId: state.bot!.id }).toArray()
     return response(
@@ -145,12 +142,12 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
             user_displayname: '',
             user_remark: friend.remark,
           }
-        })
-      )
+        }),
+      ),
     )
   },
 
-  'get_group_info': async ({ group_id }: { group_id: string }): Promise<ActionResponse<GroupInfo>> => {
+  get_group_info: async ({ group_id }: { group_id: string }): Promise<ActionResponse<GroupInfo>> => {
     const group = await db.groups.get(group_id)
     if (!group) {
       return response(1404, null, '群组不存在')
@@ -161,7 +158,7 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
     })
   },
 
-  'get_group_list': async (): Promise<ActionResponse<GroupInfo[]>> => {
+  get_group_list: async (): Promise<ActionResponse<GroupInfo[]>> => {
     const state = useStateStore()
     const members = await db.members.where({ userId: state.bot!.id }).toArray()
     return response(
@@ -173,12 +170,12 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
             group_id: group!.id,
             group_name: group!.name,
           }
-        })
-      )
+        }),
+      ),
     )
   },
 
-  'get_group_member_info': async ({
+  get_group_member_info: async ({
     group_id,
     user_id,
   }: {
@@ -197,7 +194,7 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
     })
   },
 
-  'get_group_member_list': async ({ group_id }: { group_id: string }): Promise<ActionResponse<UserInfo[]>> => {
+  get_group_member_list: async ({ group_id }: { group_id: string }): Promise<ActionResponse<UserInfo[]>> => {
     const members = await db.members.where({ groupId: group_id }).toArray()
     return response(
       0,
@@ -209,12 +206,12 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
             user_name: user!.name,
             user_displayname: member.card,
           }
-        })
-      )
+        }),
+      ),
     )
   },
 
-  'set_group_name': async ({
+  set_group_name: async ({
     group_id,
     group_name,
   }: {
@@ -226,14 +223,14 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
     return response(0)
   },
 
-  'leave_group': async ({ group_id }: { group_id: string }): Promise<ActionResponse<null>> => {
+  leave_group: async ({ group_id }: { group_id: string }): Promise<ActionResponse<null>> => {
     const behav = new Behav()
     await behav.removeGroupMember(group_id, behav.state.bot!.id, behav.state.bot!.id)
     return response(0)
   },
 
-  'upload_file': async (
-    fileInfo: FileURL<'url'> | FilePath<'path'> | FileData<'data'>
+  upload_file: async (
+    fileInfo: FileURL<'url'> | FilePath<'path'> | FileData<'data'>,
   ): Promise<ActionResponse<null> | ActionResponse<{ file_id: string }>> => {
     try {
       if (fileInfo.sha256) {
@@ -243,20 +240,20 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
         }
       }
       if (fileInfo.type === 'data') {
-        fileInfo.data =
-          fileInfo.data instanceof Uint8Array ? { binary: fileInfo.data } : { str: fileInfo.data as string }
+        fileInfo.data
+          = fileInfo.data instanceof Uint8Array ? { binary: fileInfo.data } : { str: fileInfo.data as string }
       }
-      const { size, sha256 } = await invoke<{ size: number; sha256: string }>('upload_file', { file: fileInfo })
+      const { size, sha256 } = await invoke<{ size: number, sha256: string }>('upload_file', { file: fileInfo })
       const fileId = getUUID()
       await db.files.add({ id: fileId, name: fileInfo.name, sha256, size })
       return response(0, { file_id: fileId })
-    } catch (err) {
-      return response(32000, null, `${err}`)
+    } catch (error) {
+      return response(3_2000, null, String(error))
     }
   },
 
-  'upload_file_fragmented': async (
-    fileInfo: UploadFilePrepare | UploadFileTransfer | UploadFileFinish
+  upload_file_fragmented: async (
+    fileInfo: UploadFilePrepare | UploadFileTransfer | UploadFileFinish,
   ): Promise<ActionResponse<null> | ActionResponse<{ file_id: string }>> => {
     switch (fileInfo.stage) {
       case 'prepare': {
@@ -278,12 +275,13 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
         await db.files.add({ id: file_id, name, sha256, size: total_size })
         return response(0, { file_id })
       }
-      default:
-        return response(10004, null, '无效的上传阶段')
+      default: {
+        return response(1_0004, null, '无效的上传阶段')
+      }
     }
   },
 
-  'get_file': async ({
+  get_file: async ({
     file_id,
     type,
   }: {
@@ -292,29 +290,33 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
   }): Promise<ActionResponse<FileURL> | ActionResponse<FilePath> | ActionResponse<FileData>> => {
     const file = await db.files.get(file_id)
     if (!file) {
-      return response(32000, null, '文件不存在')
+      return response(3_2000, null, '文件不存在')
     }
     const { name, sha256 } = file
     switch (type) {
-      case 'url':
+      case 'url': {
         return response(0, { name, sha256, url: await getFile(GetType.URL, file_id) })
-      case 'path':
+      }
+      case 'path': {
         return response(0, { name, sha256, path: await getFile(GetType.PATH, file_id) })
-      case 'data':
+      }
+      case 'data': {
         return response(0, { name, sha256, data: await getFile(GetType.DATA, file_id) })
-      default:
-        return response(10004, null, '无效的获取方式')
+      }
+      default: {
+        return response(1_0004, null, '无效的获取方式')
+      }
     }
   },
 
-  'get_file_fragmented': async (
-    fileInfo: GetFilePrepareParameters | GetFileTransferParameters
+  get_file_fragmented: async (
+    fileInfo: GetFilePrepareParameters | GetFileTransferParameters,
   ): Promise<ActionResponse<GetFilePrepareReturn> | ActionResponse<GetFileTransferReturn>> => {
     switch (fileInfo.stage) {
       case 'prepare': {
         const file = await db.files.get(fileInfo.file_id)
         if (!file) {
-          return response(32000, null, '文件不存在')
+          return response(3_2000, null, '文件不存在')
         }
         const { name, size: total_size, sha256 } = file
         return response(0, { name, total_size, sha256 })
@@ -330,8 +332,9 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
           data: new Uint8Array(contents),
         })
       }
-      default:
-        return response(10004, null, '无效的获取阶段')
+      default: {
+        return response(1_0004, null, '无效的获取阶段')
+      }
     }
   },
 }
@@ -344,12 +347,12 @@ interface FileInfo<T extends FileType = never> {
   type?: T
 }
 
-type FileURL<T extends FileType = never> = FileInfo<T> & { url: string; headers?: string }
+type FileURL<T extends FileType = never> = FileInfo<T> & { url: string, headers?: string }
 
 type FilePath<T extends FileType = never> = FileInfo<T> & { path: string }
 
 type FileData<T extends FileType = never> = FileInfo<T> & {
-  data: string | Uint8Array | { str?: string; binary?: Uint8Array }
+  data: string | Uint8Array | { str?: string, binary?: Uint8Array }
 }
 
 interface UploadFilePrepare {

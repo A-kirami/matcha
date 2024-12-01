@@ -9,8 +9,12 @@ const state = useStateStore()
       <AvatarFallback>{{ state.chatTarget?.name }}</AvatarFallback>
     </Avatar>
     <div class="text-center">
-      <div class="max-w-40 truncate text-lg text-foreground font-semibold">{{ state.chatTarget?.name }}</div>
-      <div class="text-muted-foreground">{{ state.chatTarget?.id }}</div>
+      <div class="max-w-40 truncate text-lg text-foreground font-semibold">
+        {{ state.chatTarget?.name }}
+      </div>
+      <div class="text-muted-foreground">
+        {{ state.chatTarget?.id }}
+      </div>
     </div>
     <ChatDetailsInfoBot v-if="state.chatTarget?.isBot" />
     <ChatDetailsInfoGroup v-else />

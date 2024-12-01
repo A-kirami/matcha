@@ -11,9 +11,9 @@ const userList = $(
     from(
       liveQuery(async () => {
         return await db.users.toArray()
-      })
-    )
-  )
+      }),
+    ),
+  ),
 )
 
 const filter = $ref('')
@@ -36,7 +36,7 @@ const users = $computed(() => {
         }
         return b.lastUseTime - a.lastUseTime
       })
-      .filter((user) => user.id.includes(filter) || user.name.includes(filter)) || []
+      .filter(user => user.id.includes(filter) || user.name.includes(filter)) ?? []
   )
 })
 
@@ -61,12 +61,16 @@ const open = $(defineModel('open', { default: false }))
 <template>
   <Dialog v-model:open="open">
     <DialogTrigger as-child>
-      <slot></slot>
+      <slot />
     </DialogTrigger>
     <DialogContent class="max-w-100">
       <DialogHeader>
-        <DialogTitle class="text-base">角色管理</DialogTitle>
-        <DialogDescription class="text-sm">管理当前交互的用户和机器人角色</DialogDescription>
+        <DialogTitle class="text-base">
+          角色管理
+        </DialogTitle>
+        <DialogDescription class="text-sm">
+          管理当前交互的用户和机器人角色
+        </DialogDescription>
       </DialogHeader>
       <div class="mt-2 flex items-center justify-evenly gap-4">
         <div class="relative">
@@ -120,8 +124,12 @@ const open = $(defineModel('open', { default: false }))
               <AvatarFallback>{{ user.name }}</AvatarFallback>
             </Avatar>
             <div>
-              <p class="text-sm font-medium leading-none">{{ user.name }}</p>
-              <p class="text-sm text-muted-foreground">{{ user.id }}</p>
+              <p class="text-sm font-medium leading-none">
+                {{ user.name }}
+              </p>
+              <p class="text-sm text-muted-foreground">
+                {{ user.id }}
+              </p>
             </div>
             <div class="ml-auto">
               <Button
@@ -175,7 +183,9 @@ const open = $(defineModel('open', { default: false }))
       </OverlayScrollbarsComponent>
       <DialogFooter>
         <UserCreateFormDialog>
-          <Button class="h-8 w-full">新建角色</Button>
+          <Button class="h-8 w-full">
+            新建角色
+          </Button>
         </UserCreateFormDialog>
       </DialogFooter>
     </DialogContent>

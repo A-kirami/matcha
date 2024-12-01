@@ -12,7 +12,7 @@ const emit = defineEmits<{ send: [] }>()
 
 const general = useGeneralSettingsStore()
 
-const inputRef = $ref<HTMLDivElement | null>(null)
+const inputRef = $ref<HTMLDivElement>()
 
 function onEnter(e: KeyboardEvent): void {
   const enterSend = general.sendMessageShortcut === 'enter' && !e.shiftKey && !e.ctrlKey
@@ -43,8 +43,7 @@ async function onPaste(e: Event): Promise<void> {
     const fileList = []
     const files = data.files
 
-    for (let i = 0; i < files.length; i++) {
-      const pasteFile = files[i]
+    for (const pasteFile of files) {
       fileList.push(handlePasteFile(pasteFile))
     }
     nodeList.push(...(await Promise.all(fileList)))
@@ -54,7 +53,7 @@ async function onPaste(e: Event): Promise<void> {
 }
 
 function insertNodes(nodes: Node[]) {
-  const selection = window.getSelection()
+  const selection = globalThis.getSelection()
   if (!selection) {
     return
   }
@@ -78,15 +77,15 @@ const style = useCssModule()
 const MAX_IMAGE_SIZE = 1024 * 1024 * 10
 
 async function handlePasteFile(pasteFile: File) {
-  const fileCache = await createFileCache(pasteFile, null, pasteFile.name)
+  const fileCache = await createFileCache(pasteFile, undefined, pasteFile.name)
   const { id, url } = fileCache
-  if (/^image/.test(pasteFile.type) && pasteFile.size <= MAX_IMAGE_SIZE) {
+  if (pasteFile.type.startsWith('image') && pasteFile.size <= MAX_IMAGE_SIZE) {
     return createImageNode({ id, url })
   }
   return createFileNode(id, pasteFile)
 }
 
-function createImageNode({ id, url }: { id: string; url: string }) {
+function createImageNode({ id, url }: { id: string, url: string }) {
   const imageNode = new Image()
   imageNode.dataset.type = 'image'
   imageNode.dataset.id = id
@@ -107,10 +106,10 @@ function createFileNode(id: string, { name, size, type }: UploadFile) {
 
 async function insertFile({ name, size, type, path }: UploadFile & { path: string }) {
   const mineType = type instanceof Object ? type.mimeType : mime.getType(type || name) || type
-  const fileCache = await createFileCache(`file://${path}`, null, name)
+  const fileCache = await createFileCache(`file://${path}`, undefined, name)
   const { id, url } = fileCache
   const nodes: Element[] = []
-  if (mineType && /^image/.test(mineType) && size <= MAX_IMAGE_SIZE) {
+  if (mineType && mineType.startsWith('image') && size <= MAX_IMAGE_SIZE) {
     const imageNode = createImageNode({ id, url })
     nodes.push(imageNode)
   } else {
@@ -134,11 +133,11 @@ async function getMentions(): Promise<Mentions[]> {
     const members = await db.members.where({ groupId: state.chatTarget.id }).toArray()
     mentions.push(
       ...(await Promise.all(
-        members.map(async (item) => ({
+        members.map(async item => ({
           id: item.userId,
           name: await getUserNickname(item.userId, state.chatTarget!.id),
-        }))
-      ))
+        })),
+      )),
     )
   }
   return mentions
@@ -157,8 +156,8 @@ const tribute = new Tribute<Mentions>({
     return `<span data-type="mention" data-id="${item.original.id}" class="text-sky-400" contenteditable="false">@${item.original.name}</span>`
   },
   menuItemTemplate(item) {
-    const userIdInfo =
-      item.original.id === 'all' ? '' : `<span class="text-sm text-muted-foreground">${item.original.id}</span>`
+    const userIdInfo
+      = item.original.id === 'all' ? '' : `<span class="text-sm text-muted-foreground">${item.original.id}</span>`
     return `<img src="${getMentionAvatar(item.original.id)}" class="w-6 rounded-1/2 v-middle inline" alt="avatar"><div class="flex items-center gap-1"><span class="inline-block truncate max-w-26 ">${item.original.name}</span>${userIdInfo}</div>`
   },
   noMatchTemplate() {
@@ -169,17 +168,17 @@ const tribute = new Tribute<Mentions>({
   },
 })
 
-onMounted(() => {
+onMounted(async () => {
   inputRef && tribute.attach(inputRef)
-  focusInputBox()
+  await focusInputBox()
 })
 
 onBeforeUnmount(() => {
   inputRef && tribute.detach(inputRef)
 })
 
-onBeforeRouteUpdate(() => {
-  focusInputBox()
+onBeforeRouteUpdate(async () => {
+  await focusInputBox()
 })
 
 const session = useSessionStore()
@@ -194,19 +193,19 @@ function onBackspace(): void {
   }
 }
 
-function clearInput() {
+async function clearInput() {
   if (inputRef) {
     inputRef.textContent = ''
   }
   clearReplyMessage()
-  focusInputBox()
+  await focusInputBox()
 }
 
 watch(
   () => session.currentSession?.replyMessageId,
-  () => {
-    focusInputBox()
-  }
+  async () => {
+    await focusInputBox()
+  },
 )
 
 defineExpose($$({ inputRef, clearInput, insertFile }))
@@ -233,7 +232,7 @@ defineExpose($$({ inputRef, clearInput, insertFile }))
       @paste.prevent="onPaste"
       @keydown.backspace="onBackspace"
       @keydown.enter="onEnter"
-    ></div>
+    />
   </OverlayScrollbarsComponent>
 </template>
 

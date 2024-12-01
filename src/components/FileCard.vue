@@ -11,7 +11,7 @@ const { id, name, size, type, downloadable } = $defineProps<
   }
 >()
 
-defineEmits<{ (e: 'download'): void }>()
+defineEmits<(e: 'download') => void>()
 
 function getFileType() {
   if (!type) {

@@ -16,17 +16,18 @@ interface MetaData {
   hostname: string
 }
 
-let metadata = $ref<MetaData | null>(null)
+let metadata = $ref<MetaData>()
 
 onBeforeMount(async () => {
   const response = await fetch(data.url, { mode: 'no-cors' })
+  // eslint-disable-next-line unicorn/no-null
   const result = await urlMetadata(null, { parseResponseObject: response })
   metadata = {
-    title: result.title || result['og:title'] || result['twitter:title'],
-    description: result.description || result['og:description'] || result['twitter:description'],
-    image: result.image || result['og:image'] || result['twitter:image'],
-    url: result.url || result['og:url'] || result.url,
-    hostname: result.hostname || result['expected-hostname'] || new URL(data.url).hostname,
+    title: (result.title || result['og:title'] || result['twitter:title']) as MetaData['title'],
+    description: (result.description || result['og:description'] || result['twitter:description']) as MetaData['description'],
+    image: (result.image || result['og:image'] || result['twitter:image']) as MetaData['image'],
+    url: (result.url || result['og:url'] || result.url) as MetaData['url'],
+    hostname: (result.hostname || result['expected-hostname'] || new URL(data.url).hostname) as MetaData['hostname'],
   }
 })
 </script>
@@ -38,7 +39,7 @@ onBeforeMount(async () => {
       <div
         class="mt-2 border border-gray-200 rounded-xl p-3 transition-colors dark:bg-gray-600 hover:bg-gray-100 dark:hover:bg-gray-500"
       >
-        <img :src="metadata.image" class="mb-2 rounded-lg" alt="image" />
+        <img :src="metadata.image" class="mb-2 rounded-lg" alt="image">
         <div class="text-sm text-gray-900 font-medium dark:text-white">
           {{ metadata.title }}
         </div>

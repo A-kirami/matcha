@@ -38,7 +38,7 @@ onUnmounted(() => {
 <template>
   <ContextMenu>
     <ContextMenuTrigger as-child>
-      <slot></slot>
+      <slot />
     </ContextMenuTrigger>
     <ContextMenuContent class="text-sm space-y-1">
       <ContextMenuItem

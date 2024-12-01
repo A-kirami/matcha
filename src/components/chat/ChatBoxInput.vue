@@ -35,8 +35,8 @@ function getContent(el: HTMLElement): Contents[] {
 
 /** 从元素子节点中提取输入内容 */
 function* extractContent(nodeList: NodeListOf<ChildNode>): Generator<Contents, void, void> {
-  for (let index = 0; index < nodeList.length; index++) {
-    const node = nodeList[index] as HTMLElement
+  for (const element of nodeList) {
+    const node = element as HTMLElement
     const contentType = node.dataset?.type || 'unknown'
     if (node instanceof Text && node.data) {
       yield {
@@ -45,42 +45,56 @@ function* extractContent(nodeList: NodeListOf<ChildNode>): Generator<Contents, v
           text: node.data,
         },
       }
-    } else if (contentType === 'image') {
-      yield {
-        type: contentType,
-        data: {
-          id: node.dataset.id as string,
-          url: node.dataset.url as string,
-        },
+    } else {
+      switch (contentType) {
+        case 'image': {
+          yield {
+            type: contentType,
+            data: {
+              id: node.dataset.id!,
+              url: node.dataset.url!,
+            },
+          }
+
+          break
+        }
+        case 'mention': {
+          yield {
+            type: contentType,
+            data: {
+              target: node.dataset.id!,
+            },
+          }
+
+          break
+        }
+        case 'file': {
+          yield {
+            type: node.dataset.fileType as 'image' | 'audio' | 'video' | 'file',
+            data: {
+              id: node.dataset.fileId!,
+              url: node.dataset.fileUrl!,
+            },
+          }
+
+          break
+        }
+        default: { if (node.nodeName === 'DIV') {
+          yield {
+            type: 'text',
+            data: {
+              text: '\n',
+            },
+          }
+          yield * extractContent(node.childNodes)
+        }
+        }
       }
-    } else if (contentType === 'mention') {
-      yield {
-        type: contentType,
-        data: {
-          target: node.dataset.id as string,
-        },
-      }
-    } else if (contentType === 'file') {
-      yield {
-        type: node.dataset.fileType as 'image' | 'audio' | 'video' | 'file',
-        data: {
-          id: node.dataset.fileId as string,
-          url: node.dataset.fileUrl as string,
-        },
-      }
-    } else if (node.nodeName === 'DIV') {
-      yield {
-        type: 'text',
-        data: {
-          text: '\n',
-        },
-      }
-      yield* extractContent(node.childNodes)
     }
   }
 }
 
-const inputBoxRef = $ref<ComponentInstance['ChatBoxInputBox'] | null>(null)
+const inputBoxRef = $ref<ComponentInstance['ChatBoxInputBox']>()
 
 const behav = new Behav()
 

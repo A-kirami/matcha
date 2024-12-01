@@ -11,13 +11,13 @@ const allMembers = $(
     from(
       liveQuery(async () => {
         return await db.members.toArray()
-      })
-    )
-  )
+      }),
+    ),
+  ),
 )
 
 const groupMembers = $computed(() => {
-  return allMembers?.filter((member) => member.groupId === state.chatTarget?.id)
+  return allMembers?.filter(member => member.groupId === state.chatTarget?.id)
 })
 
 provide('groupMembers', $$(groupMembers))
@@ -26,7 +26,7 @@ let memberContacts = $ref<Contact[]>([])
 
 watch($$(groupMembers), async () => {
   if (groupMembers) {
-    memberContacts = await Promise.all(groupMembers.map(async (member) => await getContact('user', member.userId)))
+    memberContacts = await Promise.all(groupMembers.map(async member => await getContact('user', member.userId)))
   }
 })
 

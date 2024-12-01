@@ -7,9 +7,7 @@ export type EventStrategy<S> = {
   readonly [K in keyof S]?: (scene: S[K]) => Event | Promise<Event>
 }
 
-interface Strategy<P, R> {
-  [key: string]: ((context: P) => R | Promise<R>) | undefined
-}
+type Strategy<P, R> = Record<string, ((context: P) => R | Promise<R>) | undefined>
 
 export abstract class AdapterEventHandler<E extends Event> {
   abstract readonly strategy: EventStrategy<unknown>

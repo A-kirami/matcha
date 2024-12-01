@@ -1,28 +1,30 @@
 <script setup lang="ts">
-import type { OsType } from '@tauri-apps/plugin-os'
+import { type as getOsType } from '@tauri-apps/plugin-os'
 import { twMerge } from 'tailwind-merge'
 import { onMounted, ref } from 'vue'
-import type { WindowControlsProps, WindowTitlebarProps } from './types'
-import { type as getOsType } from '@tauri-apps/plugin-os'
+
 import WindowControls from './WindowControls.vue'
 
-const { controlsOrder, windowControlsProps } = withDefaults(defineProps<WindowTitlebarProps>(), {
-  controlsOrder: 'system',
-})
+import type { WindowControlsProps, WindowTitlebarProps } from './types'
+import type { OsType } from '@tauri-apps/plugin-os'
 
-const osType = ref<OsType | undefined>(undefined)
+const { controlsOrder = 'system', windowControlsProps } = defineProps<WindowTitlebarProps>()
+
+const osType = ref<OsType>()
 
 onMounted(() => {
   osType.value = getOsType()
 })
 
-const left =
-  controlsOrder === 'left' ||
-  (controlsOrder === 'platform' && windowControlsProps?.platform === 'macos') ||
-  (controlsOrder === 'system' && osType.value === 'macos')
+const left
+  = controlsOrder === 'left'
+  || (controlsOrder === 'platform' && windowControlsProps?.platform === 'macos')
+  || (controlsOrder === 'system' && osType.value === 'macos')
 
-const customProps = (ml: string) => {
-  if (windowControlsProps?.justify !== undefined) return windowControlsProps
+function customProps(ml: string) {
+  if (windowControlsProps?.justify !== undefined) {
+    return windowControlsProps
+  }
 
   const { justify: windowControlsJustify, className: windowControlsClassName, ...restProps } = windowControlsProps || {}
   return {

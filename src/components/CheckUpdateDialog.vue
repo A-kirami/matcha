@@ -28,7 +28,9 @@ async function installUpdate() {
         <VueMarkdown class="mx-2 text-sm prose prose-truegray" :source="updateInfo.body" />
       </OverlayScrollbarsComponent>
       <DialogFooter>
-        <Button class="h-8 w-full" @click="installUpdate">立即更新</Button>
+        <Button class="h-8 w-full" @click="installUpdate">
+          立即更新
+        </Button>
       </DialogFooter>
     </DialogContent>
   </Dialog>

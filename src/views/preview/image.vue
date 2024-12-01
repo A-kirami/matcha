@@ -18,20 +18,20 @@ let previewContent = $ref<PreviewContent>({
 
 const currentImage = $computed(() => previewContent.urls[previewContent.currentIndex])
 
-currentWindow.once<PreviewContent>('set-preview-content', (e) => {
+await currentWindow.once<PreviewContent>('set-preview-content', (e) => {
   previewContent = e.payload
 })
 
-currentWindow.emit('preview-window-created')
+await currentWindow.emit('preview-window-created')
 
-const osRef = $ref<InstanceType<typeof OverlayScrollbarsComponent> | null>(null)
+const osRef = $ref<InstanceType<typeof OverlayScrollbarsComponent>>()
 
 let isDragging = $ref(false)
 
 let hasOverflow = $ref(false)
 
 function updateHasOverflow(instance: OverlayScrollbars) {
-  hasOverflow = Object.values(instance?.state()?.hasOverflow || {}).some((value) => value)
+  hasOverflow = Object.values(instance?.state()?.hasOverflow || {}).some(Boolean)
 }
 
 function handleMouseDown() {
@@ -39,7 +39,7 @@ function handleMouseDown() {
     isDragging = true
   } else {
     requestAnimationFrame(() => {
-      currentWindow.startDragging()
+      void currentWindow.startDragging()
     })
   }
 }
@@ -79,7 +79,7 @@ let displayRatio = $ref(1)
 
 let showDisplayRatio = $ref(false)
 
-const imgRef = $ref<HTMLImageElement | null>(null)
+const imgRef = $ref<HTMLImageElement>()
 
 function updateDisplayRatio() {
   if (imgRef) {
@@ -125,7 +125,7 @@ async function handleWheel(event: WheelEvent) {
 
     updateDisplayRatio()
     showDisplayRatio = true
-    hiddenDisplayRatio()
+    await hiddenDisplayRatio()
   }
 }
 
@@ -159,7 +159,7 @@ function handleLoad() {
         alt="image"
         draggable="false"
         @load="handleLoad"
-      />
+      >
     </OverlayScrollbarsComponent>
   </main>
 </template>

@@ -26,7 +26,7 @@ export function nonNullable<T>(x: T | undefined | null): x is T {
  * @returns 当前时间戳（10位）
  */
 export function getTimestamp(): number {
-  return Math.round(new Date().getTime() / 1000)
+  return Math.round(Date.now() / 1000)
 }
 
 /**
@@ -55,7 +55,7 @@ export function asyncWrapper<T>(func: (...param: any[]) => T | Promise<T>): (...
 export class DefaultMap<K, V> extends Map<K, V> {
   constructor(
     private getDefaultValue: (key: K) => V,
-    entries?: readonly (readonly [K, V])[] | null
+    entries?: readonly (readonly [K, V])[] | null,
   ) {
     super(entries)
   }
@@ -88,7 +88,7 @@ export function formatBytes(bytes: number, decimals: number = 2): string {
     dm = decimals || 2,
     sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
     i = Math.floor(Math.log(bytes) / Math.log(k))
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
+  return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
 }
 
 interface NavigatorUAData {
@@ -111,7 +111,7 @@ export async function isWindows11(): Promise<boolean> {
   try {
     const ua = await userAgentData.getHighEntropyValues(['platformVersion'])
     if (userAgentData.platform === 'Windows') {
-      const majorPlatformVersion = parseInt(ua.platformVersion.split('.')[0])
+      const majorPlatformVersion = Number.parseInt(ua.platformVersion.split('.')[0])
       return majorPlatformVersion >= 13
     }
   } catch {

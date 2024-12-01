@@ -39,7 +39,7 @@ const generalFormSchema = toTypedSchema(
       .min(0, '心跳间隔必须大于等于 0'),
     postSelfEvents: z.boolean(),
     showError: z.boolean(),
-  })
+  }),
 )
 
 const { handleSubmit, values, resetForm } = useForm({
@@ -63,7 +63,7 @@ watchDebounced(
   async () => {
     await onSubmit()
   },
-  { deep: true, debounce: 250, maxWait: 1000 }
+  { deep: true, debounce: 250, maxWait: 1000 },
 )
 
 defineExpose({ resetForm })
@@ -82,8 +82,12 @@ defineExpose({ resetForm })
           </FormControl>
           <SelectContent>
             <SelectGroup>
-              <SelectItem value="OneBot.V11.Standard">OneBot v11 标准</SelectItem>
-              <SelectItem value="OneBot.V12.Standard">OneBot v12 标准</SelectItem>
+              <SelectItem value="OneBot.V11.Standard">
+                OneBot v11 标准
+              </SelectItem>
+              <SelectItem value="OneBot.V12.Standard">
+                OneBot v12 标准
+              </SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
@@ -102,9 +106,15 @@ defineExpose({ resetForm })
           </FormControl>
           <SelectContent>
             <SelectGroup>
-              <SelectItem value="websocketServer" disabled>WebSocket 服务器</SelectItem>
-              <SelectItem value="websocketClient">WebSocket 客户端</SelectItem>
-              <SelectItem value="http" disabled>HTTP</SelectItem>
+              <SelectItem value="websocketServer" disabled>
+                WebSocket 服务器
+              </SelectItem>
+              <SelectItem value="websocketClient">
+                WebSocket 客户端
+              </SelectItem>
+              <SelectItem value="http" disabled>
+                HTTP
+              </SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>

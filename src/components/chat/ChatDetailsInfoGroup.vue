@@ -7,7 +7,7 @@ const memberContacts = $(inject<Contact[]>('memberContacts'))
 const MAX_AVATAR_COUNT = 4
 
 const getMemberRole = $computed(() => (id: string) => {
-  const member = groupMembers.find((member) => member.userId === id)
+  const member = groupMembers.find(member => member.userId === id)
   if (!member) {
     return 'member'
   }
@@ -53,9 +53,7 @@ function openMemberEdit(member: Contact) {
       v-if="memberContacts?.length > MAX_AVATAR_COUNT"
       class="size-[32px] inline-flex items-center justify-center rounded-full bg-blue-50 ring-2 ring-white hover:bg-blue-100"
     >
-      <span class="text-sm text-gray-500 font-medium leading-none dark:text-gray-400"
-        >+{{ memberContacts.length - MAX_AVATAR_COUNT }}</span
-      >
+      <span class="text-sm text-gray-500 font-medium leading-none dark:text-gray-400">+{{ memberContacts.length - MAX_AVATAR_COUNT }}</span>
     </span>
   </div>
 </template>

@@ -13,7 +13,7 @@ interface VideoInfo {
   duration: number
 }
 
-let videoInfo = $ref<VideoInfo | null>(null)
+let videoInfo = $ref<VideoInfo>()
 
 function createVideoElement(url: string): HTMLVideoElement {
   const video = document.createElement('video')
@@ -81,8 +81,8 @@ onBeforeMount(async () => {
 
 <template>
   <div v-if="videoInfo" data-type="video" class="relative svg:hover:scale-110" @click="previewVideo">
-    <img :src="videoInfo.cover" alt="video cover" />
-    <div :class="$style.videoMask" class="absolute left-0 top-0 size-full cursor-pointer"></div>
+    <img :src="videoInfo.cover" alt="video cover">
+    <div :class="$style.videoMask" class="absolute left-0 top-0 size-full cursor-pointer" />
     <svg
       class="pointer-events-none absolute left-50% top-50% translate--50% text-light-200 opacity-85 transition-transform duration-250"
       fill="currentColor"
@@ -91,18 +91,19 @@ onBeforeMount(async () => {
       height="72"
       part="button"
     >
-      <path d="M8.5 8.7c0-1.7 1.2-2.4 2.6-1.5l14.4 8.3c1.4.8 1.4 2.2 0 3l-14.4 8.3c-1.4.8-2.6.2-2.6-1.5V8.7z"></path>
+      <path d="M8.5 8.7c0-1.7 1.2-2.4 2.6-1.5l14.4 8.3c1.4.8 1.4 2.2 0 3l-14.4 8.3c-1.4.8-2.6.2-2.6-1.5V8.7z" />
     </svg>
   </div>
 </template>
 
 <style module>
 .video-mask {
-  background-image: linear-gradient(
-    rgb(0 0 0 / 40%) 0%,
-    rgb(0 0 0 / 0%) 20%,
-    rgb(0 0 0 / 0%) 80%,
-    rgb(0 0 0 / 40%) 100%
-  );
+  background-image:
+    linear-gradient(
+      rgb(0 0 0 / 40%) 0%,
+      rgb(0 0 0 / 0%) 20%,
+      rgb(0 0 0 / 0%) 80%,
+      rgb(0 0 0 / 40%) 100%
+    );
 }
 </style>

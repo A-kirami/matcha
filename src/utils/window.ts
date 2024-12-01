@@ -9,7 +9,7 @@ const screenHeight = window.screen.height
 
 const TitleHeight = 28
 
-function getWindowSize(width: number, height: number, scale = 0.5): { width: number; height: number } {
+function getWindowSize(width: number, height: number, scale = 0.5): { width: number, height: number } {
   let windowWidth = width
   let windowHeight = height
   if (windowWidth > screenWidth * scale) {
@@ -31,10 +31,10 @@ export async function createPreviewWindow(
   title: string,
   width: number,
   height: number,
-  minWidth = 706,
-  minHeight = 564
+  minWidth: number = 706,
+  minHeight: number = 564,
 ): Promise<WebviewWindow> {
-  const window = WebviewWindow.getByLabel('preview')
+  const window = await WebviewWindow.getByLabel('preview')
   if (window) {
     await window.close()
   }
@@ -52,7 +52,7 @@ export async function createPreviewWindow(
 const osEffects = {
   windows: { effects: [Effect.Acrylic, Effect.Blur] },
   macos: { effects: [Effect.HudWindow], state: EffectState.Active },
-} as { 'windows': Effects; 'macos': Effects; [key: string]: Effects | undefined }
+} as { windows: Effects, macos: Effects, [key: string]: Effects | undefined }
 
 export async function setWindowEffect(enable: boolean = true): Promise<void> {
   const osType = getOsType()

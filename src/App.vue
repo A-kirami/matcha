@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { attachConsole } from '@tauri-apps/plugin-log'
 import { locale as dayjsLocale } from 'dayjs'
 
 import 'dayjs/locale/zh-cn'
@@ -24,7 +23,6 @@ const themeMode = useColorMode({
 provide('themeMode', themeMode)
 
 onBeforeMount(async () => {
-  await attachConsole()
   await setWindowEffect()
   await setAcrylicWindowEffect(general.applyAcrylicWindowEffects)
 })

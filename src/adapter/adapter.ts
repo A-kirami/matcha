@@ -5,7 +5,7 @@ import { ProtocolError } from './errors'
 
 import type { ActionRequest, ActionResponse, AdapterActionHandler } from './action'
 import type { AdapterEventHandler, Event } from './event'
-import type { Config } from '~/stores/connect-settings'
+import type { ConnectSettings } from '~/stores/connect-settings'
 
 export type OneBotHeaders = Record<string, string>
 
@@ -20,7 +20,7 @@ export abstract class Adapter {
   abstract readonly protocolUrl: string
 
   /** 协议支持连接方式 */
-  abstract readonly supportMode: Config['comm']
+  abstract readonly supportMode: ConnectSettings['comm']
 
   /** 动作处理器 */
   abstract readonly actionHandler: AdapterActionHandler
@@ -29,26 +29,26 @@ export abstract class Adapter {
   abstract readonly eventHandler: AdapterEventHandler<Event>
 
   /** 驱动器实例 */
-  driver: CommDriver.Driver | null = null
+  driver: CommDriver.Driver | undefined
 
   chat = useChatStore()
 
   state = useStateStore()
 
-  constructor(public config: Config) {}
+  constructor(public config: ConnectSettings) {}
 
   async startup(): Promise<void> {
     if (!this.state.bot || this.driver) {
       return
     }
-    const DriverCls: new (adapter: this) => CommDriver.Driver = Reflect.get(CommDriver, this.config.comm)
+    const DriverCls = Reflect.get(CommDriver, this.config.comm) as new (adapter: this) => CommDriver.Driver
     this.driver = new DriverCls(this)
     await this.driver.run()
   }
 
   async shutdown(): Promise<void> {
     await this.driver?.stop()
-    this.driver = null
+    this.driver = undefined
   }
 
   async reboot(): Promise<void> {
@@ -66,12 +66,12 @@ export abstract class Adapter {
 
   async actionHandle(request: ActionRequest): Promise<ActionResponse> {
     try {
-      logger.info(
-        `[${this.protocolName}] 收到 ${this.state.bot!.id} 的请求 ${request.action}: ${JSON.stringify(request.params)}`
+      void logger.info(
+        `[${this.protocolName}] 收到 ${this.state.bot!.id} 的请求 ${request.action}: ${JSON.stringify(request.params)}`,
       )
       const response = await this.actionHandler.handle(request)
-      logger.info(
-        `[${this.protocolName}] 响应 ${this.state.bot!.id} 的请求 ${request.action}: ${JSON.stringify(response)}`
+      void logger.info(
+        `[${this.protocolName}] 响应 ${this.state.bot!.id} 的请求 ${request.action}: ${JSON.stringify(response)}`,
       )
       return response
     } catch (error) {

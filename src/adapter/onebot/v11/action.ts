@@ -16,7 +16,7 @@ import type {
   FriendRequestEvent,
   GroupRequestEvent,
 } from './event'
-import type { Messages, PokeMessage } from './message'
+import type { Messages } from './message'
 import type { ActionResponse, ActionRequest, ActionStrategy } from '~/adapter/action'
 import type { StrKeyObject } from '~/adapter/typed'
 
@@ -35,13 +35,9 @@ export class ActionHandler extends AdapterActionHandler {
       const asyncFn = asyncWrapper<ActionResponse>(func)
       return await asyncFn(params)
     } catch (error) {
-      const errStr = (error as Error).toString()
-      logger.error(errStr)
-      if (error instanceof ProtocolError) {
-        throw error
-      } else {
-        throw new InternalHandlerError(response(1000, { message: errStr }))
-      }
+      const errStr = String(error)
+      void logger.error(errStr)
+      throw error instanceof ProtocolError ? error : new InternalHandlerError(response(1000, { message: errStr }))
     }
   }
 }
@@ -93,7 +89,7 @@ const actionStrategy: ActionStrategy = {
     auto_escape: boolean
   }): Promise<ActionResponse<MessageData> | ActionResponse<ErrorInfo>> => {
     const behav = new Behav()
-    const pokeMs = message instanceof Array ? (message.find((ms) => ms.type === 'poke') as PokeMessage) : undefined
+    const pokeMs = Array.isArray(message) ? (message.find(ms => ms.type === 'poke')!) : undefined
     if (pokeMs) {
       const behav = new Behav()
       await behav.pokeUser(behav.state.bot!.id, pokeMs.data.id, group_id ? group_id.toString() : undefined)
@@ -123,11 +119,11 @@ const actionStrategy: ActionStrategy = {
   },
 
   /** 获取消息 */
-  'get_msg': async ({
+  'get_msg': ({
     message_id,
   }: {
     message_id: number
-  }): Promise<ActionResponse<MessageInfo> | ActionResponse<ErrorInfo>> => {
+  }): ActionResponse<MessageInfo> | ActionResponse<ErrorInfo> => {
     const chat = useChatStore()
     const messageChat = chat.getMessage(message_id.toString())
     if (!messageChat) {
@@ -265,7 +261,7 @@ const actionStrategy: ActionStrategy = {
       user_id.toString(),
       behav.state.bot!.id,
       special_title,
-      duration
+      duration,
     )
     return response(0)
   },
@@ -301,7 +297,7 @@ const actionStrategy: ActionStrategy = {
   },
 
   /** 获取登录号信息 */
-  'get_login_info': async (): Promise<ActionResponse<{ user_id: number; nickname: string }>> => {
+  'get_login_info': (): ActionResponse<{ user_id: number, nickname: string }> => {
     const state = useStateStore()
     return response(0, { user_id: Number(state.bot!.id), nickname: state.bot!.name })
   },
@@ -325,7 +321,7 @@ const actionStrategy: ActionStrategy = {
   },
 
   /** 获取好友列表 */
-  'get_friend_list': async (): Promise<ActionResponse<{ user_id: number; nickname: string; remark: string }[]>> => {
+  'get_friend_list': async (): Promise<ActionResponse<{ user_id: number, nickname: string, remark: string }[]>> => {
     const state = useStateStore()
     const friends = await db.friends.where({ userId: state.bot!.id }).toArray()
     const friendList = friends.map(async (friend) => {
@@ -397,7 +393,7 @@ const actionStrategy: ActionStrategy = {
       return response(1403, { message: '没有加入该群' })
     }
     const members = await db.members.where({ groupId: group_id }).toArray()
-    const infoList = members.map(async (member) => await getMemberInfo(member, operator.role))
+    const infoList = members.map(async member => await getMemberInfo(member, operator.role))
     return response(0, await Promise.all(infoList))
   },
 
@@ -416,7 +412,7 @@ const actionStrategy: ActionStrategy = {
   },
 
   /** 获取运行状态 */
-  'get_status': (): ActionResponse<{ online: boolean; good: boolean }> => {
+  'get_status': (): ActionResponse<{ online: boolean, good: boolean }> => {
     return response(0, {
       online: true,
       good: true,
@@ -425,13 +421,13 @@ const actionStrategy: ActionStrategy = {
 
   /** 获取版本信息 */
   'get_version_info': async (): Promise<
-    ActionResponse<{ app_name: string; app_version: string; protocol_version: string }>
+    ActionResponse<{ app_name: string, app_version: string, protocol_version: string }>
   > => {
     const appVersion = await getVersion()
     return response(0, {
-      'app_name': 'matcha',
-      'app_version': appVersion,
-      'protocol_version': 'v11',
+      app_name: 'matcha',
+      app_version: appVersion,
+      protocol_version: 'v11',
     })
   },
 
@@ -583,9 +579,9 @@ function getGroupInfo(group: Group): GroupInfo {
 
 async function getMemberInfo(member: Member, role: 'owner' | 'admin' | 'member'): Promise<MemberInfo> {
   const chat = useChatStore()
-  const lastSentTime = chat.chatLogs.filter((chat) => chat.type === 'message').at(-1)?.scene.time
+  const lastSentTime = chat.chatLogs.findLast(chat => chat.type === 'message')?.scene.time
   const cardChangeable = role === 'owner' ? true : !!(role === 'admin' && member.role !== 'owner')
-  const user = (await db.users.get(member.userId)) as User
+  const user = (await db.users.get(member.userId))!
   return {
     group_id: Number(member.groupId),
     user_id: Number(member.userId),

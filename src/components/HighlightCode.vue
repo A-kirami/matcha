@@ -14,19 +14,18 @@ const { language, code } = $defineProps<{
 
 const HighlightJs = hljsVuePlugin.component
 
-const preCode = $ref<InstanceType<typeof HighlightJs> | null>(null)
+const preCode = $ref<InstanceType<typeof HighlightJs>>()
 
 onMounted(() => {
   const codeEl = (preCode!.$el as HTMLPreElement).firstChild as HTMLElement
   if (codeEl) {
-    const codeSpan = codeEl.getElementsByTagName('span')
-    for (let index = 0; index < codeSpan.length; index++) {
-      const element = codeSpan[index]
-      if (element.innerText.startsWith('"base64://')) {
+    const codeSpan = codeEl.querySelectorAll('span')
+    for (const element of codeSpan) {
+      if (element.textContent?.startsWith('"base64://')) {
         element.classList.add('line-clamp-3 cursor-pointer')
-        element.onclick = () => {
+        element.addEventListener('click', () => {
           element.classList.toggle('line-clamp-3')
-        }
+        })
       }
     }
   }
@@ -34,5 +33,5 @@ onMounted(() => {
 </script>
 
 <template>
-  <HighlightJs ref="preCode" :language="language" :code="code"></HighlightJs>
+  <HighlightJs ref="preCode" :language="language" :code="code" />
 </template>

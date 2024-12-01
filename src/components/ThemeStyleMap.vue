@@ -17,8 +17,8 @@ const Message = (
     :class="[$style.theme, $style[theme]]"
     class="h-28 w-42 flex flex-1 gap-1 border-2 border-muted rounded-md bg-[--color-background] p-1 hover:border-accent"
   >
-    <div class="w-4 rounded-sm bg-[--color-contrast]"></div>
-    <div class="w-12 rounded-sm bg-[--color-primary]"></div>
+    <div class="w-4 rounded-sm bg-[--color-contrast]" />
+    <div class="w-12 rounded-sm bg-[--color-primary]" />
     <div class="w-full flex flex-col gap-2 rounded-sm bg-[--color-primary] p-2">
       <Message />
       <Message />
@@ -27,8 +27,8 @@ const Message = (
   </div>
   <div v-else class="relative h-28 w-42 overflow-hidden border-2 border-muted rounded-md hover:border-accent">
     <div :class="[$style.theme, $style.light]" class="absolute size-full flex flex-1 gap-1 bg-[--color-background] p-1">
-      <div class="w-4 rounded-sm bg-[--color-contrast]"></div>
-      <div class="w-12 rounded-sm bg-[--color-primary]"></div>
+      <div class="w-4 rounded-sm bg-[--color-contrast]" />
+      <div class="w-12 rounded-sm bg-[--color-primary]" />
       <div class="w-full flex flex-col gap-2 rounded-sm bg-[--color-primary] p-2">
         <Message />
         <Message />
@@ -38,10 +38,10 @@ const Message = (
     <div
       :class="[$style.theme, $style.dark]"
       class="absolute size-full flex flex-1 gap-1 bg-[--color-background] p-1"
-      style="clip-path: polygon(75% 0, 100% 0%, 100% 100%, 25% 100%)"
+      style="clip-path: polygon(75% 0, 100% 0%, 100% 100%, 25% 100%);"
     >
-      <div class="w-4 rounded-sm bg-[--color-contrast]"></div>
-      <div class="w-12 rounded-sm bg-[--color-primary]"></div>
+      <div class="w-4 rounded-sm bg-[--color-contrast]" />
+      <div class="w-12 rounded-sm bg-[--color-primary]" />
       <div class="w-full flex flex-col gap-2 rounded-sm bg-[--color-primary] p-2">
         <Message />
         <Message />

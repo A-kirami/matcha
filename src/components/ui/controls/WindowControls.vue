@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { type as getOsType } from '@tauri-apps/plugin-os'
 import { twMerge } from 'tailwind-merge'
-import type { WindowControlsProps } from './types'
+import { onMounted } from 'vue'
+
 import Gnome from './WindowControlsGnome.vue'
 import MacOs from './WindowControlsMacOs.vue'
 import Windows from './WindowControlsWindows.vue'
+
+import type { WindowControlsProps } from './types'
 
 defineOptions({
   inheritAttrs: false,
@@ -17,20 +20,23 @@ const props = withDefaults(defineProps<WindowControlsProps>(), {
   className: '',
 })
 
-let platform = $ref(props.platform)
+let platform = props.platform
 
-onMounted(async () => {
+onMounted(() => {
   const osType = getOsType()
   if (!platform) {
     switch (osType) {
-      case 'macos':
+      case 'macos': {
         platform = 'macos'
         break
-      case 'linux':
+      }
+      case 'linux': {
         platform = 'gnome'
         break
-      default:
+      }
+      default: {
         platform = 'windows'
+      }
     }
   }
 })
@@ -38,7 +44,7 @@ onMounted(async () => {
 const customClass = twMerge(
   'flex',
   props.className,
-  props.hide && (props.hideMethod === 'display' ? 'hidden' : 'invisible')
+  props.hide && (props.hideMethod === 'display' ? 'hidden' : 'invisible'),
 )
 </script>
 

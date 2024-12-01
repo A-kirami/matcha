@@ -10,11 +10,11 @@ const { data } = $defineProps<{
 
 const waveformId = 'waveform-' + crypto.randomUUID()
 
-let wavesurfer = $ref<WaveSurfer | null>(null)
+let wavesurfer = $ref<WaveSurfer>()
 
 let isPlaying = $ref(false)
 
-let remainingTime = $ref<string | null>(null)
+let remainingTime = $ref<string>()
 
 onMounted(() => {
   wavesurfer = WaveSurfer.create({
@@ -64,12 +64,12 @@ onMounted(() => {
   wavesurfer.on('seeking', updateRemainingTime)
 })
 
-function handleClick() {
+async function handleClick() {
   if (wavesurfer?.isPlaying()) {
     wavesurfer?.pause()
     isPlaying = false
   } else {
-    wavesurfer?.play()
+    await wavesurfer?.play()
     isPlaying = true
   }
 }
@@ -95,7 +95,7 @@ function updateRemainingTime() {
       <Pause v-if="isPlaying" class="stroke-1" />
       <Play v-else class="stroke-1" />
     </Button>
-    <div :id="waveformId" class="whitespace-normal"></div>
+    <div :id="waveformId" class="whitespace-normal" />
     <span v-if="remainingTime" class="mx-2">{{ remainingTime }}</span>
   </div>
 </template>

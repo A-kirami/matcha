@@ -39,7 +39,7 @@ interface ModalProps {
 }
 
 export const useModalStore = defineStore('modal', () => {
-  let modalState = $shallowRef<ModalState | null>(null)
+  let modalState = $shallowRef<ModalState>()
   let modalOpen = $ref(false)
 
   function openModal<M extends ModalComponent>(modal: M, props?: ModalProps[M]) {

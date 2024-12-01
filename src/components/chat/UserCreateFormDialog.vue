@@ -13,18 +13,18 @@ const userFormSchema = toTypedSchema(
       .min(6, { message: '角色 ID 长度不能小于6' })
       .max(12, { message: '角色 ID 长度不能大于12' })
       .regex(/^[a-zA-Z0-9]+$/, { message: '角色 ID 只能包含字母和数字' })
-      .refine(async (id) => !(await db.users.get(id)), { message: '角色 ID 已存在' }),
+      .refine(async id => !(await db.users.get(id)), { message: '角色 ID 已存在' }),
     name: z
       .string({ required_error: '角色名称不能为空', invalid_type_error: '角色名称必须是字符串' })
       .min(2, { message: '角色名称长度不能小于2' })
       .max(12, { message: '角色名称长度不能大于12' }),
-  })
+  }),
 )
 
-const formRef = $ref<InstanceType<typeof Form> | null>(null)
+const formRef = $ref<InstanceType<typeof Form>>()
 
 const avatarUrl = $computed(() => {
-  return getAvatarUrl('user', formRef?.values.id)
+  return getAvatarUrl('user', formRef?.values.id as string)
 })
 
 let open = $(defineModel('open', { default: false }))
@@ -50,7 +50,7 @@ const onSubmit = getSubmitFn(userFormSchema, async (values) => {
 <template>
   <Dialog v-model:open="open">
     <DialogTrigger as-child>
-      <slot></slot>
+      <slot />
     </DialogTrigger>
     <DialogContent class="max-w-100">
       <DialogHeader>
@@ -84,7 +84,9 @@ const onSubmit = getSubmitFn(userFormSchema, async (values) => {
         </FormField>
       </Form>
       <DialogFooter>
-        <Button form="user-form" type="submit" class="mt-2 h-8 w-full">创建</Button>
+        <Button form="user-form" type="submit" class="mt-2 h-8 w-full">
+          创建
+        </Button>
       </DialogFooter>
     </DialogContent>
   </Dialog>
