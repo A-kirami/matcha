@@ -1,4 +1,4 @@
-use std::{collections::HashMap, error::Error, fs, net::TcpListener, path::PathBuf, str};
+use std::{collections::HashMap, error::Error, fs, path::PathBuf, str};
 
 use base64::{engine::general_purpose, Engine as _};
 use regex::Regex;
@@ -116,11 +116,4 @@ pub fn validate_file(
         }
     }
     Ok((),)
-}
-
-pub fn get_unused_port() -> u16 {
-    let listener = TcpListener::bind("127.0.0.1:0",).unwrap();
-    let port = listener.local_addr().unwrap().port();
-    drop(listener,);
-    port
 }
