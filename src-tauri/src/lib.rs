@@ -1,26 +1,26 @@
 use tauri::Manager;
-
 mod command;
-mod server;
+mod state;
 mod utils;
+use std::sync::Mutex;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    tauri::Builder::default()
-        .setup(|app| {
-            #[cfg(dev)]
-            app.get_webview_window("main",).unwrap().open_devtools();
+    let mut builder = tauri::Builder::default().setup(|app| {
+        #[cfg(dev)]
+        app.get_webview_window("main",).unwrap().open_devtools();
 
-            let cache_path = app.handle().path().app_cache_dir().unwrap();
-            let port: u16 = 8720;
-            server::start_static_file_server(cache_path, port,);
+        app.manage(Mutex::new(state::AppState::default(),),);
 
-            #[cfg(desktop)]
-            app.handle()
-                .plugin(tauri_plugin_updater::Builder::new().build(),)?;
+        Ok((),)
+    },);
 
-            Ok((),)
-        },)
+    #[cfg(desktop)]
+    {
+        builder = builder.plugin(tauri_plugin_updater::Builder::new().build(),)
+    }
+
+    builder
         .plugin(tauri_plugin_os::init(),)
         .plugin(tauri_plugin_fs::init(),)
         .plugin(tauri_plugin_websocket::init(),)
@@ -49,6 +49,7 @@ pub fn run() {
             command::merge_file_fragment,
             command::write_file,
             command::copy_file,
+            command::start_assets_server,
         ],)
         .run(tauri::generate_context!(),)
         .expect("error while running tauri application",);

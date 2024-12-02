@@ -288,3 +288,51 @@ pub async fn copy_file(source: PathBuf, target: PathBuf,) -> Result<(), String,>
         .map_err(|err| format!("复制文件失败: {}", err),)?;
     Ok((),)
 }
+
+use std::{
+    net::{IpAddr, Ipv4Addr, TcpListener},
+    sync::Mutex,
+};
+
+use tauri::State;
+use warp::Filter;
+
+use crate::state::AppState;
+
+#[tauri::command]
+pub async fn start_assets_server(
+    app_handle: AppHandle,
+    state: State<'_, Mutex<AppState,>,>,
+    host: String,
+    port: u16,
+) -> Result<(), String,> {
+    let cors = warp::cors().allow_any_origin().allow_methods(vec!["GET"],);
+
+    let cache_dir = get_cache_file_path(app_handle,);
+
+    let route = warp::path("matcha",)
+        .and(warp::path("cache",),)
+        .and(warp::fs::dir(cache_dir,),)
+        .with(cors,);
+
+    let ip_addr: IpAddr = host
+        .parse()
+        .unwrap_or(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1,),),);
+
+    let mut state = state.lock().unwrap();
+
+    state.stop_server();
+
+    let addr = format!("{}:{}", ip_addr, port);
+    match TcpListener::bind(&addr,) {
+        Ok(_,) => {
+            let new_handle = tauri::async_runtime::spawn(async move {
+                warp::serve(route,).run((ip_addr, port,),).await;
+            },);
+
+            state.set_handle(new_handle,);
+            Ok((),)
+        }
+        Err(e,) => Err(e.to_string(),),
+    }
+}
