@@ -112,14 +112,13 @@ export class websocketClient implements Driver {
       case 'Pong': {
         break
       }
-      case 'Close': {
+      default: {
         await this.disconnect()
         toast.error('连接错误', { description: 'WebSocket 服务器的连接被关闭' })
         void logger.error(`[WebSocket] 反向 WebSocket 服务器 ${this.connectUrl} 的连接被关闭: ${message.data?.reason}`)
         this.autoReconnection()
         break
       }
-      // no default
     }
   }
 
