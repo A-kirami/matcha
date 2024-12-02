@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import type { OsType } from '@tauri-apps/plugin-os'
+import { type as getOsType } from '@tauri-apps/plugin-os'
 
-const osType = inject<OsType>('osType')
-
-const isMacOs = $computed(() => unref(osType) === 'macos')
+const osType = getOsType()
+const isMacOs = osType === 'macos'
 </script>
 
 <template>
