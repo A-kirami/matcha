@@ -33,7 +33,7 @@
     "types": [
       "vite/client",
       "vitest/globals",
-      "vite-plugin-vue-layouts/client",
+      "vite-plugin-vue-meta-layouts/client",
       "unplugin-vue-macros/macros-global",
       "unplugin-vue-router/client",
       "unplugin-info/client"

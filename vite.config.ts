@@ -14,7 +14,7 @@ import { VueRouterAutoImports } from 'unplugin-vue-router'
 import VueRouter from 'unplugin-vue-router/vite'
 import { defineConfig } from 'vite'
 import VueDevTools from 'vite-plugin-vue-devtools'
-import Layouts from 'vite-plugin-vue-layouts'
+import MetaLayouts from 'vite-plugin-vue-meta-layouts'
 
 import type { UserConfig } from 'vite'
 
@@ -34,9 +34,7 @@ export default defineConfig({
       },
       betterDefine: false,
     }),
-    Layouts({
-      pagesDirs: 'src/views',
-    }),
+    MetaLayouts(),
     AutoImport({
       imports: [
         'vue',
