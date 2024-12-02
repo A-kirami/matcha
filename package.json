@@ -115,7 +115,7 @@
     "unplugin-vue-router": "^0.10.8",
     "vite": "^5.4.11",
     "vite-plugin-vue-devtools": "^7.6.7",
-    "vite-plugin-vue-layouts": "^0.11.0",
+    "vite-plugin-vue-meta-layouts": "^0.5.1",
     "vitest": "^2.1.6",
     "vue-eslint-parser": "^9.4.3",
     "vue-tsc": "^2.1.10"
