@@ -12,6 +12,7 @@ import type {
   ImageContent,
   AudioContent,
   VideoContent,
+  LinkContent,
   ContentMapping,
 } from '~/adapter/content'
 import type { Message as AdapterMessage, MessageBuildStrategy, MessageParseStrategy } from '~/adapter/message'
@@ -132,6 +133,10 @@ const messageBuildStrategy: MessageBuildStrategy<ContentMapping> = {
 
   video: (content: VideoContent): VideoMessage => {
     return createMessage('video', { file_id: content.data.id })
+  },
+
+  link: (content: LinkContent): TextMessage => {
+    return createMessage('text', { text: content.data.url })
   },
 }
 

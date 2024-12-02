@@ -20,6 +20,7 @@ import type {
   ImageContent,
   AudioContent,
   VideoContent,
+  LinkContent,
   ForwardContent,
   ForwardContentNode,
   ContentMapping,
@@ -344,6 +345,10 @@ const messageBuildStrategy: MessageBuildStrategy<ContentMapping> = {
       file: id,
       url,
     })
+  },
+
+  link: (content: LinkContent): TextMessage => {
+    return createMessage('text', { text: content.data.url })
   },
 
   forward: (): ForwardMessage => {

@@ -7,6 +7,7 @@ export interface GeneralSettings {
   enbaleSuperUser: boolean
   showRecallMessage: boolean
   applyAcrylicWindowEffects: boolean
+  enableLinkPreview: boolean
 }
 
 export const useGeneralSettingsStore = defineStore(
@@ -19,6 +20,7 @@ export const useGeneralSettingsStore = defineStore(
     const enbaleSuperUser = $ref<GeneralSettings['enbaleSuperUser']>(false)
     const showRecallMessage = $ref<GeneralSettings['showRecallMessage']>(true)
     const applyAcrylicWindowEffects = $ref<GeneralSettings['applyAcrylicWindowEffects']>(false)
+    const enableLinkPreview = $ref<GeneralSettings['enableLinkPreview']>(true)
 
     watch($$(applyAcrylicWindowEffects), async (enable) => {
       await setAcrylicWindowEffect(enable)
@@ -31,6 +33,7 @@ export const useGeneralSettingsStore = defineStore(
       enbaleSuperUser,
       showRecallMessage,
       applyAcrylicWindowEffects,
+      enableLinkPreview,
     })
   },
 
