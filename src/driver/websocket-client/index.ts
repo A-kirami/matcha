@@ -103,7 +103,6 @@ export class websocketClient implements Driver {
         const request = (message.type === 'Text' ? JSON.parse(message.data) : decode(message.data)) as ActionRequest
         const response = { ...(await this.adapter.actionHandle(request)), echo: request.echo }
         const data
-
           = message.type === 'Text' ? JSON.stringify(response, this.adapter.JSONEncode) : [...encode(response)]
         await this.ws?.send(data)
         break
@@ -112,10 +111,17 @@ export class websocketClient implements Driver {
       case 'Pong': {
         break
       }
-      default: {
+      case 'Close': {
         await this.disconnect()
         toast.error('连接错误', { description: 'WebSocket 服务器的连接被关闭' })
         void logger.error(`[WebSocket] 反向 WebSocket 服务器 ${this.connectUrl} 的连接被关闭: ${message.data?.reason}`)
+        this.autoReconnection()
+        break
+      }
+      default: {
+        await this.disconnect()
+        toast.error('连接错误', { description: 'WebSocket 服务器出现意外错误' })
+        void logger.error(`[WebSocket] 反向 WebSocket 服务器 ${this.connectUrl} 出现意外错误: ${message}`)
         this.autoReconnection()
         break
       }
