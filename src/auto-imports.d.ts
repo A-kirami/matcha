@@ -74,6 +74,8 @@ declare global {
   const isReadonly: typeof import('vue')['isReadonly']
   const isRef: typeof import('vue')['isRef']
   const isWindows11: typeof import('./utils/utils')['isWindows11']
+  const linkMessageParse: typeof import('./utils/chat')['linkMessageParse']
+  const linkParse: typeof import('./utils/chat')['linkParse']
   const logger: typeof import('@tauri-apps/plugin-log')
   const makeDestructurable: typeof import('@vueuse/core')['makeDestructurable']
   const mapActions: typeof import('pinia')['mapActions']
@@ -427,6 +429,7 @@ declare module 'vue' {
     readonly isReadonly: UnwrapRef<typeof import('vue')['isReadonly']>
     readonly isRef: UnwrapRef<typeof import('vue')['isRef']>
     readonly isWindows11: UnwrapRef<typeof import('./utils/utils')['isWindows11']>
+    readonly linkMessageParse: UnwrapRef<typeof import('./utils/chat')['linkMessageParse']>
     readonly logger: UnwrapRef<typeof import('@tauri-apps/plugin-log')>
     readonly makeDestructurable: UnwrapRef<typeof import('@vueuse/core')['makeDestructurable']>
     readonly mapActions: UnwrapRef<typeof import('pinia')['mapActions']>

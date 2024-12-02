@@ -27,6 +27,7 @@ const generalSettingsSchema = toTypedSchema(
     enbaleSuperUser: z.boolean(),
     showRecallMessage: z.boolean(),
     applyAcrylicWindowEffects: z.boolean(),
+    enableLinkPreview: z.boolean(),
   }),
 )
 
@@ -147,6 +148,17 @@ const osType = getOsType()
         <div class="space-y-0.5">
           <FormLabel>显示撤回消息</FormLabel>
           <FormDescription>撤回后的消息是否显示在聊天记录中</FormDescription>
+        </div>
+        <FormControl>
+          <Switch :checked="value" aria-readonly @update:checked="handleChange" />
+        </FormControl>
+      </FormItem>
+    </FormField>
+    <FormField v-slot="{ value, handleChange }" name="enableLinkPreview">
+      <FormItem class="max-w-120 flex flex-row items-center justify-between rounded-lg">
+        <div class="space-y-0.5">
+          <FormLabel>启用链接预览</FormLabel>
+          <FormDescription>预览消息中的链接内容</FormDescription>
         </div>
         <FormControl>
           <Switch :checked="value" aria-readonly @update:checked="handleChange" />

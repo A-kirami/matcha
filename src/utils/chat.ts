@@ -204,3 +204,63 @@ export async function getPreviewMessage(scene: Scenes, uid?: string): Promise<st
   const nickname = await getUserNickname(user_id, group_id)
   return `${nickname}: ${message}`
 }
+
+/**
+ * 解析消息组中的链接，并将链接转换为 `link` 元素。
+ *
+ * @param contents 消息组
+ *
+ * @returns 解析后的消息组，其中文本消息中的链接被转换为 `link` 消息。
+ */
+export function linkMessageParse(contents: Contents[]): Contents[] {
+  const result: Contents[] = []
+
+  for (const element of contents) {
+    if (element.type === 'text') {
+      const { text } = element.data
+      const urlRegex = /https?:\/\/[^\s]+/g
+      let lastIndex = 0
+
+      for (const match of text.matchAll(urlRegex)) {
+        const url = match[0]
+        const startIndex = match.index
+        const endIndex = startIndex + url.length
+
+        // 添加链接之前的文本部分
+        if (startIndex > lastIndex) {
+          result.push({
+            type: 'text',
+            data: {
+              text: text.slice(lastIndex, startIndex),
+            },
+          })
+        }
+
+        // 添加链接
+        result.push({
+          type: 'link',
+          data: {
+            url,
+          },
+        })
+
+        lastIndex = endIndex
+      }
+
+      // 添加剩余的文本部分
+      if (lastIndex < text.length) {
+        result.push({
+          type: 'text',
+          data: {
+            text: text.slice(lastIndex),
+          },
+        })
+      }
+    } else {
+      // 直接添加非文本元素
+      result.push(element)
+    }
+  }
+
+  return result
+}

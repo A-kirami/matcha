@@ -14,7 +14,11 @@ const behav = new Behav()
 
 const state = useStateStore()
 
+const general = useGeneralSettingsStore()
+
 const scene = $computed(() => message.scene)
+
+const msgElements = $computed(() => general.enableLinkPreview ? linkMessageParse(scene.message) : scene.message)
 
 const isUserMsg = $computed(() => scene.sender_id === state.user?.id)
 
@@ -44,8 +48,6 @@ async function resendMessage(): Promise<void> {
 async function pokeUser(): Promise<void> {
   await behav.pokeUser(state.user!.id, scene.user_id, 'group_id' in scene ? scene.group_id : undefined)
 }
-
-const general = useGeneralSettingsStore()
 </script>
 
 <template>
@@ -94,7 +96,7 @@ const general = useGeneralSettingsStore()
           :class="[$style.messageBubble, isUserMsg ? 'rounded-tr-none bg-blue-50' : 'rounded-tl-none bg-white']"
         >
           <!-- eslint-disable-next-line vue/valid-v-for -->
-          <ChatMessageElement v-for="msg in scene.message" :type="msg.type" :data="msg.data" />
+          <ChatMessageElement v-for="msg in msgElements" :type="msg.type" :data="msg.data" />
         </div>
       </ChatMessageMenu>
       <div class="h-5 flex items-center gap-1 px-1">

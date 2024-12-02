@@ -34,8 +34,8 @@ onBeforeMount(async () => {
 
 <template>
   <div data-type="link">
-    <a :href="data.url" class="break-all text-blue-400 font-medium underline hover:no-underline">{{ data.url }}</a>
-    <a v-if="metadata?.image" :href="metadata.url">
+    <a :href="data.url" target="_blank" class="break-all text-blue-400 font-medium no-underline hover:underline">{{ data.url }}</a>
+    <a v-if="metadata?.image" :href="metadata.url" target="_blank">
       <div
         class="mt-2 border border-gray-200 rounded-xl p-3 transition-colors dark:bg-gray-600 hover:bg-gray-100 dark:hover:bg-gray-500"
       >
