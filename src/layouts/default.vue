@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import { type as getOsType } from '@tauri-apps/plugin-os'
 import { relaunch } from '@tauri-apps/plugin-process'
 import { check } from '@tauri-apps/plugin-updater'
 import { configure } from 'vee-validate'
-
-import type { OsType } from '@tauri-apps/plugin-os'
 
 import { isRelease } from '~build/meta'
 
@@ -12,13 +9,7 @@ configure({
   validateOnBlur: false,
 })
 
-let osType = $ref<OsType>()
-
-provide('osType', $$(osType))
-
 onMounted(async () => {
-  osType = getOsType()
-
   const general = useGeneralSettingsStore()
 
   if (isRelease && general.autoUpdate) {
