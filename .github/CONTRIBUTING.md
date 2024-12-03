@@ -32,12 +32,18 @@ fork 本项目并创建一个分支。
 
 ### 开发环境
 
-您需要准备 node18 和 pnpm8 以及 rust 工具链。
+您需要准备 Node.js 、 pnpm 以及 rust 工具链。
 
-运行以下命令安装依赖并启动 Matcha 开发模式：
+运行以下命令安装依赖：
 
 ```sh
-pnpm i && pnpm tauri dev
+pnpm i
+```
+
+启动 Matcha 开发模式：
+
+```sh
+pnpm dev
 ```
 
 ### 代码风格
@@ -47,7 +53,13 @@ Matcha 使用 eslint 和 stylelint 规范代码风格，请确保您的代码风
 您可以运行 lint 命令来检查您的代码是否符合规范:
 
 ```sh
-pnpm lint && pnpm lint:style
+pnpm lint
+```
+
+要修复出现的代码问题，可以运行以下命令：
+
+```sh
+pnpm lint:fix
 ```
 
 ### Commit 规范
@@ -58,7 +70,7 @@ pnpm lint && pnpm lint:style
 
 ### Pull Request
 
-发起拉取请求之前，请先在本地运行 `pnpm tauri build`，以确保你的修改能正确构建。
+发起拉取请求之前，请先在本地运行 `pnpm build`，以确保你的修改能正确构建。
 
 为了帮助进行代码审查，请在拉取请求中仅包含与您的更改直接相关的文件，不要包含不相关的更改。
 
