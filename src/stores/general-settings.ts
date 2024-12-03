@@ -28,9 +28,12 @@ export const useGeneralSettingsStore = defineStore(
 
     async function startAssetsServer(address: string): Promise<void> {
       const [host, port] = address.split(':')
-      await invoke('start_assets_server', { host, port: Number.parseInt(port) }).catch((error) => {
-        toast.error('资源服务器错误', { description: error })
-      })
+      try {
+        await invoke('start_assets_server', { host, port: Number.parseInt(port) })
+        toast.success('资源服务器已启动', { description: `地址: ${address}` })
+      } catch (error) {
+        toast.error('资源服务器错误', { description: error as string })
+      }
     }
 
     watch($$(applyAcrylicWindowEffects), async (enable) => {
