@@ -1,4 +1,4 @@
-use tauri::Manager;
+use tauri::{Manager, WebviewUrl, WebviewWindowBuilder};
 
 mod command;
 mod server;
@@ -8,8 +8,25 @@ mod utils;
 pub fn run() {
     tauri::Builder::default()
         .setup(|app| {
+            let win_builder = WebviewWindowBuilder::new(app, "main", WebviewUrl::default(),)
+                .title("Matcha",)
+                .min_inner_size(620.0, 540.0,)
+                .inner_size(1080.0, 720.0,)
+                .center();
+
+            #[cfg(not(target_os = "macos"))]
+            let win_builder = win_builder.decorations(false,).transparent(true,);
+
+            #[cfg(target_os = "macos")]
+            let win_builder = win_builder
+                .decorations(true,)
+                .hidden_title(true,)
+                .title_bar_style(tauri::TitleBarStyle::Overlay,);
+
+            let window = win_builder.build().unwrap();
+
             #[cfg(dev)]
-            app.get_webview_window("main",).unwrap().open_devtools();
+            window.open_devtools();
 
             let cache_path = app.handle().path().app_cache_dir().unwrap();
             let port: u16 = 8720;

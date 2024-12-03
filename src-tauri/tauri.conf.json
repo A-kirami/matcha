@@ -12,16 +12,6 @@
   "app": {
     "macOSPrivateApi": true,
     "windows": [
-      {
-        "title": "Matcha",
-        "height": 720,
-        "width": 1080,
-        "minHeight": 540,
-        "minWidth": 620,
-        "center": true,
-        "decorations": false,
-        "transparent": true
-      }
     ],
     "security": {
       "csp": null
