@@ -289,12 +289,9 @@ pub async fn copy_file(source: PathBuf, target: PathBuf,) -> Result<(), String,>
     Ok((),)
 }
 
-use std::{
-    net::{IpAddr, Ipv4Addr, TcpListener},
-    sync::Mutex,
-};
-
 use tauri::State;
+use tokio::{net::TcpListener, sync::Mutex};
+use tokio_stream::wrappers::TcpListenerStream;
 use warp::Filter;
 
 use crate::state::AppState;
@@ -306,28 +303,25 @@ pub async fn start_assets_server(
     host: String,
     port: u16,
 ) -> Result<(), String,> {
-    let cors = warp::cors().allow_any_origin().allow_methods(vec!["GET"],);
-
     let cache_dir = get_cache_file_path(app_handle,);
+
+    let cors = warp::cors().allow_any_origin().allow_methods(vec!["GET"],);
 
     let route = warp::path("matcha",)
         .and(warp::path("cache",),)
         .and(warp::fs::dir(cache_dir,),)
         .with(cors,);
 
-    let ip_addr: IpAddr = host
-        .parse()
-        .unwrap_or(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1,),),);
-
-    let mut state = state.lock().unwrap();
+    let mut state = state.lock().await;
 
     state.stop_server();
 
-    let addr = format!("{}:{}", ip_addr, port);
-    match TcpListener::bind(&addr,) {
-        Ok(_,) => {
+    let addr = format!("{}:{}", host, port);
+    match TcpListener::bind(&addr,).await {
+        Ok(listener,) => {
             let new_handle = tauri::async_runtime::spawn(async move {
-                warp::serve(route,).run((ip_addr, port,),).await;
+                let stream = TcpListenerStream::new(listener,);
+                warp::serve(route,).run_incoming(stream,).await;
             },);
 
             state.set_handle(new_handle,);

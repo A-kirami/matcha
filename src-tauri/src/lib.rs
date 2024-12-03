@@ -2,7 +2,7 @@ use tauri::{Manager, WebviewUrl, WebviewWindowBuilder};
 mod command;
 mod state;
 mod utils;
-use std::sync::Mutex;
+use tokio::sync::Mutex;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
