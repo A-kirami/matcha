@@ -60,6 +60,8 @@ function handleSlider(event: MouseEvent) {
   }
 }
 
+const cssModule = useCssModule()
+
 function checkRouteInNavItems(routePath: string) {
   return navItems.some(navItem => routePath.startsWith(navItem.path))
 }
@@ -71,7 +73,7 @@ watch(
 
     if (isRouteInNavItems) {
       await nextTick()
-      const el = document.querySelector<HTMLElement>('.navbar a.router-link-active')
+      const el = document.querySelector<HTMLElement>(`.${cssModule.navbar} a.router-link-active`)
       if (el) {
         activeSliderTop = el.offsetTop + 'px'
       }
