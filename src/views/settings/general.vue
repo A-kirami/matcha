@@ -28,6 +28,7 @@ const generalSettingsSchema = toTypedSchema(
     showRecallMessage: z.boolean(),
     applyAcrylicWindowEffects: z.boolean(),
     enableLinkPreview: z.boolean(),
+    assetsServerAddress: z.string().regex(/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}:[0-9]{1,5}$/, '服务器地址格式不正确'),
   }),
 )
 
@@ -163,6 +164,16 @@ const osType = getOsType()
         <FormControl>
           <Switch :checked="value" aria-readonly @update:checked="handleChange" />
         </FormControl>
+      </FormItem>
+    </FormField>
+    <FormField v-slot="{ componentField }" name="assetsServerAddress">
+      <FormItem v-auto-animate>
+        <FormLabel>资源服务器地址</FormLabel>
+        <FormControl>
+          <Input type="text" v-bind="componentField" class="h-9 max-w-100" />
+        </FormControl>
+        <FormDescription>指定用于提供资源文件的服务器地址</FormDescription>
+        <FormMessage />
       </FormItem>
     </FormField>
   </form>

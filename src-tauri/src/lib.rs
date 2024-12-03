@@ -1,43 +1,44 @@
 use tauri::{Manager, WebviewUrl, WebviewWindowBuilder};
-
 mod command;
-mod server;
+mod state;
 mod utils;
+use tokio::sync::Mutex;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    tauri::Builder::default()
-        .setup(|app| {
-            let win_builder = WebviewWindowBuilder::new(app, "main", WebviewUrl::default(),)
-                .title("Matcha",)
-                .min_inner_size(620.0, 540.0,)
-                .inner_size(1080.0, 720.0,)
-                .center();
+    let mut builder = tauri::Builder::default().setup(|app| {
+        let win_builder = WebviewWindowBuilder::new(app, "main", WebviewUrl::default(),)
+            .title("Matcha",)
+            .min_inner_size(620.0, 540.0,)
+            .inner_size(1080.0, 720.0,)
+            .center();
 
-            #[cfg(not(target_os = "macos"))]
-            let win_builder = win_builder.decorations(false,).transparent(true,);
+        #[cfg(not(target_os = "macos"))]
+        let win_builder = win_builder.decorations(false,).transparent(true,);
 
-            #[cfg(target_os = "macos")]
-            let win_builder = win_builder
-                .decorations(true,)
-                .hidden_title(true,)
-                .title_bar_style(tauri::TitleBarStyle::Overlay,);
+        #[cfg(target_os = "macos")]
+        let win_builder = win_builder
+            .decorations(true,)
+            .hidden_title(true,)
+            .title_bar_style(tauri::TitleBarStyle::Overlay,);
 
-            let window = win_builder.build().unwrap();
+        let window = win_builder.build().unwrap();
 
-            #[cfg(dev)]
+        if tauri::is_dev() {
             window.open_devtools();
+        }
 
-            let cache_path = app.handle().path().app_cache_dir().unwrap();
-            let port: u16 = 8720;
-            server::start_static_file_server(cache_path, port,);
+        app.manage(Mutex::new(state::AppState::default(),),);
 
-            #[cfg(desktop)]
-            app.handle()
-                .plugin(tauri_plugin_updater::Builder::new().build(),)?;
+        Ok((),)
+    },);
 
-            Ok((),)
-        },)
+    #[cfg(desktop)]
+    {
+        builder = builder.plugin(tauri_plugin_updater::Builder::new().build(),)
+    }
+
+    builder
         .plugin(tauri_plugin_os::init(),)
         .plugin(tauri_plugin_fs::init(),)
         .plugin(tauri_plugin_websocket::init(),)
@@ -66,6 +67,7 @@ pub fn run() {
             command::merge_file_fragment,
             command::write_file,
             command::copy_file,
+            command::start_assets_server,
         ],)
         .run(tauri::generate_context!(),)
         .expect("error while running tauri application",);
