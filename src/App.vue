@@ -26,12 +26,6 @@ onBeforeMount(async () => {
   await setWindowEffect()
   await setAcrylicWindowEffect(general.applyAcrylicWindowEffects)
 })
-
-onMounted(async () => {
-  setTimeout(async () => {
-    await general.startAssetsServer(general.assetsServerAddress)
-  }, 500)
-})
 </script>
 
 <template>
