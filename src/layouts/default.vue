@@ -21,6 +21,8 @@ onMounted(async () => {
 
   const general = useGeneralSettingsStore()
 
+  await general.startAssetsServer(general.assetsServerAddress)
+
   if (isRelease && general.autoUpdate) {
     try {
       const update = await check()

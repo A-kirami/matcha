@@ -8,13 +8,12 @@ const isMacOs = $computed(() => unref(osType) === 'macos')
 
 <template>
   <aside
-    class="w-15 flex flex-col items-center gap-4 bg-background pb-5"
+    class="flex flex-col items-center gap-4 bg-background pb-5"
     :class="[
       focused ? 'bg-opacity-40 dark:bg-opacity-60' : 'bg-opacity-70 dark:bg-opacity-90',
-      isMacOs ? 'pt-2' : 'pt-7',
+      isMacOs ? 'pt-8 w-18' : 'pt-7 w-15',
     ]"
   >
-    <WindowControls v-if="isMacOs" />
     <AppLogo class="size-9" />
     <AppSidebarNavigation />
     <AppSidebarUserAvatar class="mt-auto" />

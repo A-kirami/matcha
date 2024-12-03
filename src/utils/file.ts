@@ -2,6 +2,8 @@ import { invoke } from '@tauri-apps/api/core'
 import { appCacheDir, join } from '@tauri-apps/api/path'
 import { exists, BaseDirectory } from '@tauri-apps/plugin-fs'
 
+const general = useGeneralSettingsStore()
+
 interface FileSource {
   str?: string
   binary?: number[]
@@ -82,7 +84,7 @@ export async function getFile(type: GetType, fileId: string): Promise<string | U
   }
   switch (type) {
     case GetType.URL: {
-      return `http://127.0.0.1:8720/matcha/cache/${file.sha256}`
+      return `http://${general.assetsServerAddress}/matcha/cache/${file.sha256}`
     }
     case GetType.PATH:
     case GetType.DATA: {
