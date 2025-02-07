@@ -63,17 +63,25 @@ pub async fn get_file_contents(file: &str,) -> Result<Vec<u8,>, Box<dyn Error,>,
         Ok(response,)
     } else if file_type.file_url.is_match(file,) {
         let uri = url::Url::parse(file,)?;
-        let path = uri.to_file_path().unwrap();
+        let path = uri.to_file_path().map_err(|_| "无效的文件 URL",)?;
         let contents = tokio::fs::read(path,).await?;
         Ok(contents,)
     } else {
-        let file_rex = if file_type.data_url.is_match(file,) {
+        let is_data = file_type.data_url.is_match(file,);
+        let is_base64 = file_type.base64.is_match(file,);
+
+        if !is_data && !is_base64 {
+            return Err("无效的文件源".into(),);
+        }
+
+        let file_rex = if is_data {
             &file_type.data_url
         } else {
             &file_type.base64
         };
+
         let base64_data = file_rex.replace(file, "",);
-        let contents = general_purpose::STANDARD.decode(&*base64_data,).unwrap();
+        let contents = general_purpose::STANDARD.decode(&*base64_data,)?;
         Ok(contents,)
     }
 }
