@@ -48,6 +48,9 @@ pub fn run() {
         .plugin(tauri_plugin_process::init(),)
         .plugin(
             tauri_plugin_log::Builder::new()
+                .target(tauri_plugin_log::Target::new(
+                    tauri_plugin_log::TargetKind::Webview,
+                ),)
                 .timezone_strategy(tauri_plugin_log::TimezoneStrategy::UseLocal,)
                 .level(log::LevelFilter::Debug,)
                 .filter(|metadata| {

@@ -23,6 +23,8 @@ const themeMode = useColorMode({
 provide('themeMode', themeMode)
 
 onBeforeMount(async () => {
+  await logger.attachConsole()
+
   await setWindowEffect()
   await setAcrylicWindowEffect(general.applyAcrylicWindowEffects)
 })
