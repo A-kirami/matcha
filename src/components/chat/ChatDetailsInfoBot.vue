@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { RefreshCw } from 'lucide-vue-next'
+
 const state = useStateStore()
 </script>
 
@@ -15,5 +17,6 @@ const state = useStateStore()
       />
     </span>
     <span class="text-xs text-muted-foreground">{{ state.isConnected ? '已连接' : '未连接' }}</span>
+    <RefreshCw class="size-4 text-muted-foreground" />
   </div>
 </template>
