@@ -17,6 +17,8 @@ export class websocketClient implements Driver {
   explicitlyClosed: boolean = false
   heartbeatPause?: () => void
   heartbeatResume?: () => void
+  private reconnectTimer?: number
+  private isConnecting: boolean = false
 
   constructor(public adapter: Adapter) {
     this.connectUrl = this.adapter.getConnectUrl()
@@ -44,6 +46,10 @@ export class websocketClient implements Driver {
 
   async stop(): Promise<void> {
     this.explicitlyClosed = true
+    if (this.reconnectTimer !== undefined) {
+      clearTimeout(this.reconnectTimer)
+      this.reconnectTimer = undefined
+    }
     await this.disconnect()
   }
 
@@ -60,17 +66,17 @@ export class websocketClient implements Driver {
   }
 
   async connect(): Promise<void> {
-    if (this.explicitlyClosed || !this.connectUrl) {
+    if (this.explicitlyClosed || !this.connectUrl || this.isConnecting) {
       return
     }
 
+    await this.disconnect()
+    this.isConnecting = true
     void logger.info(`正在尝试连接到反向 WebSocket 服务器 ${this.connectUrl}`)
 
-    const connectConfig = await this.getConnectConfig()
-
     try {
+      const connectConfig = await this.getConnectConfig()
       this.ws = await WebSocket.connect(this.connectUrl, connectConfig)
-
       this.ws.addListener(this.onMessage.bind(this))
       await this.adapter.onConnect()
       this.heartbeatResume?.()
@@ -86,6 +92,8 @@ export class websocketClient implements Driver {
         this.connectingError = true
       }
       this.autoReconnection()
+    } finally {
+      this.isConnecting = false
     }
   }
 
@@ -129,8 +137,12 @@ export class websocketClient implements Driver {
   }
 
   autoReconnection(): void {
+    if (this.reconnectTimer !== undefined) {
+      clearTimeout(this.reconnectTimer)
+      this.reconnectTimer = undefined
+    }
     if (!this.explicitlyClosed && this.adapter.config.reconnectInterval) {
-      setTimeout(this.connect.bind(this), this.adapter.config.reconnectInterval * 1000)
+      this.reconnectTimer = setTimeout(this.connect.bind(this), this.adapter.config.reconnectInterval * 1000) as unknown as number
     }
   }
 
