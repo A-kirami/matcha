@@ -54,8 +54,11 @@ const rebootConnect = useDebounceFn(async () => {
 }, 1000)
 
 const onSubmit = handleSubmit(async (values) => {
+  const { protocol } = connect
   connect.$patch(values)
-  await rebootConnect()
+  if (values.protocol === protocol) {
+    await rebootConnect()
+  }
 })
 
 watchDebounced(
