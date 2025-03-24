@@ -72,6 +72,12 @@ class MatchaDB extends Dexie {
         group.lastMessageTime ??= 0
       })
     })
+    this.version(5).upgrade(async (trans) => {
+      const users = trans.table<User>('users').toCollection()
+      await users.modify((user) => {
+        user.regTime ??= getTimestamp()
+      })
+    })
   }
 }
 

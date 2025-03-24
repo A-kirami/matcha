@@ -1,4 +1,6 @@
 export interface User {
+  /** 注册时间 */
+  regTime: number
   /** QQ */
   id: string
   /** 昵称 */
