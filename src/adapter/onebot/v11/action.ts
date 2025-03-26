@@ -317,6 +317,7 @@ const actionStrategy: ActionStrategy = {
       nickname: user.name,
       sex: user.sex || 'unknown',
       age: user.birthdate ? getUserAge(user.birthdate) : 0,
+      reg_time: user.regTime,
     })
   },
 
@@ -496,6 +497,7 @@ interface MessageInfo {
 }
 
 interface StrangerInfo {
+  reg_time: number
   user_id: number
   nickname: string
   sex: 'male' | 'female' | 'unknown'
@@ -514,6 +516,7 @@ interface GroupInfo {
 }
 
 interface MemberInfo {
+  reg_time: number
   group_id: number
   user_id: number
   nickname: string
@@ -583,6 +586,7 @@ async function getMemberInfo(member: Member, role: 'owner' | 'admin' | 'member')
   const cardChangeable = role === 'owner' ? true : !!(role === 'admin' && member.role !== 'owner')
   const user = (await db.users.get(member.userId))!
   return {
+    reg_time: Number(user.regTime),
     group_id: Number(member.groupId),
     user_id: Number(member.userId),
     nickname: user.name,

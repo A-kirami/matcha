@@ -32,6 +32,7 @@ let open = $(defineModel('open', { default: false }))
 const onSubmit = getSubmitFn(userFormSchema, async (values) => {
   await db.users.add({
     ...values,
+    regTime: getTimestamp(),
     sex: 'unknown',
     birthdate: undefined,
     location: '',
