@@ -12,6 +12,7 @@ export interface ConnectSettings {
   timeout: number
   postSelfEvents: boolean
   showError: boolean
+  autoReconnect: boolean
 }
 
 export const useConnectSettingsStore = defineStore(
@@ -29,6 +30,7 @@ export const useConnectSettingsStore = defineStore(
     const timeout = $ref(3)
     const postSelfEvents = $ref(false)
     const showError = $ref(true)
+    const autoReconnect = $ref(true)
 
     return $$({
       protocol,
@@ -42,6 +44,7 @@ export const useConnectSettingsStore = defineStore(
       timeout,
       postSelfEvents,
       showError,
+      autoReconnect,
     })
   },
 

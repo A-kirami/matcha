@@ -141,7 +141,7 @@ export class websocketClient implements Driver {
       clearTimeout(this.reconnectTimer)
       this.reconnectTimer = undefined
     }
-    if (!this.explicitlyClosed && this.adapter.config.reconnectInterval) {
+    if (!this.explicitlyClosed && this.adapter.config.reconnectInterval && this.adapter.config.autoReconnect) {
       this.reconnectTimer = setTimeout(this.connect.bind(this), this.adapter.config.reconnectInterval * 1000) as unknown as number
     }
   }

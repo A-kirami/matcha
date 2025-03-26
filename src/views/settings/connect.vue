@@ -39,6 +39,7 @@ const generalFormSchema = toTypedSchema(
       .min(0, '心跳间隔必须大于等于 0'),
     postSelfEvents: z.boolean(),
     showError: z.boolean(),
+    autoReconnect: z.boolean(),
   }),
 )
 
@@ -145,16 +146,29 @@ defineExpose({ resetForm })
         <FormMessage />
       </FormItem>
     </FormField>
-    <FormField v-slot="{ componentField }" name="reconnectInterval">
-      <FormItem v-auto-animate>
-        <FormLabel>重连间隔</FormLabel>
+    <FormField v-slot="{ value, handleChange }" name="autoReconnect">
+      <FormItem class="max-w-120 flex flex-row items-center justify-between rounded-lg">
+        <div class="space-y-0.5">
+          <FormLabel>自动重连</FormLabel>
+          <FormDescription>是否在连接断开后自动进行重连</FormDescription>
+        </div>
         <FormControl>
-          <Input type="number" v-bind="componentField" class="h-9 max-w-100" />
+          <Switch :checked="value" aria-readonly @update:checked="handleChange" />
         </FormControl>
-        <FormDescription>WebSocket 客户端断线重连间隔，单位秒，为 0 则不重连</FormDescription>
-        <FormMessage />
       </FormItem>
     </FormField>
+    <div v-show="values.autoReconnect">
+      <FormField v-slot="{ componentField }" name="reconnectInterval">
+        <FormItem v-auto-animate>
+          <FormLabel>重连间隔</FormLabel>
+          <FormControl>
+            <Input type="number" v-bind="componentField" class="h-9 max-w-100" />
+          </FormControl>
+          <FormDescription>WebSocket 客户端断线重连间隔，单位秒，为 0 则不重连</FormDescription>
+          <FormMessage />
+        </FormItem>
+      </FormField>
+    </div>
     <FormField v-slot="{ componentField }" name="heartbeatInterval">
       <FormItem v-auto-animate>
         <FormLabel>心跳间隔</FormLabel>
