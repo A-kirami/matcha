@@ -107,8 +107,8 @@ const messageBuildStrategy: MessageBuildStrategy<ContentMapping> = {
     return content.data.target === 'all'
       ? createMessage('mention_all', {})
       : createMessage('mention', {
-        user_id: content.data.target,
-      })
+          user_id: content.data.target,
+        })
   },
 
   reply: (content: ReplyContent): ReplyMessage => {

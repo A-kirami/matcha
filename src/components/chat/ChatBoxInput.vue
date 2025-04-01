@@ -86,7 +86,7 @@ function* extractContent(nodeList: NodeListOf<ChildNode>): Generator<Contents, v
               text: '\n',
             },
           }
-          yield * extractContent(node.childNodes)
+          yield* extractContent(node.childNodes)
         }
         }
       }

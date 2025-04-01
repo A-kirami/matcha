@@ -497,18 +497,18 @@ export class Behav {
     } as const
     return await (groupId
       ? this.chat.appendScene({
-        ...poke,
-        group_id: groupId,
-        chat_type: 'group',
-        sender_id: userId,
-        receiver_id: groupId,
-      })
+          ...poke,
+          group_id: groupId,
+          chat_type: 'group',
+          sender_id: userId,
+          receiver_id: groupId,
+        })
       : this.chat.appendScene({
-        ...poke,
-        chat_type: 'private',
-        sender_id: userId,
-        receiver_id: targeId,
-      } as FriendPokeNoticeScene))
+          ...poke,
+          chat_type: 'private',
+          sender_id: userId,
+          receiver_id: targeId,
+        } as FriendPokeNoticeScene))
   }
 
   /** 解散群组 */

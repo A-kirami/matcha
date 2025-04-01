@@ -77,7 +77,12 @@ export class DefaultMap<K, V> extends Map<K, V> {
 }
 
 export function getAssetsUrl(name: string): string {
-  return new URL(`../assets/${name}`, import.meta.url).href
+  const assetsUrlGlob = import.meta.glob<string>('../assets/**/*', {
+    eager: true,
+    query: 'url',
+    import: 'default',
+  })
+  return assetsUrlGlob[`../assets/${name}`]
 }
 
 export function formatBytes(bytes: number, decimals: number = 2): string {
