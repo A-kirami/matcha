@@ -54,26 +54,21 @@ jobs:
 
       - name: Rust setup
         uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
 
       - name: Rust cache
         uses: swatinem/rust-cache@v2
         with:
           workspaces: ./src-tauri -> target
 
-      - name: Pnpm setup
-        uses: pnpm/action-setup@v4
-
-      - name: Sync node version and setup cache
-        uses: actions/setup-node@v4
+      - name: Bun setup
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version-file: package.json
-          cache: pnpm
+          bun-version-file: package.json
 
       - name: Install app dependencies
-        run: pnpm install
-
-      - name: Rustup add target
-        run: rustup target add ${{ matrix.target }}
+        run: bun install
 
       - name: Build the app
         uses: tauri-apps/tauri-action@v0

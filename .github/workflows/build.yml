@@ -6,13 +6,11 @@ on:
       - main
   pull_request:
     paths:
-      - "src/**"
-      - "src-tauri/src/**"
-      - "tests/**"
-      - "package.json"
-      - "vite.config.ts"
-      - "src-tauri/Cargo.toml"
-      - "src-tauri/tauri.conf.json"
+      - 'src/**'
+      - 'src-tauri/**'
+      - 'package.json'
+      - 'vite.config.ts'
+      - 'unocss.config.ts'
   workflow_dispatch:
 
 concurrency:
@@ -54,26 +52,21 @@ jobs:
 
       - name: Rust setup
         uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
 
       - name: Rust cache
         uses: swatinem/rust-cache@v2
         with:
           workspaces: ./src-tauri -> target
 
-      - name: Pnpm setup
-        uses: pnpm/action-setup@v4
-
-      - name: Sync node version and setup cache
-        uses: actions/setup-node@v4
+      - name: Bun setup
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version-file: package.json
-          cache: pnpm
+          bun-version-file: package.json
 
       - name: Install app dependencies
-        run: pnpm install
-
-      - name: Rustup add target
-        run: rustup target add ${{ matrix.target }}
+        run: bun install
 
       - name: Build the app
         id: tauri-build
@@ -83,7 +76,8 @@ jobs:
         with:
           args: -t ${{ matrix.target }} -c '{"bundle":{"createUpdaterArtifacts":false}}'
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
         with:
           name: 'matcha_${{steps.tauri-build.outputs.appVersion}}_${{ matrix.label }}'
           path: "${{ join(fromJSON(steps.tauri-build.outputs.artifactPaths), '\n') }}"

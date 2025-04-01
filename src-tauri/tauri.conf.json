@@ -4,9 +4,9 @@
   "version": "../package.json",
   "identifier": "com.akirami.matcha",
   "build": {
-    "beforeDevCommand": "pnpm dev:web",
+    "beforeDevCommand": "bun dev:web",
     "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "pnpm build:web",
+    "beforeBuildCommand": "bun build:web",
     "frontendDist": "../dist"
   },
   "app": {
