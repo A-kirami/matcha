@@ -11,10 +11,14 @@ import type { UploadFile } from '~/types'
 const emit = defineEmits<{ send: [] }>()
 
 const general = useGeneralSettingsStore()
-
 const inputRef = $ref<HTMLDivElement>()
+const isMentionMenuActive = ref<boolean>(false)
 
 function onEnter(e: KeyboardEvent): void {
+  if (isMentionMenuActive.value) {
+    return
+  }
+
   const enterSend = general.sendMessageShortcut === 'enter' && !e.shiftKey && !e.ctrlKey
   const ctrlEnterSend = general.sendMessageShortcut === 'ctrlEnter' && e.ctrlKey
   if (enterSend || ctrlEnterSend) {
@@ -169,8 +173,17 @@ const tribute = new Tribute<Mentions>({
 })
 
 onMounted(async () => {
-  inputRef && tribute.attach(inputRef)
-  await focusInputBox()
+  if (inputRef) {
+    tribute.attach(inputRef)
+
+    inputRef.addEventListener('tribute-active-true', () => {
+      isMentionMenuActive.value = true
+    })
+    inputRef.addEventListener('tribute-active-false', () => {
+      isMentionMenuActive.value = false
+    })
+  }
+  focusInputBox()
 })
 
 onBeforeUnmount(() => {
