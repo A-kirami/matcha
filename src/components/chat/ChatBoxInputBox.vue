@@ -15,6 +15,10 @@ const general = useGeneralSettingsStore()
 const inputRef = $ref<HTMLDivElement>()
 
 function onEnter(e: KeyboardEvent): void {
+  if (tribute.isActive) {
+    return
+  }
+
   const enterSend = general.sendMessageShortcut === 'enter' && !e.shiftKey && !e.ctrlKey
   const ctrlEnterSend = general.sendMessageShortcut === 'ctrlEnter' && e.ctrlKey
   if (enterSend || ctrlEnterSend) {
