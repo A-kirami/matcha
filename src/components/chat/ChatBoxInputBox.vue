@@ -11,6 +11,7 @@ import type { UploadFile } from '~/types'
 const emit = defineEmits<{ send: [] }>()
 
 const general = useGeneralSettingsStore()
+
 const inputRef = $ref<HTMLDivElement>()
 
 function onEnter(e: KeyboardEvent): void {
@@ -173,7 +174,7 @@ const tribute = new Tribute<Mentions>({
 
 onMounted(async () => {
   inputRef && tribute.attach(inputRef)
-  focusInputBox()
+  await focusInputBox()
 })
 
 onBeforeUnmount(() => {
