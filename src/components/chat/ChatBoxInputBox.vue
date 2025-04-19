@@ -12,10 +12,9 @@ const emit = defineEmits<{ send: [] }>()
 
 const general = useGeneralSettingsStore()
 const inputRef = $ref<HTMLDivElement>()
-const isMentionMenuActive = ref<boolean>(false)
 
 function onEnter(e: KeyboardEvent): void {
-  if (isMentionMenuActive.value) {
+  if (tribute.isActive) {
     return
   }
 
@@ -173,16 +172,7 @@ const tribute = new Tribute<Mentions>({
 })
 
 onMounted(async () => {
-  if (inputRef) {
-    tribute.attach(inputRef)
-
-    inputRef.addEventListener('tribute-active-true', () => {
-      isMentionMenuActive.value = true
-    })
-    inputRef.addEventListener('tribute-active-false', () => {
-      isMentionMenuActive.value = false
-    })
-  }
+  inputRef && tribute.attach(inputRef)
   focusInputBox()
 })
 
