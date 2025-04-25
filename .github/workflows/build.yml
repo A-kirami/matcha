@@ -112,4 +112,3 @@ jobs:
           number: ${{ github.event.pull_request.number }}
           header: artifacts
           message: ${{ steps.format-artifact-comment.outputs.result }}
-          GITHUB_TOKEN: ${{ secrets.PULL_REQUEST_COMMENT_TOKEN }}
