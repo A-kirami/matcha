@@ -9,11 +9,6 @@ import UserManageDialog from '~/components/UserManageDialog.vue'
 
 import type { ComponentProps } from '~/types'
 
-interface ModalState {
-  component: Component
-  props?: object
-}
-
 const ModalDialog = {
   userManage: UserManageDialog,
   userCreate: UserCreateFormDialog,
@@ -23,36 +18,57 @@ const ModalDialog = {
   groupEdit: GroupEditFormDialog,
   botEvent: BotEventDialog,
   checkUpdate: CheckUpdateDialog,
-}
+} as const satisfies Record<string, Component>
 
 type ModalComponent = keyof typeof ModalDialog
 
-interface ModalProps {
-  userManage: ComponentProps<typeof UserManageDialog>
-  userCreate: ComponentProps<typeof UserCreateFormDialog>
-  userEdit: ComponentProps<typeof UserEditFormDialog>
-  memberEdit: ComponentProps<typeof MemberEditFormDialog>
-  groupCreate: ComponentProps<typeof GroupCreateFormDialog>
-  groupEdit: ComponentProps<typeof GroupEditFormDialog>
-  botEvent: ComponentProps<typeof BotEventDialog>
-  checkUpdate: ComponentProps<typeof CheckUpdateDialog>
+type ModalProps = {
+  [K in ModalComponent]: ComponentProps<(typeof ModalDialog)[K]>;
+}
+
+interface ModalState {
+  component: Component
+  props?: object
+  isOpen: boolean
+  key?: string
+  keepAlive: boolean
 }
 
 export const useModalStore = defineStore('modal', () => {
-  let modalState = $shallowRef<ModalState>()
-  let modalOpen = $ref(false)
+  let modalStack = $ref<Map<string, ModalState>>(new Map())
 
-  function openModal<M extends ModalComponent>(modal: M, props?: ModalProps[M]) {
-    modalState = {
-      component: ModalDialog[modal],
+  function open<M extends ModalComponent>(modal: M, props?: ModalProps[M], key?: string, keepAlive: boolean = false) {
+    const modalKey = key ? `${modal}-${key}` : modal
+    const modalState = {
+      component: markRaw(ModalDialog[modal]),
       props,
+      isOpen: true,
+      key: modalKey,
+      keepAlive,
     }
-    modalOpen = true
+    modalStack.set(modalKey, modalState)
   }
 
+  watchDebounced($$(modalStack), () => {
+    const hasModalToClean = [...modalStack.entries()].some(
+      ([_, modal]) => !modal.keepAlive && !modal.isOpen,
+    )
+
+    if (hasModalToClean) {
+      const newModalStack = new Map(
+        [...modalStack.entries()].filter(
+          ([_, modal]) => modal.keepAlive || modal.isOpen,
+        ),
+      )
+      modalStack = newModalStack
+    }
+  }, {
+    debounce: 500,
+    deep: true,
+  })
+
   return $$({
-    modalState,
-    modalOpen,
-    openModal,
+    modalStack,
+    open,
   })
 })

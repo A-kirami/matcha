@@ -19,7 +19,7 @@ const state = useStateStore()
 const modal = useModalStore()
 
 function openMemberEdit(member: Contact) {
-  modal.openModal('memberEdit', {
+  modal.open('memberEdit', {
     groupId: state.chatTarget!.id,
     userId: member.id,
     userName: member.name,

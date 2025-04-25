@@ -36,7 +36,7 @@ async function deleteContact() {
 const modal = useModalStore()
 
 function openEditDialog() {
-  modal.openModal(isGroup ? 'groupEdit' : 'userEdit', {
+  modal.open(isGroup ? 'groupEdit' : 'userEdit', {
     targetId: contact.id,
   })
 }

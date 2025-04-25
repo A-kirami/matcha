@@ -1,11 +1,13 @@
 <script setup lang="ts">
-const modal = useModalStore()
+const { modalStack } = storeToRefs(useModalStore())
 </script>
 
 <template>
   <component
-    :is="modal.modalState?.component"
-    v-bind="modal.modalState?.props"
-    v-model:open="modal.modalOpen"
+    :is="modal.component"
+    v-for="[key, modal] in modalStack"
+    :key="key"
+    v-bind="modal.props"
+    v-model:open="modal.isOpen"
   />
 </template>

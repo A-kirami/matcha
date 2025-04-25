@@ -9,9 +9,15 @@ onMounted(async () => {
   user = await db.users.get(uid)
 })
 
-const open = $ref(false)
-
 const state = useStateStore()
+
+const modal = useModalStore()
+
+function openEditDialog() {
+  if (user && state.chatTarget?.type === 'group') {
+    modal.open('memberEdit', { groupId: state.chatTarget.id, userId: uid, userName: user.name })
+  }
+}
 </script>
 
 <template>
@@ -32,18 +38,11 @@ const state = useStateStore()
           <p class="text-sm text-muted-foreground">
             {{ uid }}
           </p>
-          <Button class="mt-2 h-auto px-3 py-1 text-xs" @click="open = true">
+          <Button class="mt-2 h-auto px-3 py-1 text-xs" @click="openEditDialog">
             编辑资料
           </Button>
         </div>
       </div>
     </HoverCardContent>
   </HoverCard>
-  <MemberEditFormDialog
-    v-if="user && state.chatTarget?.type === 'group'"
-    v-model:open="open"
-    :group-id="state.chatTarget.id"
-    :user-id="user.id"
-    :user-name="user.name"
-  />
 </template>
