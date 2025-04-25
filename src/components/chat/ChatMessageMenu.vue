@@ -20,8 +20,6 @@ function setReplyMessage() {
   session.currentSession!.replyMessageId = messageId
 }
 
-const eventOpen = $ref(false)
-
 const copyTarget = `[data-message-id="${messageId}"]`
 
 const clipboard = new ClipboardJS('#copy-message')
@@ -33,6 +31,8 @@ clipboard.on('success', (e) => {
 onUnmounted(() => {
   clipboard.destroy()
 })
+
+const modal = useModalStore()
 </script>
 
 <template>
@@ -44,7 +44,7 @@ onUnmounted(() => {
       <ContextMenuItem
         v-if="message.event"
         class="flex items-center gap-2 px-2 py-1 text-gray-500"
-        @click="eventOpen = true"
+        @click="modal.open('botEvent', { event: message.event})"
       >
         <FileJson2 class="size-4 stroke-1" />
         <span>查看事件</span>
@@ -70,5 +70,4 @@ onUnmounted(() => {
       </ContextMenuItem>
     </ContextMenuContent>
   </ContextMenu>
-  <BotEventDialog v-if="message.event" v-model:open="eventOpen" :event="message.event" />
 </template>

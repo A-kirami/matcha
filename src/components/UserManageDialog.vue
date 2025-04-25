@@ -56,6 +56,8 @@ async function assignUser(type: 'user' | 'bot', uid: string) {
 }
 
 const open = $(defineModel('open', { default: false }))
+
+const modal = useModalStore()
 </script>
 
 <template>
@@ -164,29 +166,26 @@ const open = $(defineModel('open', { default: false }))
                   :class="{ 'text-violet-500 dark:text-violet-200': user.id === state.bot?.id }"
                 />
               </Button>
-              <UserEditFormDialog :target-id="user.id">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  class="size-8"
-                  :class="{
-                    'hover:bg-rose-200 dark:hover:bg-rose-800': user.id === state.user?.id,
-                    'hover:bg-violet-200 dark:hover:bg-violet-800': user.id === state.bot?.id,
-                  }"
-                >
-                  <Pencil class="size-4 stroke-1.5" />
-                </Button>
-              </UserEditFormDialog>
+              <Button
+                variant="ghost"
+                size="icon"
+                class="size-8"
+                :class="{
+                  'hover:bg-rose-200 dark:hover:bg-rose-800': user.id === state.user?.id,
+                  'hover:bg-violet-200 dark:hover:bg-violet-800': user.id === state.bot?.id,
+                }"
+                @click="modal.open('userEdit', { targetId: user.id })"
+              >
+                <Pencil class="size-4 stroke-1.5" />
+              </Button>
             </div>
           </div>
         </div>
       </OverlayScrollbarsComponent>
       <DialogFooter>
-        <UserCreateFormDialog>
-          <Button class="h-8 w-full">
-            新建角色
-          </Button>
-        </UserCreateFormDialog>
+        <Button class="h-8 w-full" @click="modal.open('userCreate')">
+          新建角色
+        </Button>
       </DialogFooter>
     </DialogContent>
   </Dialog>
