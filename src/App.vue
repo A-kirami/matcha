@@ -5,12 +5,6 @@ import 'dayjs/locale/zh-cn'
 
 dayjsLocale('zh-cn')
 
-document.addEventListener('contextmenu', (e) => {
-  if (import.meta.env.PROD) {
-    e.preventDefault()
-  }
-})
-
 const general = useGeneralSettingsStore()
 
 const { theme } = storeToRefs(general)
