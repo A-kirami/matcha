@@ -21,10 +21,11 @@ const ModalDialog = {
 } as const satisfies Record<string, Component>
 
 interface ModalState<M extends ModalComponent = ModalComponent> {
-  id: symbol
   component: typeof ModalDialog[M]
   props?: ModalProps[M]
   isOpen: boolean
+  key?: string
+  keepAlive: boolean
 }
 
 type ModalComponent = keyof typeof ModalDialog
@@ -34,26 +35,37 @@ type ModalProps = {
 }
 
 export const useModalStore = defineStore('modal', () => {
-  const modalStack = $ref<ModalState[]>([])
+  let modalStack = $ref<Map<string, ModalState>>(new Map())
 
-  function open<M extends ModalComponent>(modal: M, props?: ModalProps[M]): symbol {
-    const existingIdx = modalStack.findIndex(m => m.component === ModalDialog[modal])
-    if (existingIdx === -1) {
-      const id = Symbol()
-      modalStack.push({
-        id,
-        component: markRaw(ModalDialog[modal]),
-        props,
-        isOpen: true,
-      })
-      return id
-    } else {
-      modalStack[existingIdx].isOpen = true
-      modalStack[existingIdx].props = props
-      modalStack.push(modalStack.splice(existingIdx, 1)[0])
-      return modalStack[existingIdx].id
+  function open<M extends ModalComponent>(modal: M, props?: ModalProps[M], key?: string, keepAlive: boolean = false) {
+    const modalKey = key ? `${modal}-${key}` : modal
+    const modalState = {
+      component: markRaw(ModalDialog[modal]),
+      props,
+      isOpen: true,
+      key: modalKey,
+      keepAlive,
     }
+    modalStack.set(modalKey, modalState)
   }
+
+  watchDebounced($$(modalStack), () => {
+    const hasModalToClean = [...modalStack.entries()].some(
+      ([_, modal]) => !modal.keepAlive && !modal.isOpen,
+    )
+
+    if (hasModalToClean) {
+      const newModalStack = new Map(
+        [...modalStack.entries()].filter(
+          ([_, modal]) => modal.keepAlive || modal.isOpen,
+        ),
+      )
+      modalStack = newModalStack
+    }
+  }, {
+    debounce: 500,
+    deep: true,
+  })
 
   return $$({
     modalStack,

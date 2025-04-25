@@ -5,8 +5,8 @@ const { modalStack } = storeToRefs(useModalStore())
 <template>
   <component
     :is="modal.component"
-    v-for="modal in modalStack"
-    :key="modal.id"
+    v-for="[key, modal] in modalStack"
+    :key="key"
     v-bind="modal.props"
     v-model:open="modal.isOpen"
   />
