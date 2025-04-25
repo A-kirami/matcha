@@ -9,11 +9,6 @@ import UserManageDialog from '~/components/UserManageDialog.vue'
 
 import type { ComponentProps } from '~/types'
 
-interface ModalState {
-  component: Component
-  props?: object
-}
-
 const ModalDialog = {
   userManage: UserManageDialog,
   userCreate: UserCreateFormDialog,
@@ -23,36 +18,45 @@ const ModalDialog = {
   groupEdit: GroupEditFormDialog,
   botEvent: BotEventDialog,
   checkUpdate: CheckUpdateDialog,
+} as const satisfies Record<string, Component>
+
+interface ModalState<M extends ModalComponent = ModalComponent> {
+  id: symbol
+  component: typeof ModalDialog[M]
+  props?: ModalProps[M]
+  isOpen: boolean
 }
 
 type ModalComponent = keyof typeof ModalDialog
 
-interface ModalProps {
-  userManage: ComponentProps<typeof UserManageDialog>
-  userCreate: ComponentProps<typeof UserCreateFormDialog>
-  userEdit: ComponentProps<typeof UserEditFormDialog>
-  memberEdit: ComponentProps<typeof MemberEditFormDialog>
-  groupCreate: ComponentProps<typeof GroupCreateFormDialog>
-  groupEdit: ComponentProps<typeof GroupEditFormDialog>
-  botEvent: ComponentProps<typeof BotEventDialog>
-  checkUpdate: ComponentProps<typeof CheckUpdateDialog>
+type ModalProps = {
+  [K in ModalComponent]: ComponentProps<(typeof ModalDialog)[K]>;
 }
 
 export const useModalStore = defineStore('modal', () => {
-  let modalState = $shallowRef<ModalState>()
-  let modalOpen = $ref(false)
+  const modalStack = $ref<ModalState[]>([])
 
-  function openModal<M extends ModalComponent>(modal: M, props?: ModalProps[M]) {
-    modalState = {
-      component: ModalDialog[modal],
-      props,
+  function open<M extends ModalComponent>(modal: M, props?: ModalProps[M]): symbol {
+    const existingIdx = modalStack.findIndex(m => m.component === ModalDialog[modal])
+    if (existingIdx === -1) {
+      const id = Symbol()
+      modalStack.push({
+        id,
+        component: markRaw(ModalDialog[modal]),
+        props,
+        isOpen: true,
+      })
+      return id
+    } else {
+      modalStack[existingIdx].isOpen = true
+      modalStack[existingIdx].props = props
+      modalStack.push(modalStack.splice(existingIdx, 1)[0])
+      return modalStack[existingIdx].id
     }
-    modalOpen = true
   }
 
   return $$({
-    modalState,
-    modalOpen,
-    openModal,
+    modalStack,
+    open,
   })
 })

@@ -41,7 +41,7 @@ async function manualCheckUpdate() {
   try {
     const update = await check()
     if (update?.available) {
-      modal.openModal('checkUpdate', { updateInfo: update })
+      modal.open('checkUpdate', { updateInfo: update })
     } else {
       toast.success('', { description: '当前已是最新版本，无需更新' })
     }

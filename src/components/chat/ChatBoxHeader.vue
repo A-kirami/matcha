@@ -45,7 +45,7 @@ async function handleFriend() {
 const modal = useModalStore()
 
 function openEditDialog() {
-  modal.openModal(state.chatTarget?.type === 'group' ? 'groupEdit' : 'userEdit', {
+  modal.open(state.chatTarget?.type === 'group' ? 'groupEdit' : 'userEdit', {
     targetId: state.chatTarget!.id,
   })
 }

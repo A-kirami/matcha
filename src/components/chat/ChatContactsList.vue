@@ -55,7 +55,7 @@ watchDebounced(
 const modal = useModalStore()
 
 function openUserManage() {
-  modal.openModal('userManage')
+  modal.open('userManage')
 }
 </script>
 
