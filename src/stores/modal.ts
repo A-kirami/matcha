@@ -20,18 +20,18 @@ const ModalDialog = {
   checkUpdate: CheckUpdateDialog,
 } as const satisfies Record<string, Component>
 
-interface ModalState<M extends ModalComponent = ModalComponent> {
-  component: typeof ModalDialog[M]
-  props?: ModalProps[M]
-  isOpen: boolean
-  key?: string
-  keepAlive: boolean
-}
-
 type ModalComponent = keyof typeof ModalDialog
 
 type ModalProps = {
   [K in ModalComponent]: ComponentProps<(typeof ModalDialog)[K]>;
+}
+
+interface ModalState {
+  component: Component
+  props?: object
+  isOpen: boolean
+  key?: string
+  keepAlive: boolean
 }
 
 export const useModalStore = defineStore('modal', () => {
