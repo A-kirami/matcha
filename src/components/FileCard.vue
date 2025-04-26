@@ -3,8 +3,11 @@ import { Download } from 'lucide-vue-next'
 import mime from 'mime/lite'
 
 const { id, name, size, type, downloadable } = $defineProps<
-  Omit<UploadFile, 'path'> & {
+  {
     id: string
+    name: string
+    size: number
+    type?: string | FileType
     downloadable?: boolean
   }
 >()
