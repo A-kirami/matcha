@@ -3,8 +3,6 @@ import { useObservable, from } from '@vueuse/rxjs'
 import { liveQuery } from 'dexie'
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-vue'
 
-import type { Contact } from '~/types'
-
 const { filter } = $defineProps<{
   filter: string
 }>()

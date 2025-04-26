@@ -7,8 +7,6 @@ import UserEditFormDialog from '~/components/chat/UserEditFormDialog.vue'
 import CheckUpdateDialog from '~/components/CheckUpdateDialog.vue'
 import UserManageDialog from '~/components/UserManageDialog.vue'
 
-import type { ComponentProps } from '~/types'
-
 const ModalDialog = {
   userManage: UserManageDialog,
   userCreate: UserCreateFormDialog,

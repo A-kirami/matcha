@@ -2,8 +2,6 @@
 import { Pin, PinOff, Pencil, Trash2 } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 
-import type { Contact } from '~/types'
-
 const { contact, isPinned } = $defineProps<{
   contact: Contact
   isPinned: boolean

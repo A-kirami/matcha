@@ -2,8 +2,6 @@
 import { unix } from 'dayjs'
 import { CheckCheck, X, Pin } from 'lucide-vue-next'
 
-import type { Contact } from '~/types'
-
 defineOptions({
   inheritAttrs: false,
 })

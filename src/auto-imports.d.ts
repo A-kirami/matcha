@@ -328,6 +328,7 @@ declare global {
   const useWindowFocus: typeof import('@vueuse/core')['useWindowFocus']
   const useWindowScroll: typeof import('@vueuse/core')['useWindowScroll']
   const useWindowSize: typeof import('@vueuse/core')['useWindowSize']
+  const vue3VideoPlayD: typeof import('./types/vue3-video-play.d')['default']
   const watch: typeof import('vue')['watch']
   const watchArray: typeof import('@vueuse/core')['watchArray']
   const watchAtMost: typeof import('@vueuse/core')['watchAtMost']
@@ -370,6 +371,15 @@ declare global {
   // @ts-ignore
   export type { DefaultMap } from './utils/utils'
   import('./utils/utils')
+  // @ts-ignore
+  export type { OneBotV11StandardHTTP, OneBotV11StandardWebSocketServer, OneBotV11StandardWebSocketClient, OneBotV11Standard, OneBotV12StandardHTTP, OneBotV12StandardHTTPWebhook, OneBotV12StandardWebSocketServer, OneBotV12StandardWebSocketClient, OneBotV12Standard } from './types/connect'
+  import('./types/connect')
+  // @ts-ignore
+  export type { Contact, UploadFile, FileType, ComponentProps } from './types/index'
+  import('./types/index')
+  // @ts-ignore
+  export type { isBuild, isRelease, prNum, buildSha } from './types/info-build-meta.d'
+  import('./types/info-build-meta.d')
 }
 
 // for vue template auto import
@@ -699,6 +709,7 @@ declare module 'vue' {
     readonly useWindowFocus: UnwrapRef<typeof import('@vueuse/core')['useWindowFocus']>
     readonly useWindowScroll: UnwrapRef<typeof import('@vueuse/core')['useWindowScroll']>
     readonly useWindowSize: UnwrapRef<typeof import('@vueuse/core')['useWindowSize']>
+    readonly vue3VideoPlayD: UnwrapRef<typeof import('./types/vue3-video-play.d')['default']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchArray: UnwrapRef<typeof import('@vueuse/core')['watchArray']>
     readonly watchAtMost: UnwrapRef<typeof import('@vueuse/core')['watchAtMost']>

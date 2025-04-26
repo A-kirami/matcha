@@ -23,7 +23,6 @@ import type {
   GroupPokeNoticeScene,
   FriendPokeNoticeScene,
 } from './scene'
-import type { Contact } from '~/types'
 
 export class Behav {
   readonly state = useStateStore()

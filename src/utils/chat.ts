@@ -12,7 +12,6 @@ import type {
 } from '~/adapter/content'
 import type { Scenes } from '~/adapter/scene'
 import type { Context } from '~/adapter/typed'
-import type { Contact } from '~/types'
 
 /**
  * 获取头像

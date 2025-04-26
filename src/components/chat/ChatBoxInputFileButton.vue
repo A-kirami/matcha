@@ -4,8 +4,6 @@ import { open } from '@tauri-apps/plugin-dialog'
 import { stat } from '@tauri-apps/plugin-fs'
 import { Paperclip } from 'lucide-vue-next'
 
-import type { UploadFile, FileType } from '~/types'
-
 const emits = defineEmits<{
   upload: [val: UploadFile & { path: string }]
 }>()
