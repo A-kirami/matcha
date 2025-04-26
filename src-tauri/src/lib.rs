@@ -22,11 +22,10 @@ pub fn run() {
             .hidden_title(true,)
             .title_bar_style(tauri::TitleBarStyle::Overlay,);
 
-        let window = win_builder.build().unwrap();
+        let _window = win_builder.build().unwrap();
 
-        if tauri::is_dev() {
-            window.open_devtools();
-        }
+        #[cfg(dev)]
+        _window.open_devtools();
 
         app.manage(Mutex::new(state::AppState::default(),),);
 
@@ -64,7 +63,6 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             command::read_file,
             command::get_file_type,
-            command::open_devtools,
             command::create_cache_file,
             command::upload_file,
             command::create_file_fragment,
