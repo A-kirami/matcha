@@ -7,7 +7,7 @@ use std::{
 
 use base64::{engine::general_purpose, Engine as _};
 use serde::{Deserialize, Serialize};
-use tauri::{AppHandle, WebviewWindow};
+use tauri::AppHandle;
 
 use crate::utils::{
     download_file, get_cache_file_path, get_file_contents, save_file_contents, validate_file,
