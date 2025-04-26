@@ -64,7 +64,6 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             command::read_file,
             command::get_file_type,
-            command::open_devtools,
             command::create_cache_file,
             command::upload_file,
             command::create_file_fragment,

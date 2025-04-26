@@ -78,11 +78,6 @@ pub fn get_file_type(file: FileInput,) -> Result<FileTypeInfo, String,> {
     },)
 }
 
-#[tauri::command]
-pub fn open_devtools(window: WebviewWindow,) {
-    window.open_devtools();
-}
-
 #[derive(Serialize, Deserialize,)]
 #[serde(rename_all = "camelCase")]
 pub enum OBFile {

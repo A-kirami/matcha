@@ -2,7 +2,7 @@
 import { WebviewWindow } from '@tauri-apps/api/webviewWindow'
 import { open } from '@tauri-apps/plugin-shell'
 import { check } from '@tauri-apps/plugin-updater'
-import { SlidersHorizontal, Info, Bolt, Terminal, RefreshCw } from 'lucide-vue-next'
+import { SlidersHorizontal, Info, Bolt, RefreshCw } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 
 import { github } from '~build/git'
@@ -32,8 +32,6 @@ async function openAbout() {
     transparent: true,
   })
 }
-
-let commandOpen = $ref(false)
 
 const modal = useModalStore()
 
@@ -66,12 +64,6 @@ const isDev = import.meta.env.DEV
       <SlidersHorizontal class="size-7 cursor-pointer stroke-1.5 text-gray-500" dark="text-gray-400" />
     </DropdownMenuTrigger>
     <DropdownMenuContent class="ml-15 w-46 -mb-10">
-      <DropdownMenuItem class="cursor-pointer" @click="commandOpen = true">
-        <Terminal class="mr-2 size-4 stroke-1.5" />
-        <span>命令面板</span>
-        <DropdownMenuShortcut>Ctrl+J</DropdownMenuShortcut>
-      </DropdownMenuItem>
-      <DropdownMenuSeparator />
       <RouterLink :to="settingsPath">
         <DropdownMenuItem class="cursor-pointer">
           <Bolt class="mr-2 size-4 stroke-1.5" />
@@ -88,5 +80,4 @@ const isDev = import.meta.env.DEV
       </DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
-  <AppCommand v-model:open="commandOpen" />
 </template>
