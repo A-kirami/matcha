@@ -1,5 +1,5 @@
 use tauri::{Manager, WebviewUrl, WebviewWindowBuilder};
-mod command;
+mod commands;
 mod state;
 mod utils;
 use tokio::sync::Mutex;
@@ -61,15 +61,15 @@ pub fn run() {
         )
         .plugin(prevent_default(),)
         .invoke_handler(tauri::generate_handler![
-            command::read_file,
-            command::get_file_type,
-            command::create_cache_file,
-            command::upload_file,
-            command::create_file_fragment,
-            command::merge_file_fragment,
-            command::write_file,
-            command::copy_file,
-            command::start_assets_server,
+            commands::read_file,
+            commands::get_file_type,
+            commands::create_cache_file,
+            commands::upload_file,
+            commands::create_file_fragment,
+            commands::merge_file_fragment,
+            commands::write_file,
+            commands::copy_file,
+            commands::start_assets_server,
         ],)
         .run(tauri::generate_context!(),)
         .expect("error while running tauri application",);

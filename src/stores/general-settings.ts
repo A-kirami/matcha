@@ -1,4 +1,3 @@
-import { invoke } from '@tauri-apps/api/core'
 import { defineStore } from 'pinia'
 import { toast } from 'vue-sonner'
 
@@ -29,7 +28,7 @@ export const useGeneralSettingsStore = defineStore(
     async function startAssetsServer(address: string): Promise<void> {
       const [host, port] = address.split(':')
       try {
-        await invoke('start_assets_server', { host, port: Number.parseInt(port) })
+        await Commands.startAssetsServer(host, Number.parseInt(port))
         toast.success('资源服务器已启动', { description: `地址: ${address}` })
       } catch (error) {
         toast.error('资源服务器错误', { description: error as string })

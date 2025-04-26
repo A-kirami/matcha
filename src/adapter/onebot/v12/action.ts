@@ -1,7 +1,6 @@
 /* eslint-disable unicorn/no-null */
 /* eslint-disable camelcase */
 import { getVersion } from '@tauri-apps/api/app'
-import { invoke } from '@tauri-apps/api/core'
 
 import { AdapterActionHandler } from '~/adapter/action'
 import { Behav } from '~/adapter/behav'
@@ -11,7 +10,7 @@ import { MessageHandler } from './message'
 import { response } from './utils'
 
 import type { Messages } from './message'
-import type { ActionResponse, ActionRequest, Status, Version, UserInfo, GroupInfo } from './typed'
+import type { ActionResponse, ActionRequest, Status, Version, UserInfo, GroupInfo, FileURL, FilePath, FileData } from './typed'
 import type { ActionStrategy } from '~/adapter/action'
 
 const messageHandler = new MessageHandler()
@@ -243,7 +242,7 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
         fileInfo.data
           = fileInfo.data instanceof Uint8Array ? { binary: fileInfo.data } : { str: fileInfo.data as string }
       }
-      const { size, sha256 } = await invoke<{ size: number, sha256: string }>('upload_file', { file: fileInfo })
+      const { size, sha256 } = await Commands.uploadFile(fileInfo)
       const fileId = getUUID()
       await db.files.add({ id: fileId, name: fileInfo.name, sha256, size })
       return response(0, { file_id: fileId })
@@ -264,13 +263,13 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
       }
       case 'transfer': {
         const { file_id, offset, data } = fileInfo
-        await invoke('create_file_fragment', { file_id, offset, data })
+        await Commands.createFileFragment(file_id, offset, data)
         return response(0)
       }
       case 'finish': {
         const { file_id, sha256 } = fileInfo
         const { name, total_size } = fileFragmented.get(file_id)!
-        await invoke<string>('merge_file_fragment', { file_id, total_size, sha256 })
+        await Commands.mergeFileFragment(file_id, total_size, sha256)
         fileFragmented.delete(file_id)
         await db.files.add({ id: file_id, name, sha256, size: total_size })
         return response(0, { file_id })
@@ -323,11 +322,8 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
       }
       case 'transfer': {
         const { file_id, offset, size } = fileInfo
-        const contents = await invoke<number[]>('read_file', {
-          path: await getFile(GetType.PATH, file_id),
-          offset,
-          size,
-        })
+        const filePath = await getFile(GetType.PATH, file_id)
+        const contents = await Commands.readFile(filePath, offset, size)
         return response(0, {
           data: new Uint8Array(contents),
         })
@@ -337,22 +333,6 @@ const actionStrategy: ActionStrategy<ActionResponse> = {
       }
     }
   },
-}
-
-type FileType = 'url' | 'path' | 'data'
-
-interface FileInfo<T extends FileType = never> {
-  name: string
-  sha256?: string
-  type?: T
-}
-
-type FileURL<T extends FileType = never> = FileInfo<T> & { url: string, headers?: string }
-
-type FilePath<T extends FileType = never> = FileInfo<T> & { path: string }
-
-type FileData<T extends FileType = never> = FileInfo<T> & {
-  data: string | Uint8Array | { str?: string, binary?: Uint8Array }
 }
 
 interface UploadFilePrepare {

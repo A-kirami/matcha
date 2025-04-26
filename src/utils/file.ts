@@ -1,13 +1,7 @@
-import { invoke } from '@tauri-apps/api/core'
 import { appCacheDir, join } from '@tauri-apps/api/path'
 import { exists, BaseDirectory } from '@tauri-apps/plugin-fs'
 
 const general = useGeneralSettingsStore()
-
-interface FileSource {
-  str?: string
-  binary?: number[]
-}
 
 async function getSHA256(buffer: ArrayBuffer): Promise<string> {
   const hashBuffer = await crypto.subtle.digest('SHA-256', buffer)
@@ -41,10 +35,7 @@ export async function createFileCache(
   } else {
     fileSource.str = file
   }
-  const { size, sha256 } = await invoke<{ size: number, sha256: string }>('create_cache_file', {
-    fileSource,
-    validateType,
-  })
+  const { size, sha256 } = await Commands.createCacheFile(fileSource, validateType)
   const existFile = await db.files.get({ sha256 })
   const fileId = existFile ? existFile.id : getUUID()
   if (!existFile) {
@@ -93,7 +84,7 @@ export async function getFile(type: GetType, fileId: string): Promise<string | U
       if (type === GetType.PATH) {
         return path
       } else {
-        const contents = await invoke<number[]>('read_file', { path })
+        const contents = await Commands.readFile(path)
         return new Uint8Array(contents)
       }
     }

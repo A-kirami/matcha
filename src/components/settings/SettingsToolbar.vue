@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { invoke } from '@tauri-apps/api/core'
 import { open, save } from '@tauri-apps/plugin-dialog'
 import { FileUp, FileDown } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
@@ -25,7 +24,7 @@ async function importSettings() {
     ],
   })
   if (filePath) {
-    const contents = await invoke<number[]>('read_file', { path: filePath })
+    const contents = await Commands.readFile(filePath)
     const setting = new TextDecoder().decode(new Uint8Array(contents))
     const config = JSON.parse(setting) as { general: GeneralSettings, connect: ConnectSettings }
     general.$patch(config.general)
@@ -52,7 +51,7 @@ async function exportSettings() {
       connect: connect.$state,
     })
     const contents = [...new TextEncoder().encode(setting)]
-    await invoke('write_file', { contents, path, overwrite: true })
+    await Commands.writeFile(contents, path, true)
     toast.success('', { description: '导出配置成功' })
   }
 }

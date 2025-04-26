@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { invoke } from '@tauri-apps/api/core'
 import { open } from '@tauri-apps/plugin-dialog'
 import { stat } from '@tauri-apps/plugin-fs'
 import { Paperclip } from 'lucide-vue-next'
@@ -20,7 +19,7 @@ async function uploadFile() {
   })
   if (filePath) {
     const fileStat = await stat(filePath)
-    const type = await invoke<FileType>('get_file_type', { file: { path: filePath } })
+    const type = await Commands.getFileType({ path: filePath })
     emits('upload', {
       name: filePath.split('/').pop()?.split('\\')
         .pop() || '',
