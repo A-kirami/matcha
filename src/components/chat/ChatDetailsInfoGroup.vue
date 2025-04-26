@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { Contact } from '~/types'
 
 const groupMembers = $(inject<Member[]>('groupMembers'))
 const memberContacts = $(inject<Contact[]>('memberContacts'))

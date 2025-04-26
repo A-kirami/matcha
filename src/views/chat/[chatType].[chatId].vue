@@ -2,8 +2,6 @@
 import { useObservable, from } from '@vueuse/rxjs'
 import { liveQuery } from 'dexie'
 
-import type { Contact } from '~/types'
-
 const state = useStateStore()
 
 const allMembers = $(

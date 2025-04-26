@@ -2,7 +2,6 @@
 import { Behav } from '~/adapter/behav'
 
 import type { Contents } from '~/adapter/content'
-import type { UploadFile } from '~/types'
 
 const session = useSessionStore()
 

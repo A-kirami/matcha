@@ -44,13 +44,17 @@ export default defineConfig({
         {
           '@tauri-apps/plugin-log': [['*', 'logger']],
         },
+      ],
+      dirs: [
+        'src/composables',
+        'src/database',
+        'src/stores',
+        'src/utils',
         {
-          from: 'src/database/model',
-          imports: ['User', 'Friend', 'Group', 'Member', 'CacheFile'],
-          type: true,
+          glob: 'src/types',
+          types: true,
         },
       ],
-      dirs: ['src/composables', 'src/database', 'src/stores', 'src/utils'],
       dts: 'src/auto-imports.d.ts',
       vueTemplate: true,
     }),

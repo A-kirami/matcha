@@ -6,8 +6,6 @@ import { createVNode, render } from 'vue'
 
 import FileCard from '~/components/FileCard.vue'
 
-import type { UploadFile } from '~/types'
-
 const emit = defineEmits<{ send: [] }>()
 
 const general = useGeneralSettingsStore()

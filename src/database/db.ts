@@ -1,6 +1,5 @@
 import { Dexie } from 'dexie'
 
-import type { User, Friend, Group, Member, CacheFile } from './model'
 import type { Table } from 'dexie'
 
 class MatchaDB extends Dexie {

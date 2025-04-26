@@ -1,7 +1,5 @@
 import { defineStore } from 'pinia'
 
-import type { Contact } from '~/types'
-
 /** 全局共享状态 */
 export const useStateStore = defineStore(
   'state',
@@ -46,7 +44,7 @@ export const useStateStore = defineStore(
       () => route.params,
       async ({ chatType, chatId }) => {
         if (chatType && chatId) {
-          const contact = await getContact(chatType as Contact['type'], chatId)
+          const contact = await getContact(chatType as Contact['type'], chatId as Contact['id'])
           chatTarget = {
             ...contact,
             isBot: bot?.id === chatId,
