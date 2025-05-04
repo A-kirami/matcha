@@ -33,3 +33,19 @@ export interface GroupInfo {
   group_id: string
   group_name: string
 }
+
+type FileType = 'url' | 'path' | 'data'
+
+interface FileInfo<T extends FileType = never> {
+  name: string
+  sha256?: string
+  type?: T
+}
+
+export type FileURL<T extends FileType = never> = FileInfo<T> & { url: string, headers?: string }
+
+export type FilePath<T extends FileType = never> = FileInfo<T> & { path: string }
+
+export type FileData<T extends FileType = never> = FileInfo<T> & {
+  data: string | Uint8Array | { str?: string, binary?: Uint8Array }
+}

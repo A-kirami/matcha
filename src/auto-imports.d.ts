@@ -6,6 +6,7 @@
 // biome-ignore lint: disable
 export {}
 declare global {
+  const Commands: typeof import('./commands/index')['Commands']
   const DefaultMap: typeof import('./utils/utils')['DefaultMap']
   const EffectScope: typeof import('vue')['EffectScope']
   const GetType: typeof import('./utils/file')['GetType']
@@ -354,6 +355,9 @@ declare global {
   export type { Component, ComponentPublicInstance, ComputedRef, DirectiveBinding, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, MaybeRef, MaybeRefOrGetter, VNode, WritableComputedRef } from 'vue'
   import('vue')
   // @ts-ignore
+  export type { FileSource } from './commands/index'
+  import('./commands/index')
+  // @ts-ignore
   export type { User, Friend, Group, Member, CacheFile } from './database/model'
   import('./database/model')
   // @ts-ignore
@@ -387,6 +391,7 @@ import { UnwrapRef } from 'vue'
 declare module 'vue' {
   interface GlobalComponents {}
   interface ComponentCustomProperties {
+    readonly Commands: UnwrapRef<typeof import('./commands/index')['Commands']>
     readonly DefaultMap: UnwrapRef<typeof import('./utils/utils')['DefaultMap']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly GetType: UnwrapRef<typeof import('./utils/file')['GetType']>

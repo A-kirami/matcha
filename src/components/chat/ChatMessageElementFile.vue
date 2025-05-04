@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { invoke } from '@tauri-apps/api/core'
 import { save } from '@tauri-apps/plugin-dialog'
 import { toast } from 'vue-sonner'
 
@@ -24,7 +23,7 @@ async function saveFile() {
     ],
   })
   if (path) {
-    await invoke('copy_file', { source: fileInfo!.path, target: path })
+    await Commands.copyFile(fileInfo!.path, path)
     toast.success('', { description: '文件已保存' })
   }
 }
