@@ -73,10 +73,10 @@ onUpdated(resetForm)
       <Form id="group-form" ref="formRef" :validation-schema="groupFormSchema" class="space-y-2" @submit="onSubmit">
         <FormField v-slot="{ componentField }" name="name">
           <FormItem v-auto-animate>
+            <FormLabel>群组名称</FormLabel>
             <FormControl>
               <Input type="text" v-bind="componentField" class="h-8" />
             </FormControl>
-            <FormLabel>群组名称</FormLabel>
             <FormDescription>群组的公开显示名称</FormDescription>
             <FormMessage />
           </FormItem>
