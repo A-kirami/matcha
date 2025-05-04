@@ -85,10 +85,10 @@ onUpdated(resetForm)
       <Form id="user-form" ref="formRef" :validation-schema="userFormSchema" class="space-y-2" @submit="onSubmit">
         <FormField v-slot="{ componentField }" name="name">
           <FormItem v-auto-animate>
+            <FormLabel>角色名称</FormLabel>
             <FormControl>
               <Input type="text" v-bind="componentField" class="h-8" />
             </FormControl>
-            <FormLabel>角色名称</FormLabel>
             <FormDescription>角色的公开显示名称</FormDescription>
             <FormMessage />
           </FormItem>

@@ -64,20 +64,20 @@ const onSubmit = getSubmitFn(userFormSchema, async (values) => {
       <Form id="user-form" ref="formRef" :validation-schema="userFormSchema" class="space-y-2" @submit="onSubmit">
         <FormField v-slot="{ componentField }" name="id">
           <FormItem v-auto-animate>
+            <FormLabel>角色 ID</FormLabel>
             <FormControl>
               <Input type="text" v-bind="componentField" :disabled="false" class="h-8" />
             </FormControl>
-            <FormLabel>角色 ID</FormLabel>
             <FormDescription>角色的唯一标识符</FormDescription>
             <FormMessage />
           </FormItem>
         </FormField>
         <FormField v-slot="{ componentField }" name="name">
           <FormItem v-auto-animate>
+            <FormLabel>角色名称</FormLabel>
             <FormControl>
               <Input type="text" v-bind="componentField" class="h-8" />
             </FormControl>
-            <FormLabel>角色名称</FormLabel>
             <FormDescription>角色的公开显示名称</FormDescription>
             <FormMessage />
           </FormItem>
