@@ -81,34 +81,3 @@ jobs:
         with:
           name: 'matcha_${{steps.tauri-build.outputs.appVersion}}_${{ matrix.label }}'
           path: "${{ join(fromJSON(steps.tauri-build.outputs.artifactPaths), '\n') }}"
-
-  comment:
-    needs: build
-    permissions:
-      pull-requests: write
-    if: github.event.pull_request && github.event.sender.type != 'Bot'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Format artifact comment
-        id: format-artifact-comment
-        uses: actions/github-script@v7
-        with:
-          result-encoding: string
-          script: |
-            const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              run_id: context.runId
-            });
-            const createArtifactComment = (await import(`${{github.workspace}}/scripts/formatArtifactComment.js`)).default;
-            return createArtifactComment(artifacts.data.artifacts, '${{github.event.pull_request.head.sha}}');
-
-      - name: Add artifact comment
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          number: ${{ github.event.pull_request.number }}
-          header: artifacts
-          message: ${{ steps.format-artifact-comment.outputs.result }}
