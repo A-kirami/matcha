@@ -90,15 +90,22 @@ const plainStrategy: PlainStrategy<ContentMapping> = {
 }
 
 /**
- * 获取消息 ID，从 10000 开始自增
+ * 获取消息 ID，为当前的秒级时间戳
+ * 如果在同一秒内多次调用，则会递增 ID
  *
  * @returns 分配的消息 ID
  */
 export const getMessageId = (() => {
-  let messageId = 1_0000
+  let lastMessageId = 0
+
   return (): number => {
-    messageId++
-    return messageId
+    const currentTimestamp = Math.floor(Date.now() / 1000)
+    if (currentTimestamp > lastMessageId) {
+      lastMessageId = currentTimestamp
+    } else {
+      lastMessageId += 1
+    }
+    return lastMessageId
   }
 })()
 
