@@ -392,7 +392,7 @@ const actionStrategy: ActionStrategy = {
     if (!operator) {
       return response(1403, { message: '没有加入该群' })
     }
-    const members = await db.members.where({ groupId: group_id }).toArray()
+    const members = await db.members.where('groupId').equals(group_id.toString()).toArray()
     const infoList = members.map(async member => await getMemberInfo(member, operator.role))
     return response(0, await Promise.all(infoList))
   },
