@@ -74,6 +74,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          includeDebug: ${{ github.event_name == 'pull_request' }}
+          includeRelease: ${{ github.event_name != 'pull_request' }}
           args: -t ${{ matrix.target }} -c '{"bundle":{"createUpdaterArtifacts":false}}'
 
       - name: Upload artifact
